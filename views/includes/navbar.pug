@@ -13,4 +13,5 @@ unless minimal
 		if !modview && board
 			a.nav-item(href=`/${board._id}/manage/${managePage || 'index.html'}`)
 				img(class='navbar-img' src='/file/manage.png')
-		a.jsonly.nav-item.right#settings(data-label=(__('Settings')))
+		a.jsonly.nav-item.right#settings(data-label=(__('')))
+			img(class='navbar-img' src='/file/settings.png')
