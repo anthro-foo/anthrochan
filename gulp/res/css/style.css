@@ -104,6 +104,10 @@ pre {
 	width: 100%;
 	z-index: 2;
 	top: 0;
+	@media only screen and (max-width: 600px) {
+		display: grid;
+		grid-template-columns: auto auto auto;
+	}
 }
 
 .replies {
@@ -213,9 +217,6 @@ pre {
 }
 #settings, .dummy-link {
 	cursor: pointer;
-}
-#settings::after {
-	content: attr(data-label);
 }
 .expand-omitted {
 	background-color: var(--post-color);
@@ -1160,7 +1161,10 @@ input:invalid, textarea:invalid {
 
 .navbar-img {
 	max-height:20vh;
-	height: 60px;
+	height: 50px;
+	@media only screen and (max-width: 600px) {
+		height: 14vw;
+	}
 }
 
 .nav-item {
@@ -1669,9 +1673,6 @@ row.wrap.sb .col {
 	}
 	#hotposts td:nth-child(3) {
 		display: none;
-	}
-	#settings::after {
-		content: "\2699"!important;
 	}
 	#settingsmodal {
 		width: 100%;
