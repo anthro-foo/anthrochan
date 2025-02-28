@@ -512,18 +512,9 @@ p {
 	color: var(--pinktext-color);
 }
 
-@keyframes steady-glow {
-  0%, 100% {
-    text-shadow: 0 0 10px #006400, 0 0 20px #006400, 0 0 30px #006400;
-  }
-  50% {
-    text-shadow: 0 0 20px #006400, 0 0 60px #006400, 0 0 40px #006400;
-  }
-}
-
 .glowtext {
-  color: #008000; /* Darker green */
-  animation: steady-glow 2s infinite ease-in-out;
+	color: #008000; /* Darker green */
+    text-shadow: 0 0 10px #006400, 0 0 20px #006400, 0 0 30px #006400;
 }
 
 .embimg {
