@@ -19,6 +19,18 @@ main.minimal {
 	height: 100vh;
 }
 
+.homepage-image {
+	/* display: block; */
+	/* align-content: center; */
+	width: 10%;
+	height: auto;
+
+	@media (max-width: 600px) {
+		width: 25%;
+	}
+}
+
+
 .form-post {
 	display: flex;
 	flex-direction: column;
