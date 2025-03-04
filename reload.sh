@@ -7,8 +7,9 @@ if [ "$1" == "production" ]; then
 fi
 
 pm2 stop ecosystem.config.js
+pm2 flush
 
-# if on server pull changes and update npm
+# In production, stop nginx, pull new changes, and update npm
 if [ "$env" == "production" ]; then
     git pull
     npm install
