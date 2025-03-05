@@ -23,14 +23,18 @@ module.exports = {
 			'_id': data.hash,
 		};
 
-		const query = {
+		const update = {
 			'$setOnInsert': data,
-			'$upsert': true,
+		};
+
+		const options = {
+			upsert: true,
 		};
 
 		await db.updateOne(
 			filter,
-			query
+			update,
+			options,
 		);
 	},
 

@@ -1,6 +1,7 @@
 extends ../layout.pug
 include ../mixins/managenav.pug
 include ../mixins/boardheader.pug
+include ../mixins/media.pug
 
 block head
 	title /#{board._id}/ - #{__('Approval')}
@@ -17,4 +18,4 @@ block content
 		else
 			input(type='hidden' name='_csrf' value=csrf)
 			for media in pending
-				p= media
+				+media(media)
