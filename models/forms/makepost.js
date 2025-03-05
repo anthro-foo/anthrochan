@@ -428,13 +428,37 @@ module.exports = async (req, res) => {
 	if (files.length > 0) {
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
+
+			// Skip approval stage if file already approved
+			if (Approval.isApproved(file.hash) === true) {
+				console.log('skipping approval', file.hash);
+				continue;
+			}
+
 			const media = { 
 				...file, 
 				ip: res.locals.ip,
 				approved: isStaffOrGlobal ? approvedTypes.APPROVED : approvedTypes.PENDING,
 			};
+
+			if (media.approved !== approvedTypes.APPROVED) {
+				for (const key in file) {
+					delete file[key];
+				}
+				file.filename = 'pendingapproval.png';
+				file.originalFilename = 'pendingapproval.png';
+				file.mimetype = 'image/png';
+				file.hash = media.hash;
+				file.extension = media.extension;
+				file.geometry = {
+					width: 200,
+					heigh: 200,
+				};
+
+			};
+
 			await Approval.insertOne(media);
-			console.log('Inserted: ', media);
+			console.log('Inserted: ', media.hash);
 		}
 	}
 

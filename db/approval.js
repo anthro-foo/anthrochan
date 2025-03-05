@@ -18,6 +18,16 @@ module.exports = {
 		return posts;
 	},
 
+	isApproved: async(hash) => {
+		const file = await db.findOne({ _id: hash});
+		if (file) {
+			console.log('file found with ', file.approved);
+			return file.approved === approvalTypes.APPROVED;
+		} else {
+			return false;
+		}
+	},
+
 	insertOne: async (data) => {
 		const filter = {
 			'_id': data.hash,
@@ -36,6 +46,8 @@ module.exports = {
 			update,
 			options,
 		);
+
+		console.log('inserted pending media', data.hash);
 	},
 
 	deleteAll: () => {
