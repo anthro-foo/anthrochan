@@ -20,12 +20,7 @@ module.exports = {
 
 	isApproved: async(hash) => {
 		const file = await db.findOne({ _id: hash});
-		if (file) {
-			console.log('file found with ', file.approved);
-			return file.approved === approvalTypes.APPROVED;
-		} else {
-			return false;
-		}
+		return file ? file.approvalTypes === approvalTypes.APPROVED : false;
 	},
 
 	insertOne: async (data) => {
