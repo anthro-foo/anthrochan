@@ -431,34 +431,34 @@ module.exports = async (req, res) => {
 
 			// Skip approval stage if file already approved
 			if (Approval.isApproved(file.hash) === true) {
-				console.log('skipping approval', file.hash);
+				console.log('Skipping approval', file.hash);
 				continue;
 			}
 
-			const media = { 
+			const approvalMetadata = { 
 				...file, 
 				ip: res.locals.ip,
 				approved: isStaffOrGlobal ? approvedTypes.APPROVED : approvedTypes.PENDING,
 			};
 
-			if (media.approved !== approvedTypes.APPROVED) {
+			if (approvalMetadata.approved !== approvedTypes.APPROVED) {
+				// Delete file information from post
 				for (const key in file) {
 					delete file[key];
 				}
+
+				// Replace file with a temporary pendingapproval image
 				file.filename = 'pendingapproval.png';
 				file.originalFilename = 'pendingapproval.png';
 				file.mimetype = 'image/png';
-				file.hash = media.hash;
-				file.extension = media.extension;
-				file.geometry = {
-					width: 200,
-					heigh: 200,
-				};
-
+				file.hash = approvalMetadata.hash;
+				file.extension = '.png';
+				const imageDimensions = await getDimensions('pendingapproval.png', 'file', false);
+				file.geometry = imageDimensions;
+				file.geometryString = `${imageDimensions.width}x${imageDimensions.height}`;
 			};
 
-			await Approval.insertOne(media);
-			console.log('Inserted: ', media.hash);
+			await Approval.insertOne(approvalMetadata);
 		}
 	}
 
