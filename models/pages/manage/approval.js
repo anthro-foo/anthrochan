@@ -16,8 +16,8 @@ module.exports = async (req, res, next) => {
 	res.render('manageapproval', {
 			csrf: req.csrfToken(),
 			permissions: res.locals.permissions,
+            noboard: res.locals.noboard ? true : false,
 			viewRawIp: res.locals.permissions.get(Permissions.VIEW_RAW_IP),
 			pending,
 	});
 };
-

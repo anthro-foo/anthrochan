@@ -4,15 +4,16 @@ include ../mixins/boardheader.pug
 include ../mixins/media.pug
 
 block head
-	title /#{board._id}/ - #{__('Approval')}
+	title #{__('Approval')}
 
 block content
-	+boardheader(__('Approval'))
+	h1.board-title #{__('Approval')}
 	br
-	+managenav('approval')
+	if !noboard
+		+managenav('approval')
 	hr(size=1)
 	h4.no-m-p #{__('Pending Approval')}:
-	form(action=`/forms/board/${board._id}/modactions` method='POST' enctype='application/x-www-form-urlencoded')
+	form(action=`` method='POST' enctype='application/x-www-form-urlencoded')
 		if pending.length === 0
 			p #{__('No media pending.')}
 		else
