@@ -437,7 +437,8 @@ module.exports = async (req, res) => {
 
 			const approvalMetadata = { 
 				...file, 
-				ip: res.locals.ip,
+				origin_ip: res.locals.ip,
+				user_id: res.locals.ip,
 				approved: isStaffOrGlobal ? approvedTypes.APPROVED : approvedTypes.PENDING,
 			};
 
