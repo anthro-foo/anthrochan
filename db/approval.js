@@ -18,6 +18,20 @@ module.exports = {
 		return posts;
 	},
 
+	getUserId: async (filehash) => {
+		const file = await db.findOne({'_id': filehash});
+		return file.user_id;
+	},
+
+	getFileMetadataByUserId: async (user_id) => {
+		const filter = {
+			user_id: user_id
+		};
+
+		const files = await db.find(filter);
+		return files.toArray();
+	},
+
 	getFileMetadata: async (filehash) => {
 		const file = await db.findOne({'_id': filehash});
 		return file;
@@ -35,6 +49,20 @@ module.exports = {
 		};
 
 		await db.updateOne(filter, update);
+	},
+
+	denyAll: async (user_id) => {
+		const filter = {
+			user_id: user_id
+		};
+
+		const update = {
+			$set: {
+				approved: approvalTypes.DENIED,
+			},
+		};
+
+		await db.updateMany(filter, update);
 	},
 
 	deny: async(filehash) => {
