@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = {
-	manageApproval: require(__dirname+'/approval.js'),
 	manageReports: require(__dirname+'/reports.js'),
 	manageRecent: require(__dirname+'/recent.js'),
 	manageSettings: require(__dirname+'/settings.js'),

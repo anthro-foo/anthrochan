@@ -18,9 +18,47 @@ module.exports = {
 		return posts;
 	},
 
-	isApproved: async(hash) => {
-		const file = await db.findOne({ _id: hash});
-		return file ? file.approvalTypes === approvalTypes.APPROVED : false;
+	getFileMetadata: async (filehash) => {
+		const file = await db.findOne({'_id': filehash});
+		return file;
+	},
+
+	approve: async(filehash) => {
+		const filter = {
+			_id: filehash
+		};
+
+		const update = {
+			$set: {
+				approved: approvalTypes.APPROVED,
+			},
+		};
+
+		await db.updateOne(filter, update);
+	},
+
+	deny: async(filehash) => {
+		const filter = {
+			_id: filehash
+		};
+
+		const update = {
+			$set: {
+				approved: approvalTypes.DENIED
+			},
+		};
+
+		await db.updateOne(filter, update);
+	},
+
+	isApproved: async(filehash) => {
+		const file = await db.findOne({ _id: filehash});
+		return file ? file.approved === approvalTypes.APPROVED : false;
+	},
+
+	isDenied: async(filehash) => {
+		const file = await db.findOne({ _id: filehash});
+		return file ? file.approved === approvalTypes.DENIED : false;
 	},
 
 	insertOne: async (data) => {
@@ -41,8 +79,6 @@ module.exports = {
 			update,
 			options,
 		);
-
-		console.log('inserted pending media', data.hash);
 	},
 
 	deleteAll: () => {

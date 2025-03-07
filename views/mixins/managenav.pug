@@ -12,9 +12,6 @@ mixin managenav(selected, upLevel)
 			a(href=`${upLevel ? '../' : ''}recent.html` class=(selected === 'recent' ? 'bold' : '')) [#{__('Recent')}]
 			|
 			|
-			a(href=`${upLevel ? '../' : ''}approval.html` class=(selected === 'approval' ? 'bold' : '')) [#{__('Approval')}]
-			|
-			|
 			a(href=`${upLevel ? '../' : ''}reports.html` class=(selected === 'reports' ? 'bold' : '')) [#{__('Reports')}]
 		if permissions.get(Permissions.MANAGE_BOARD_BANS)
 			|  

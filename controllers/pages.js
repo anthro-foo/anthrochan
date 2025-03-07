@@ -18,7 +18,7 @@ const express  = require('express')
 	, setMinimal = require(__dirname+'/../lib/middleware/misc/setminimal.js')
 	, { setBoardLanguage, setQueryLanguage } = require(__dirname+'/../lib/middleware/locale/locale.js')
 	//page models
-	, { manageApproval, manageRecent, manageReports, manageAssets, manageSettings, manageBans, manageFilters, editFilter, editCustomPage, manageMyPermissions,
+	, { manageRecent, manageReports, manageAssets, manageSettings, manageBans, manageFilters, editFilter, editCustomPage, manageMyPermissions,
 		manageBoard, manageThread, manageLogs, manageCatalog, manageCustomPages, manageStaff, editStaff, editPost } = require(__dirname+'/../models/pages/manage/')
 	, { globalManageApproval, globalManageSettings, globalManageReports, globalManageBans, globalManageBoards, globalManageFilters, globalEditFilter, editNews, editAccount, editRole,
 		globalManageRecent, globalManageAccounts, globalManageNews, globalManageLogs, globalManageRoles } = require(__dirname+'/../models/pages/globalmanage/')
@@ -58,8 +58,6 @@ router.get('/settings.json', globalSettings); //public global settings
 router.get('/randombanner', randombanner); //random banner
 
 //board manage pages
-router.get('/:board/manage/approval.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, manageApproval);
 router.get('/:board/manage/catalog.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
 	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, manageCatalog);
 router.get('/:board/manage/:page(1[0-9]{1,}|[2-9][0-9]{0,}|index).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,

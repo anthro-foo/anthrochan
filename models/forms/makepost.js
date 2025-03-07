@@ -265,6 +265,17 @@ module.exports = async (req, res) => {
 		// upload, create thumbnails, get metadata, etc.
 		for (let i = 0; i < res.locals.numFiles; i++) {
 			const file = req.files.file[i];
+
+			if ((await Approval.isDenied(file.sha256)) === true) {
+				console.error('User tried to upload bad file');
+				deleteTempFiles(req).catch(console.error);
+				return dynamicResponse(req, res, 429, 'message', {
+					'title': __('Bad file'),
+					'message': __('You can not upload that file'),
+					'redirect': `/${req.params.board}${req.body.thread ? '/thread/' + req.body.thread + '.html' : ''}`
+				});
+			}
+
 			file.filename = file.sha256 + file.extension;
 
 			//get metadata
@@ -430,8 +441,7 @@ module.exports = async (req, res) => {
 			const file = files[i];
 
 			// Skip approval stage if file already approved
-			if (Approval.isApproved(file.hash) === true) {
-				console.log('Skipping approval', file.hash);
+			if ((await Approval.isApproved(file.hash)) === true) {
 				continue;
 			}
 
