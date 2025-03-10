@@ -97,16 +97,13 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
             if post.files.length > 0
                 .post-files(class=(post.files.length > 1 ? 'fn' : ''))
                     each file, fileindex in post.files
-                        -is_pending = true
-                        if file.approved || manage || modview || globalmanage
-                            -is_pending = false
                         if file.mimetype === 'tegaki/replay' && post.files.some(f => f.originalFilename.slice(0, -3) === file.originalFilename.slice(0,-4))
                             - continue; //Skip showing tegaki replay alone if is includes the image
                         .post-file
                             - const type = file.mimetype.split('/')[0]
                             span.post-file-info
                                 span
-                                    if !is_pending
+                                    if file.approved || manage || modview || globalmanage
                                         a.filename(href='/file/'+file.filename title='Download '+file.originalFilename download=file.originalFilename) #{post.spoiler || file.spoiler ? __('Spoiler File') : file.originalFilename}
                                         |
                                         |
@@ -139,7 +136,7 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
                                         if file.mimetype === 'tegaki/replay'
                                             |  
                                             span.jsonly: a.dummy-link.replay-tegaki.noselect(href=`/file/${file.filename}` download=file.originalFilename) #{__('Replay')}
-                            if !(manage || modview || globalmanage) && is_pending
+                            if !(manage || modview || globalmanage || file.approved)
                                 +filependingapproval()
                             else
                                 .file-container
@@ -155,7 +152,7 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
                                                 div.audioimg.file-thumb
                                             else
                                                 img.file-thumb(src=`/file/${file.filename}` height=file.geometry.height width=file.geometry.width loading='lazy')
-                                    if (manage || modview || globalmanage)
+                                    if (manage || modview || globalmanage) && !file.approved
                                         .overlay-text File pending approval
             - if (post.message && modview) { post.message = post.message.replace(new RegExp(`<a class="quote" href="/${post.board}/`, 'g'), `<a class="quote" href="/${post.board}/manage/`); } //its either this, a subdomain, or nothing.
             - let truncatedMessage = post.message;
