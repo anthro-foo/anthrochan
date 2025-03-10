@@ -445,6 +445,16 @@ module.exports = {
 		return db.find(query).toArray();
 	},
 
+	getFilesPendingCount: async () => {
+		const result = await db.aggregate([
+			{ $unwind: "$files" },
+			{ $match: { "files.approved": false } },
+			{ $count: "total_unapproved_files" }
+		]).toArray();
+
+		return result[0]?.total_unapproved_files || 0;
+	},
+
 	//takes array "ids" of mongo ids to get posts from any board
 	globalGetPosts: (ids) => {
 		return db.find({
