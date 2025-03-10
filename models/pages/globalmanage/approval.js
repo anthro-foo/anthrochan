@@ -1,12 +1,12 @@
 'use strict';
 
-const Approval = require(__dirname+'/../../../db/approval.js')
+const { Posts } = require(__dirname+'/../../../db/index.js')
 	, { Permissions } = require(__dirname+'/../../../lib/permission/permissions.js');
 
 module.exports = async (req, res, next) => {
-	let pending;
+	let posts = null;
 	try {
-		pending = await Approval.getPending(res.locals.permissions);
+		posts = await Posts.getFilesPending();
 	} catch (err) {
 		return next(err);
 	}
@@ -17,6 +17,6 @@ module.exports = async (req, res, next) => {
 			csrf: req.csrfToken(),
 			permissions: res.locals.permissions,
 			viewRawIp: res.locals.permissions.get(Permissions.VIEW_RAW_IP),
-			pending,
+			posts,
 	});
 };

@@ -1462,6 +1462,29 @@ table.boardtable .nobreak {
 	overflow-wrap: break-word;
 }
 
+.file-container {
+    position: relative;
+    display: inline-block;
+}
+
+.file-container .overlay-text {
+	/* offset to center over image */
+    position: absolute;
+	top: 10px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+
+	/* prevent being clicked on */
+	user-select: none;
+	pointer-events: none;
+    
+	/* text formatting */
+    color: red;
+	font-size: 1rem;
+	text-align: center;
+    text-shadow: 2px 2px 10px black;
+}
+
 /* ^="f" means only where attachment is false, to prevent showing on attachment files with audio or video mime type */
 .post-file-src[data-type="audio"][data-attachment^="f"]::after,
 .post-file-src[data-type="video"][data-attachment^="f"]::after {

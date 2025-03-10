@@ -1,7 +1,7 @@
 'use strict';
 
 const config = require(__dirname+'/../../lib/misc/config.js')
-	, approvalHandler = require(__dirname+'/../../lib/approval/approval.js')
+	, approvalHandler = require(__dirname+'/../../models/forms/approvalhandler.js')
 	, paramConverter = require(__dirname+'/../../lib/middleware/input/paramconverter.js');
 
 module.exports = {

@@ -35,13 +35,15 @@ const { createHash, randomBytes } = require('crypto')
 	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
 	, { buildThread } = require(__dirname+'/../../lib/build/tasks.js')
 	, FIELDS_TO_REPLACE = ['email', 'subject', 'message']
-	, approvedTypes = require(__dirname+'/../../lib/approval/approvaltypes.js');
+	, approvalTypes = require(__dirname+'/../../lib/approval/approvaltypes.js');
 
 module.exports = async (req, res) => {
 
 	const { __ } = res.locals;
 	const { checkRealMimeTypes, thumbSize, thumbExtension, videoThumbPercentage, audioThumbnails,
 		dontStoreRawIps, globalLimits } = config.get;
+
+	const user_uuid = res.locals.ip.raw;
 
 	//
 	// Spam/flood check
@@ -266,15 +268,16 @@ module.exports = async (req, res) => {
 		for (let i = 0; i < res.locals.numFiles; i++) {
 			const file = req.files.file[i];
 
-			if ((await Approval.isDenied(file.sha256)) === true) {
-				console.error('User tried to upload bad file');
-				deleteTempFiles(req).catch(console.error);
-				return dynamicResponse(req, res, 429, 'message', {
-					'title': __('Bad file'),
-					'message': __('You can not upload that file'),
-					'redirect': `/${req.params.board}${req.body.thread ? '/thread/' + req.body.thread + '.html' : ''}`
-				});
-			}
+			// Check if file approved
+			// if ((await Approval.isDenied(file.sha256)) === true) {
+			// 	console.error('User tried to upload bad file');
+			// 	deleteTempFiles(req).catch(console.error);
+			// 	return dynamicResponse(req, res, 429, 'message', {
+			// 		'title': __('Bad file'),
+			// 		'message': __('You can not upload that file'),
+			// 		'redirect': `/${req.params.board}${req.body.thread ? '/thread/' + req.body.thread + '.html' : ''}`
+			// 	});
+			// }
 
 			file.filename = file.sha256 + file.extension;
 
@@ -300,7 +303,7 @@ module.exports = async (req, res) => {
 			const existsFull = await pathExists(`${uploadDirectory}/file/${processedFile.filename}`);
 			processedFile.sizeString = formatSize(processedFile.size);
 			const saveFull = async () => {
-				await Files.increment(processedFile);
+				await Files.increment(processedFile, user_uuid);
 				req.files.file[i].inced = true;
 				if (!existsFull) {
 					await moveUpload(file, processedFile.filename, 'file');
@@ -440,36 +443,41 @@ module.exports = async (req, res) => {
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
 
-			// Skip approval stage if file already approved
-			if ((await Approval.isApproved(file.hash)) === true) {
-				continue;
-			}
+			file.approved = false;
 
-			const approvalMetadata = { 
-				...file, 
-				origin_ip: res.locals.ip,
-				user_id: res.locals.ip,
-				approved: isStaffOrGlobal ? approvedTypes.APPROVED : approvedTypes.PENDING,
-			};
+			// // Skip approval stage if file already approved
+			// if ((await Approval.isApproved(file.hash)) === true) {
+			// 	continue;
+			// }
 
-			if (approvalMetadata.approved !== approvedTypes.APPROVED) {
-				// Delete file information from post
-				for (const key in file) {
-					delete file[key];
-				}
+			// const approvalMetadata = { 
+			// 	...file, 
+			// 	origin_ip: res.locals.ip,
+			// 	user_id: res.locals.ip,
+			// 	approved: isStaffOrGlobal ? approvedTypes.APPROVED : approvedTypes.PENDING,
+			// };
 
-				// Replace file with a temporary pendingapproval image
-				file.filename = 'pendingapproval.png';
-				file.originalFilename = 'pendingapproval.png';
-				file.mimetype = 'image/png';
-				file.hash = approvalMetadata.hash;
-				file.extension = '.png';
-				const imageDimensions = await getDimensions('pendingapproval.png', 'file', false);
-				file.geometry = imageDimensions;
-				file.geometryString = `${imageDimensions.width}x${imageDimensions.height}`;
-			};
+			// if (approvalMetadata.approved !== approvedTypes.APPROVED) {
+			// 	// Delete file information from post
+			// 	for (const key in file) {
+			// 		delete file[key];
+			// 	}
 
-			await Approval.insertOne(approvalMetadata);
+			// 	// Replace file with a temporary pendingapproval image
+			// 	file.filename = 'pendingapproval.png';
+			// 	file.originalFilename = 'pendingapproval.png';
+			// 	file.mimetype = 'image/png';
+			// 	file.hash = approvalMetadata.hash;
+			// 	file.extension = '.png';
+			// 	const imageDimensions = await getDimensions('pendingapproval.png', 'file', false);
+			// 	file.geometry = imageDimensions;
+			// 	file.geometryString = `${imageDimensions.width}x${imageDimensions.height}`;
+			// };
+
+			// await Approval.insertOne(approvalMetadata);
+
+			const file_moderation_status = file.approved ? approvalTypes.APPROVED : approvalTypes.PENDING;
+			await Files.updateModerationStatus(file, file_moderation_status);
 		}
 	}
 
@@ -561,6 +569,7 @@ module.exports = async (req, res) => {
 		'banmessage': null,
 		userId,
 		'ip': res.locals.ip,
+		user_uuid: user_uuid,
 		files,
 		'reports': [],
 		'globalreports': [],

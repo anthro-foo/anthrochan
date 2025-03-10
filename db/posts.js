@@ -437,6 +437,14 @@ module.exports = {
 		}).limit(quoteLimit).toArray();
 	},
 
+	getFilesPending: async () => {
+		const query = {
+			"files.approved": false,
+		};
+
+		return db.find(query).toArray();
+	},
+
 	//takes array "ids" of mongo ids to get posts from any board
 	globalGetPosts: (ids) => {
 		return db.find({
