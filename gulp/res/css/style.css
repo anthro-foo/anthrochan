@@ -1472,6 +1472,12 @@ table.boardtable .nobreak {
 	overflow-wrap: break-word;
 }
 
+.file-pending-approval {
+	/* don't select or click text */
+	user-select: none;
+	pointer-events: none;
+}
+
 .post-file-src .overlay-text {
 	/* offset to center over image */
     position: absolute;

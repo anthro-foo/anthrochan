@@ -6,6 +6,6 @@ mixin filependingapproval(catalog=false, postURL=null, post=null, small=false)
             a(href=`${postURL}#${post.postId}`)
             img.catalog-thumb(class=(small?'small':'') src=filename width=size height=size loading='lazy')
     else 
-        .post-file-src(data-type='image' data-attachment='false')
+        .post-file-src.file-pending-approval(data-type='image' data-attachment='false')
             a(target='_blank' href=filename)
             img.file-thumb(src=filename height=size width=size loading='lazy')
