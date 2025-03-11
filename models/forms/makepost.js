@@ -6,7 +6,7 @@ const { createHash, randomBytes } = require('crypto')
 	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
 	, Mongo = require(__dirname+'/../../db/db.js')
 	, Socketio = require(__dirname+'/../../lib/misc/socketio.js')
-	, { Stats, Posts, Boards, Files, Approval, Filters } = require(__dirname+'/../../db/')
+	, { Stats, Posts, Boards, Files, Filters } = require(__dirname+'/../../db/')
 	, cache = require(__dirname+'/../../lib/redis/redis.js')
 	, nameHandler = require(__dirname+'/../../lib/post/name.js')
 	, getFilterStrings = require(__dirname+'/../../lib/post/getfilterstrings.js')
@@ -34,8 +34,7 @@ const { createHash, randomBytes } = require('crypto')
 	, buildQueue = require(__dirname+'/../../lib/build/queue.js')
 	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
 	, { buildThread } = require(__dirname+'/../../lib/build/tasks.js')
-	, FIELDS_TO_REPLACE = ['email', 'subject', 'message']
-	, approvalTypes = require(__dirname+'/../../lib/approval/approvaltypes.js');
+	, FIELDS_TO_REPLACE = ['email', 'subject', 'message'];
 
 module.exports = async (req, res) => {
 
@@ -438,13 +437,13 @@ module.exports = async (req, res) => {
 	//
 	// Media approval
 	//
-	// const trusted = isStaffOrGlobal ? true : false;
+	const trusted = isStaffOrGlobal ? true : false;
 
 	if (files.length > 0) {
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
 
-			file.approved = false;
+			file.approved = trusted;
 
 			// // Skip approval stage if file already approved
 			// if ((await Approval.isApproved(file.hash)) === true) {
