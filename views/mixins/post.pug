@@ -125,7 +125,7 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 												| , #{file.durationString}
 											| )
 										if type === 'image'
-											if (board && board.settings.reverseImageSearchLinks === true) || (overboard && overboardReverseLinks === true) || manage || globalmanage
+											if (board && board.settings.reverseImageSearchLinks === true) || (overboard && overboardReverseLinks === true) || manage || modview || globalmanage
 												|  
 												span: a(href=`${reverseImageLinksURL.replace('%s', encodeURIComponent(meta.url+'/file/'+file.filename))}` rel='nofollow' referrerpolicy='same-origin' title=__('Reverse Image Search') target='_blank') #{__('Reverse')}
 											if file.originalFilename.endsWith('-tegaki.png')
@@ -139,26 +139,25 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 							if !(manage || modview || globalmanage || file.approved)
 								+filependingapproval()
 							else
-								.file-container
-									.post-file-src(data-type=type data-attachment=(file.attachment ? "true" : "false"))
-										a(target='_blank' href=`/file/${file.filename}`)
-											if post.spoiler || file.spoiler
-												div.spoilerimg.file-thumb
-											else if file.hasThumb
-												img.file-thumb(src=`/file/thumb/${file.hash}${file.thumbextension}` height=file.geometry.thumbheight width=file.geometry.thumbwidth loading='lazy')
-											else if file.attachment
-												div.attachmentimg.file-thumb(data-mimetype=file.mimetype)
-											else if type === 'audio'
-												div.audioimg.file-thumb
-											else
-												img.file-thumb(src=`/file/${file.filename}` height=file.geometry.height width=file.geometry.width loading='lazy')
-										if (manage || modview || globalmanage) && !file.approved
-											.overlay-text File pending approval
+								.post-file-src(data-type=type data-attachment=(file.attachment ? "true" : "false"))
+									a(target='_blank' href=`/file/${file.filename}`)
+										if post.spoiler || file.spoiler
+											div.spoilerimg.file-thumb
+										else if file.hasThumb
+											img.file-thumb(src=`/file/thumb/${file.hash}${file.thumbextension}` height=file.geometry.thumbheight width=file.geometry.thumbwidth loading='lazy')
+										else if file.attachment
+											div.attachmentimg.file-thumb(data-mimetype=file.mimetype)
+										else if type === 'audio'
+											div.audioimg.file-thumb
+										else
+											img.file-thumb(src=`/file/${file.filename}` height=file.geometry.height width=file.geometry.width loading='lazy')
 									if (manage || modview || globalmanage) && !file.approved
-										.approval-button-container
-											button.nsfw-button N
-											button.approve-button A
-											button.illegal-button I
+										.overlay-text File pending approval
+								if (manage || modview || globalmanage) && !file.approved
+									.approval-button-container
+										input.nsfw-button(type='submit' name='action' value='N')
+										input.approve-button(type='submit' name='action' value='A')
+										input.illegal-button(type='submit' name='action' value='I')
 			- if (post.message && modview) { post.message = post.message.replace(new RegExp(`<a class="quote" href="/${post.board}/`, 'g'), `<a class="quote" href="/${post.board}/manage/`); } //its either this, a subdomain, or nothing.
 			- let truncatedMessage = post.message;
 			if post.message
