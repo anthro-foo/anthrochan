@@ -1931,13 +1931,16 @@ row.wrap.sb .col {
 
 .flag, .customflag, .customflag::before {
 	display: inline-block;
-	width: 16px;
-	height: 11px;
+	width: 26px;
+	height: 18px;
 	background:url(/file/flags.png) no-repeat;
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;
 	image-rendering: -webkit-optimize-contrast;
 	-ms-interpolation-mode: nearest-neighbor;
+	vertical-align: middle;
+	position: relative;
+	top: -1px;
 }
 
 .customflag {
