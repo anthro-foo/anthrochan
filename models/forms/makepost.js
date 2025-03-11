@@ -63,6 +63,7 @@ module.exports = async (req, res) => {
 	let salt = null;
 	let thread = null;
 	const isStaffOrGlobal = res.locals.permissions.hasAny(Permissions.MANAGE_GLOBAL_GENERAL, Permissions.MANAGE_BOARD_GENERAL);
+	const isAdmin = res.locals.permissions.hasAny(Permissions.VIEW_RAW_IP);
 	const { blockedCountries, threadLimit, ids, userPostSpoiler,
 		pphTrigger, tphTrigger, tphTriggerAction, pphTriggerAction,
 		sageOnlyEmail, forceAnon, replyLimit, disableReplySubject,
@@ -87,7 +88,7 @@ module.exports = async (req, res) => {
 	// Check if board/thread creation locked
 	//
 	if ((lockMode === 2 || (lockMode === 1 && !req.body.thread)) //if board lock, or thread lock and its a new thread
-		&& !isStaffOrGlobal) { //and not staff
+		&& !isAdmin) { // and not admin
 		await deleteTempFiles(req).catch(console.error);
 		return dynamicResponse(req, res, 400, 'message', {
 			'title': __('Bad request'),
@@ -95,7 +96,6 @@ module.exports = async (req, res) => {
 			'redirect': redirect
 		});
 	}
-
 
 	//
 	// Check if thread exists
@@ -206,7 +206,6 @@ module.exports = async (req, res) => {
 		}
 	}
 
-
 	//
 	// File processing
 	//
@@ -303,7 +302,7 @@ module.exports = async (req, res) => {
 			const existsFull = await pathExists(`${uploadDirectory}/file/${processedFile.filename}`);
 			processedFile.sizeString = formatSize(processedFile.size);
 			const saveFull = async () => {
-				await Files.increment(processedFile, user_uuid);
+				await Files.increment(processedFile);
 				req.files.file[i].inced = true;
 				if (!existsFull) {
 					await moveUpload(file, processedFile.filename, 'file');
@@ -439,6 +438,8 @@ module.exports = async (req, res) => {
 	//
 	// Media approval
 	//
+	// const trusted = isStaffOrGlobal ? true : false;
+
 	if (files.length > 0) {
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
@@ -476,8 +477,9 @@ module.exports = async (req, res) => {
 
 			// await Approval.insertOne(approvalMetadata);
 
-			const file_moderation_status = file.approved ? approvalTypes.APPROVED : approvalTypes.PENDING;
-			await Files.updateModerationStatus(file, file_moderation_status);
+			// TODO: user trust system
+			// const file_moderation_status = file.approved ? approvalTypes.APPROVED : approvalTypes.PENDING;
+			// await Files.updateModerationStatus(file.filename, file_moderation_status);
 		}
 	}
 

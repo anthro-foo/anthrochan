@@ -1,17 +1,15 @@
 'use strict';
 
-const approval = require("./approval");
-
 const Mongo = require(__dirname+'/db.js')
 	, formatSize = require(__dirname+'/../lib/converter/formatsize.js')
-	, approvalTypes = require(__dirname+'/../lib/approval/approvaltypes.js')
+	// , approvalTypes = require(__dirname+'/../lib/approval/approvaltypes.js')
 	, db = Mongo.db.collection('files');
 
 module.exports = {
 
 	db,
 
-	increment: (file, user_uuid) => {
+	increment: (file) => {
 		return db.updateOne({
 			_id: file.filename,
 		}, {
@@ -23,7 +21,6 @@ module.exports = {
 			},
 			'$setOnInsert': {
 				'size': file.size,
-				user_uuid: user_uuid
 			}
 		}, {
 			'upsert': true
@@ -90,32 +87,6 @@ module.exports = {
 				};
 			}
 		});
-	},
-
-	updateModerationStatus: async (file, new_status) => {
-		const query = {
-			_id: file.filename,
-		};
-		const update = {
-			$set: {
-				moderation_status: new_status,
-			},
-		};
-
-		return db.updateOne(query, update);
-	},
-
-	pruneDeniedFiles: () => {
-		const query = {
-			count: {
-				$lte: 0
-			},
-			status: {
-				$gte: approvalTypes.DENIED
-			}
-		};
-
-		return db.deleteMany(query);
 	},
 
 	deleteAll: () => {

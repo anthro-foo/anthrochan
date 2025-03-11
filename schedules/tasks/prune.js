@@ -26,7 +26,7 @@ module.exports = {
 			}
 		}).toArray();
 
-		// await Files.db.deleteMany(query);
+		await Files.db.deleteMany(query);
 		await Promise.all(unreferenced.map(async file => {
 			debugLogs && console.log('Pruning', file._id);
 			return Promise.all(

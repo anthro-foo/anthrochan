@@ -14,9 +14,9 @@ module.exports = async (req, res, next) => {
 	res.set('Cache-Control', 'private, max-age=5');
 
 	res.render('globalmanageapproval', {
-			csrf: req.csrfToken(),
-			permissions: res.locals.permissions,
-			viewRawIp: res.locals.permissions.get(Permissions.VIEW_RAW_IP),
-			posts,
+		csrf: req.csrfToken(),
+		permissions: res.locals.permissions,
+		viewRawIp: res.locals.permissions.get(Permissions.VIEW_RAW_IP),
+		posts,
 	});
 };
