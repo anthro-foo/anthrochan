@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
 		return next(err);
 	}
 
-	res.set('Cache-Control', 'private, max-age=5');
+	res.set('Cache-Control', 'private, max-age=1');
 
 	res.render('globalmanageapproval', {
 		csrf: req.csrfToken(),
