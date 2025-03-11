@@ -499,6 +499,16 @@ p {
 	border-style: solid none;
 }
 
+.rules {
+	font-size: 1em;
+}
+
+.rule-clarification {
+	font-size: 1em;
+	font-style: italic;
+	margin-left: 2em;
+}
+
 .dice {
 	color: var(--dice-color);
 }
