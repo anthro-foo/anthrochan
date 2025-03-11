@@ -56,9 +56,14 @@ module.exports = async (req, res) => {
 
 			for (let j = 0; j < post.files.length; j++) {
 				const file = post.files[j];
-				file.approved = true;
-				fileCount++;
-				log_message += `Approved ${file.filename.substring(0,6)},`;
+				if (
+					(req.body.file_moderation_filename && file.filename == req.body.file_moderation_filename)
+					|| !req.body.file_moderation_filename) {
+					file.approved = true;
+					fileCount++;
+					log_message += `Approved ${file.filename.substring(0,6)},`;
+				}
+
 			} 
 
 			Socketio.emitRoom(`${post.board}-${post.thread || post.postId}`, 'approvePost', {
@@ -93,7 +98,7 @@ module.exports = async (req, res) => {
 
 		}
 
-		if (fileCount > 1) {
+		if (fileCount > 1 && !req.body.file_moderation_filename) {
 			message = `Approved ${fileCount} files`;
 		} 
 	}

@@ -22,7 +22,7 @@ const express  = require('express')
 	, fileMiddlewares = require(__dirname+'/../lib/middleware/file/filemiddlewares.js')
 	, { setBoardLanguage, setQueryLanguage } = require(__dirname+'/../lib/middleware/locale/locale.js')
 //controllers
-	, { approvalController, deleteBoardController, editBansController, appealController, globalActionController, twofactorController,
+	, { deleteBoardController, editBansController, appealController, globalActionController, twofactorController,
 		actionController, addCustomPageController, deleteCustomPageController, addNewsController,
 		editNewsController, deleteNewsController, uploadBannersController, deleteBannersController, addFlagsController,
 		deleteFlagsController, boardSettingsController, transferController, addAssetsController, deleteAssetsController,
