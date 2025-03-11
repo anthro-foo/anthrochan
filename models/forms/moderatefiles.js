@@ -21,7 +21,6 @@ module.exports = async (req, res) => {
 				await Posts.approveFile(filename);
 				denied = false;
 				message = `Approved ${filehash}`;
-				log_message = message;
 				break;
 			case 'nsfw':
 				req.body.delete_file = true; // delete files
@@ -96,7 +95,7 @@ module.exports = async (req, res) => {
 
 		if (fileCount > 1) {
 			message = `Approved ${fileCount} files`;
-		}
+		} 
 	}
 
 	// recalculate actions if necessary

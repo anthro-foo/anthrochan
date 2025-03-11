@@ -77,6 +77,7 @@ module.exports = async (req, res, next) => {
 		const { message, log_message } = await moderateFiles(req, res);
 
 		req.body.log_message = log_message;
+		modlogActions.push(message);
 		messages.push(message);
 	}
 
