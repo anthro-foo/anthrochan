@@ -132,7 +132,7 @@ block content
 						a(href=`/${b}/manage/custompages.html`) #{__('Custom Pages')}
 					if permissions.get(Permissions.MANAGE_BOARD_STAFF) || boardPermissions[b].get(Permissions.MANAGE_BOARD_STAFF)
 						|   
-						a(href=`/${b}/manage/staff.html`) #{__('Staff')}
+						a(href=`/${b}/manage/staff.html`) #{__('Trusted Users')}
 
 	if user.staffBoards.length > 0 ||  user.ownedBoards.length > 0
 		hr(size=1)
