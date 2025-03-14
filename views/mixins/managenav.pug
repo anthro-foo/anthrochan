@@ -30,6 +30,6 @@ mixin managenav(selected, upLevel)
 			a(href=`${upLevel ? '../' : ''}assets.html` class=(selected === 'assets' ? 'bold' : '')) [#{__('Assets')}]
 			|  
 			a(href=`${upLevel ? '../' : ''}custompages.html` class=(selected === 'custompages' ? 'bold' : '')) [#{__('Custom Pages')}]
-		if permissions.get(Permissions.MANAGE_BOARD_TRUSTED)
+		if permissions.get(Permissions.MANAGE_BOARD_STAFF)
 			|  
-			a(href=`${upLevel ? '../' : ''}staff.html` class=(selected === 'staff' ? 'bold' : '')) [#{__('Trusted Users')}]
+			a(href=`${upLevel ? '../' : ''}staff.html` class=(selected === 'staff' ? 'bold' : '')) [#{__('Staff')}]

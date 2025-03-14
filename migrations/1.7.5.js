@@ -17,6 +17,26 @@ module.exports = async(db, redis) => {
 		Permissions.BYPASS_CAPTCHA,
 		Permissions.BYPASS_FILE_APPROVAL,
 	]);
+
+	const BOARD_STAFF_DEFAULTS = new Permission(TRUSTED_USER.base64);
+	BOARD_STAFF_DEFAULTS.setAll([
+		Permissions.MANAGE_BOARD_GENERAL,
+		Permissions.MANAGE_BOARD_BANS,
+		Permissions.MANAGE_BOARD_LOGS,
+		Permissions.MANAGE_BOARD_TRUSTED,
+	]);
+
+	const BOARD_STAFF = new Permission(BOARD_STAFF_DEFAULTS.base64);
+
+	const BOARD_OWNER_DEFAULTS = new Permission(BOARD_STAFF.base64);
+	BOARD_OWNER_DEFAULTS.setAll([
+		Permissions.MANAGE_BOARD_OWNER,
+		Permissions.MANAGE_BOARD_STAFF,
+		Permissions.MANAGE_BOARD_CUSTOMISATION,
+		Permissions.MANAGE_BOARD_SETTINGS,
+	]);
+
+	const BOARD_OWNER = new Permission(BOARD_OWNER_DEFAULTS.base64);
 	
 	const GLOBAL_STAFF = new Permission(TRUSTED_USER.base64);
 	GLOBAL_STAFF.setAll([
@@ -42,10 +62,14 @@ module.exports = async(db, redis) => {
 	console.log('Clearing existing roles');
 	await db.collection('roles').deleteMany({});
 
-	console.log('Adding Anon, Trusted User, Global Staff, Admin, Root roles');
+	console.log('Adding Anon, Trusted User, Board staff, Board owner, Global Staff, Admin, Root roles');
 	await db.collection('roles').insertMany([
 		{ name: 'ANON', permissions: Binary(ANON.array) },
 		{ name: 'TRUSTED_USER', permissions: Binary(TRUSTED_USER.array) },
+		{ name: 'BOARD_STAFF', permissions: Binary(BOARD_STAFF.array) },
+		{ name: 'BOARD_OWNER', permissions: Binary(BOARD_OWNER.array) },
+		{ name: 'BOARD_STAFF_DEFAULTS', permissions: Binary(BOARD_STAFF_DEFAULTS.array) },
+		{ name: 'BOARD_OWNER_DEFAULTS', permissions: Binary(BOARD_OWNER_DEFAULTS.array) },
 		{ name: 'GLOBAL_STAFF', permissions: Binary(GLOBAL_STAFF.array) },
 		{ name: 'ADMIN', permissions: Binary(ADMIN.array) },
 		{ name: 'ROOT', permissions: Binary(ROOT.array) },
