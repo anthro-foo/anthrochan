@@ -435,50 +435,14 @@ module.exports = async (req, res) => {
 	deleteTempFiles(req).catch(console.error);
 
 	//
-	// Media approval
+	// File approval
 	//
-	const trusted = isStaffOrGlobal ? true : false;
+	const bypassFileApproval = res.locals.permissions.hasAny(Permissions.BYPASS_FILE_APPROVAL);
 
 	if (files.length > 0) {
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
-
-			file.approved = trusted;
-
-			// // Skip approval stage if file already approved
-			// if ((await Approval.isApproved(file.hash)) === true) {
-			// 	continue;
-			// }
-
-			// const approvalMetadata = { 
-			// 	...file, 
-			// 	origin_ip: res.locals.ip,
-			// 	user_id: res.locals.ip,
-			// 	approved: isStaffOrGlobal ? approvedTypes.APPROVED : approvedTypes.PENDING,
-			// };
-
-			// if (approvalMetadata.approved !== approvedTypes.APPROVED) {
-			// 	// Delete file information from post
-			// 	for (const key in file) {
-			// 		delete file[key];
-			// 	}
-
-			// 	// Replace file with a temporary pendingapproval image
-			// 	file.filename = 'pendingapproval.png';
-			// 	file.originalFilename = 'pendingapproval.png';
-			// 	file.mimetype = 'image/png';
-			// 	file.hash = approvalMetadata.hash;
-			// 	file.extension = '.png';
-			// 	const imageDimensions = await getDimensions('pendingapproval.png', 'file', false);
-			// 	file.geometry = imageDimensions;
-			// 	file.geometryString = `${imageDimensions.width}x${imageDimensions.height}`;
-			// };
-
-			// await Approval.insertOne(approvalMetadata);
-
-			// TODO: user trust system
-			// const file_moderation_status = file.approved ? approvalTypes.APPROVED : approvalTypes.PENDING;
-			// await Files.updateModerationStatus(file.filename, file_moderation_status);
+			file.approved = bypassFileApproval;
 		}
 	}
 
