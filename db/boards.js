@@ -155,6 +155,22 @@ module.exports = {
 			}
 		);
 	},
+	
+	removeTrustedFromAll: async (usernames) => {
+		// clear all board cache
+		const boards = (await db.find().toArray()).map(board => board._id);
+		if (boards && boards.length > 0) {
+			for (let i = 0, len = boards.length; i < len; i++) {
+				const board = boards[i];
+				cache.del(`board:${board}`);
+			}
+		}
+		const unsetObject = usernames.reduce((acc, username) => {
+			acc[`trusted.${username}`] = '';
+			return acc;
+		}, {});
+		return db.updateMany({}, { '$unset': unsetObject,});
+	},
 
 	setStaffPermissions: (board, username, permissions, setOwner = false) => {
 		cache.del(`board:${board}`);

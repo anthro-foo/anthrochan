@@ -234,6 +234,20 @@ module.exports = {
 		cache.del(usernames.map(n => `users:${n}`));
 		return res;
 	},
+	
+	removeAllTrustedBoard: async (usernames) => {
+		const res = await db.updateMany({
+			'_id': {
+				'$in': usernames
+			}
+		}, {
+			'$set': {
+				'trustedBoards': []
+			}
+		});
+		cache.del(usernames.map(n => `users:${n}`));
+		return res;
+	},
 
 	clearStaffAndOwnedBoards: async (usernames) => {
 		const res = await db.updateMany({

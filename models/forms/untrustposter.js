@@ -18,8 +18,8 @@ module.exports = async (req, res) => {
 	if (accounts.size > 0) {
 		const accountsArray = [...accounts];
 		await Promise.all([
-			Accounts.removeTrustedBoard(accountsArray, res.locals.board._id),
-			Boards.removeTrusted(res.locals.board._id, accountsArray),
+			Accounts.removeAllTrustedBoard(accountsArray),
+			Boards.removeTrustedFromAll(accountsArray),
 		]);
 	}
 	
