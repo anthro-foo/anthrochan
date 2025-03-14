@@ -130,7 +130,7 @@ block content
 					if permissions.get(Permissions.MANAGE_BOARD_CUSTOMISATION) || boardPermissions[b].get(Permissions.MANAGE_BOARD_CUSTOMISATION)
 						|   
 						a(href=`/${b}/manage/custompages.html`) #{__('Custom Pages')}
-					if permissions.get(Permissions.MANAGE_BOARD_STAFF) || boardPermissions[b].get(Permissions.MANAGE_BOARD_STAFF)
+					if permissions.get(Permissions.MANAGE_BOARD_TRUSTED) || boardPermissions[b].get(Permissions.MANAGE_BOARD_TRUSTED)
 						|   
 						a(href=`/${b}/manage/staff.html`) #{__('Trusted Users')}
 

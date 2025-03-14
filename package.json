@@ -1,7 +1,7 @@
 {
   "name": "anthrochan",
-  "version": "1.7.4",
-  "migrateVersion": "1.7.4",
+  "version": "1.7.5",
+  "migrateVersion": "1.7.5",
   "description": "",
   "main": "server.js",
   "dependencies": {
