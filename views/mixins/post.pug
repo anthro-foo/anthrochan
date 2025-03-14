@@ -2,7 +2,7 @@ include ./report.pug
 include ./banmessage.pug
 include ./web3signature.pug
 include ./filependingapproval.pug
-include ../includes/actionfooter_fileapproval.pug
+include ../mixins/fileapproval.pug
 
 mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboard=false, approval=false)
 	.anchor(id=post.postId)
@@ -161,7 +161,7 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 									if (manage || modview || globalmanage) && !file.approved
 										.overlay-text File pending approval
 								if (manage || modview || globalmanage) && !file.approved
-									+actionfooter_fileapproval(file.filename)
+									+fileapproval(file.filename)
 			- if (post.message && modview) { post.message = post.message.replace(new RegExp(`<a class="quote" href="/${post.board}/`, 'g'), `<a class="quote" href="/${post.board}/manage/`); } //its either this, a subdomain, or nothing.
 			- let truncatedMessage = post.message;
 			if post.message
