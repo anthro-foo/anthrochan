@@ -1142,9 +1142,7 @@ input:invalid, textarea:invalid {
 }
 
 .post-username {
-	color: whitesmoke;
 	font-weight: bold;
-	text-decoration: underline;
 }
 
 .post-subject {
