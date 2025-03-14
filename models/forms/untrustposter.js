@@ -10,8 +10,8 @@ module.exports = async (req, res) => {
 	
 	for (let i = 0, len = posts.length; i < len; i++) {
 		const post = posts[i];
-		if (post.account_username) {
-			accounts.add(post.account_username);
+		if (post.account) {
+			accounts.add(post.account);
 		}
 	}
 	

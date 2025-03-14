@@ -541,7 +541,7 @@ module.exports = async (req, res) => {
 	};
 	
 	if (res.locals.user) {
-		data.account_username = res.locals.user.username;
+		data.account = res.locals.user.username;
 	}
 
 	if (!req.body.thread) {

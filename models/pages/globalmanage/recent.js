@@ -11,11 +11,20 @@ module.exports = async (req, res, next) => {
 
 	const { dontStoreRawIps } = config.get;
 	const { page, offset, queryString } = pageQueryConverter(req.query, limit);
-	let ipMatch = decodeQueryIP(req.query, res.locals.permissions);
+	let match = decodeQueryIP(req.query, res.locals.permissions);
 
 	let posts;
 	try {
-		posts = await Posts.getBoardRecent(offset, limit, ipMatch, null, res.locals.permissions);
+		if (match) {
+			if (match.ip) {
+				posts = await Posts.getBoardRecent(offset, limit, match.ip, null, res.locals.permissions);
+			} else if (match.account && res.locals.permissions.get(Permissions.VIEW_POST_ACCOUNT)) {
+				posts = await Posts.getBoardRecentByAccount(offset, limit, match.account, null, res.locals.permissions);			
+			}		
+		} else {
+			posts = await Posts.getBoardRecent(offset, limit, null, null, res.locals.permissions);
+		}
+		
 	} catch (err) {
 		return next(err);
 	}
@@ -31,7 +40,8 @@ module.exports = async (req, res, next) => {
 			permissions: res.locals.permissions,
 			viewRawIp: res.locals.permissions.get(Permissions.VIEW_RAW_IP) && !dontStoreRawIps,
 			page,
-			ip: ipMatch ? req.query.ip : null,
+			ip: match && match.ip ? req.query.ip : null,
+			account: match && match.account ? req.query.account : null,
 			queryString,
 		});
 	}

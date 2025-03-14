@@ -40,9 +40,9 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 							a.bold(href=`?ip=${encodeURIComponent(ip)}`) [#{ip}]
 					|
 					|
-					if (modview || manage || globalmanage) && post.account_username
+					if (modview || manage || globalmanage) && post.account
 						if permissions.get(Permissions.VIEW_POST_ACCOUNT)
-							span.post-username #{post.account_username}
+							a.bold(href=`/globalmanage/recent.html?account=${encodeURIComponent(post.account)}`) #{post.account}
 						else
 							span.post-username Account Holder
 					|
