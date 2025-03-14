@@ -77,10 +77,6 @@ class modMacroHandler {
 				this.preservepost.checked = true;
 				this.banreason.value = 'Rule 3 (Hostility)';
 				this.banduration.value = '1d';
-
-				if (this.untrust) {
-					this.untrust.checked = true;
-				}
 				break;
 			case 'rule4':
 				this.globalban.checked = true;
@@ -97,10 +93,6 @@ class modMacroHandler {
 				this.preservepost.checked = true;
 				this.banreason.value = 'Rule 5 (Underage)';
 				this.banduration.value = '1y';
-				
-				if (this.untrust) {
-					this.untrust.checked = true;
-				}
 				break;
 			case 'banevasion':
 				this.deletefile.checked = true;
