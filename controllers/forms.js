@@ -30,7 +30,8 @@ const express  = require('express')
 		deleteAccountsController, editAccountController, addFilterController, editFilterController, deleteFilterController, 
 		globalSettingsController, createBoardController, makePostController, addStaffController, deleteStaffController, 
 		editStaffController, editCustomPageController, editPostController, editRoleController, newCaptchaForm, 
-		blockBypassForm, logoutForm, deleteSessionsController, globalClearController } = require(__dirname+'/forms/index.js');
+		blockBypassForm, logoutForm, deleteSessionsController, globalClearController, addTrustedController,
+		deleteTrustedController } = require(__dirname+'/forms/index.js');
 
 //make new post
 router.post('/board/:board/post', geoIp, processIp, useSession, sessionRefresh, Boards.exists, setBoardLanguage, calcPerms, banCheck, fileMiddlewares.posts,
@@ -93,6 +94,10 @@ router.post('/board/:board/editstaff', useSession, sessionRefresh, csrf, Boards.
 	hasPerms.one(Permissions.MANAGE_BOARD_STAFF), editStaffController.paramConverter, editStaffController.controller); //edit staff permission
 router.post('/board/:board/deletestaff', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_BOARD_STAFF), deleteStaffController.paramConverter, deleteStaffController.controller); //delete board staff
+router.post('/board/:board/addtrusted', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_BOARD_TRUSTED), addTrustedController.paramConverter, addTrustedController.controller); //edit staff permission
+router.post('/board/:board/deletetrusted', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_BOARD_TRUSTED), deleteTrustedController.paramConverter, deleteTrustedController.controller); //edit staff permission
 
 //global management forms
 router.post('/global/editbans', geoIp, processIp, useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,

@@ -74,6 +74,18 @@ module.exports = async(db, redis) => {
 		{ name: 'ADMIN', permissions: Binary(ADMIN.array) },
 		{ name: 'ROOT', permissions: Binary(ROOT.array) },
 	]);
+	
+	console.log('Adding \'trusted\' to boards');
+	await db.collection('boards').updateMany(
+		{ trusted: { $exists: false } },
+		{ $set: { trusted: {} } }
+	);
+	
+	console.log('Updating accounts with \'trusted_boards\'');
+	await db.collection('accounts').updateMany(
+		{ trusted_boards: { $exists: false } },
+		{ $set: { trusted_boards: [] } }
+	);
 
 	console.log('Clearing globalsettings cache');
 	await redis.deletePattern('globalsettings');

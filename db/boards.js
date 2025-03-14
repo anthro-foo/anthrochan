@@ -110,11 +110,41 @@ module.exports = {
 		cache.del(`board:${board}`);
 		return res;
 	},
+	
+	addTrusted: async (board, username) => {
+		const update = {
+			'$set': {
+				[`trusted.${username}`]: {
+					'addedDate': new Date(),
+				},
+			},
+		};
+		const res = db.updateOne({
+			'_id': board,
+		}, update);
+		cache.del(`board:${board}`);
+		return res;
+	},
 
 	removeStaff: (board, usernames) => {
 		cache.del(`board:${board}`);
 		const unsetObject = usernames.reduce((acc, username) => {
 			acc[`staff.${username}`] = '';
+			return acc;
+		}, {});
+		return db.updateOne(
+			{
+				'_id': board,
+			}, {
+				'$unset': unsetObject,
+			}
+		);
+	},
+	
+	removeTrusted: (board, usernames) => {
+		cache.del(`board:${board}`);
+		const unsetObject = usernames.reduce((acc, username) => {
+			acc[`trusted.${username}`] = '';
 			return acc;
 		}, {});
 		return db.updateOne(

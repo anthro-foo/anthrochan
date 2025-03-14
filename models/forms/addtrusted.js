@@ -9,14 +9,14 @@ module.exports = async (req, res) => {
 	const { __ } = res.locals;
 
 	await Promise.all([
-		Accounts.addStaffBoard([req.body.username], res.locals.board._id),
-		Boards.addStaff(res.locals.board._id, req.body.username, roleManager.roles.BOARD_STAFF_DEFAULTS)
+		Accounts.addTrustedBoard([req.body.username], res.locals.board._id),
+		Boards.addTrusted(res.locals.board._id, req.body.username, roleManager.roles.BOARD_STAFF_DEFAULTS)
 	]);
 
 	return dynamicResponse(req, res, 200, 'message', {
 		'title': __('Success'),
-		'message': __('Added staff'),
-		'redirect': `/${req.params.board}/manage/staff.html`,
+		'message': __('Added user to trusted'),
+		'redirect': `/${req.params.board}/manage/trusted.html`,
 	});
 
 };

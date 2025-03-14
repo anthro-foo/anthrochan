@@ -50,6 +50,7 @@ module.exports = {
 			'permissions': Mongo.Binary(permissions.array),
 			'ownedBoards': [],
 			'staffBoards': [],
+			'trusted_boards': [],
 			'twofactor': null,
 			web3,
 		});
@@ -191,6 +192,20 @@ module.exports = {
 		cache.del(usernames.map(n => `users:${n}`));
 		return res;
 	},
+	
+	addTrustedBoard: async (usernames, board) => {
+		const res = await db.updateMany({
+			'_id': {
+				'$in': usernames
+			}
+		}, {
+			'$addToSet': {
+				'trusted_boards': board
+			}
+		});
+		cache.del(usernames.map(n => `users:${n}`));
+		return res;
+	},
 
 	removeStaffBoard: async (usernames, board) => {
 		const res = await db.updateMany({
@@ -200,6 +215,20 @@ module.exports = {
 		}, {
 			'$pull': {
 				'staffBoards': board
+			}
+		});
+		cache.del(usernames.map(n => `users:${n}`));
+		return res;
+	},
+	
+	removeTrustedBoard: async (usernames, board) => {
+		const res = await db.updateMany({
+			'_id': {
+				'$in': usernames
+			}
+		}, {
+			'$pull': {
+				'trusted_boards': board
 			}
 		});
 		cache.del(usernames.map(n => `users:${n}`));
