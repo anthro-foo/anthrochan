@@ -1141,6 +1141,11 @@ input:invalid, textarea:invalid {
 	width: 100%;
 }
 
+.post-username {
+	color: whitesmoke;
+	font-weight: bold;
+}
+
 .post-subject {
 	color: var(--subject-color)!important;
 	font-weight: bold;

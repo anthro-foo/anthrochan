@@ -38,7 +38,13 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 							a.bold(href=`recent.html?ip=${encodeURIComponent(ip)}`) [#{ip}]
 						else 
 							a.bold(href=`?ip=${encodeURIComponent(ip)}`) [#{ip}]
-					| 
+					|
+					|
+					if (modview || manage || globalmanage) && post.account_username
+						- const username = post.account_username
+						span.post-username #{username}
+					|
+					|
 					if !post.thread
 						include ../includes/posticons.pug
 					if post.subject
