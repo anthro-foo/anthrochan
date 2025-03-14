@@ -538,11 +538,8 @@ module.exports = async (req, res) => {
 		quotes, //posts this post replies to
 		crossquotes, //quotes to other threads in same board
 		'backlinks': [], //posts replying to this post
+		account: res.locals.user ? res.locals.user.username : null,
 	};
-	
-	if (res.locals.user) {
-		data.account = res.locals.user.username;
-	}
 
 	if (!req.body.thread) {
 		//if this is a thread, add thread specific properties

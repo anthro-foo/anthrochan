@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
 	const { page, offset, queryString } = pageQueryConverter(req.query, limit);
 	let match = decodeQueryIP(req.query, res.locals.permissions);
 
-	let posts;
+	let posts = null;
 	try {
 		if (match) {
 			if (match.ip) {
@@ -21,7 +21,9 @@ module.exports = async (req, res, next) => {
 			} else if (match.account && res.locals.permissions.get(Permissions.VIEW_RAW_ACCOUNT)) {
 				posts = await Posts.getBoardRecentByAccount(offset, limit, match.account, null, res.locals.permissions);			
 			}		
-		} else {
+		} 
+
+		if (posts === null) {
 			posts = await Posts.getBoardRecent(offset, limit, null, null, res.locals.permissions);
 		}
 		

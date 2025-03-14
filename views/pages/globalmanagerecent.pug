@@ -25,7 +25,7 @@ block content
 			if ip
 				h4.no-m-p #{__(`Global post history for %s`, ip)}
 				hr(size=1)
-			if account
+			if account && permissions.get(Permissions.VIEW_RAW_ACCOUNT)
 				h4.no-m-p #{__(`Global post history for %s`, account)}
 				hr(size=1)
 			for p in posts
