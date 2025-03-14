@@ -42,8 +42,6 @@ module.exports = async (req, res) => {
 	const { checkRealMimeTypes, thumbSize, thumbExtension, videoThumbPercentage, audioThumbnails,
 		dontStoreRawIps, globalLimits } = config.get;
 
-	const user_uuid = res.locals.ip.raw;
-
 	//
 	// Spam/flood check
 	//
@@ -534,7 +532,6 @@ module.exports = async (req, res) => {
 		'banmessage': null,
 		userId,
 		'ip': res.locals.ip,
-		user_uuid: user_uuid,
 		files,
 		'reports': [],
 		'globalreports': [],
@@ -542,6 +539,11 @@ module.exports = async (req, res) => {
 		crossquotes, //quotes to other threads in same board
 		'backlinks': [], //posts replying to this post
 	};
+	
+	// Keep staff identity hidden
+	if (res.locals.user && !isStaffOrGlobal) {
+		data.account_username = res.locals.user.username;
+	}
 
 	if (!req.body.thread) {
 		//if this is a thread, add thread specific properties
