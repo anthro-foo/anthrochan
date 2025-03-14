@@ -54,4 +54,10 @@ details.toggle-label#actionform
 			input(id='bandurationtext', type='text', name='ban_duration', placeholder=__('Ban duration e.g. 7d') autocomplete='off')
 		label
 			input(id='logmessagetext', type='text', name='log_message', placeholder=__('Modlog message') autocomplete='off')
+		label
+			input.post-check(id='untrustcheck', type='checkbox', name='untrust', value='1')
+			| #{__('Untrust User')}
+		label
+			input.post-check(id='trustcheck', type='checkbox', name='trust', value='1')
+			| #{__('Trust User')}
 	input(type='submit', value=__('Submit'))
