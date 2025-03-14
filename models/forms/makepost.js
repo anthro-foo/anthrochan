@@ -540,8 +540,7 @@ module.exports = async (req, res) => {
 		'backlinks': [], //posts replying to this post
 	};
 	
-	// Keep staff identity hidden
-	if (res.locals.user && !isStaffOrGlobal) {
+	if (res.locals.user) {
 		data.account_username = res.locals.user.username;
 	}
 
