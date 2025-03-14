@@ -257,7 +257,6 @@ async function wipe() {
 		Permissions.MANAGE_BOARD_GENERAL,
 		Permissions.MANAGE_BOARD_BANS,
 		Permissions.MANAGE_BOARD_LOGS,
-		Permissions.MANAGE_BOARD_TRUSTED,
 		Permissions.VIEW_BOARD_GLOBAL_BANS,
 
 		Permissions.MANAGE_GLOBAL_GENERAL,

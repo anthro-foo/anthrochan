@@ -13,7 +13,6 @@ class modMacroHandler {
 		this.noappeal = document.getElementById('noappealcheck');
 		this.preservepost = document.getElementById('preservepostcheck');
 		this.untrust = document.getElementById('untrustcheck');
-		this.trust = document.getElementById('trustcheck');
 
 		// text
 		this.banreason = document.getElementById('banreasontext');
@@ -32,9 +31,11 @@ class modMacroHandler {
 		this.widerange.checked = false;
 		this.noappeal.checked = false;
 		this.preservepost.checked = false;
-		this.untrust.checked = false;
-		this.trust.checked = false;
 		
+		if (this.untrust) {
+			this.untrust.checked = false;
+		}
+				
 		this.banreason.value = '';
 		this.banduration.value = '';
 	}
@@ -56,21 +57,30 @@ class modMacroHandler {
 				this.noappeal.checked = true;
 				this.banreason.value = 'Rule 1 (Illegal)';
 				this.banduration.value = '1y';
-				this.untrust.checked = true;
+				
+				if (this.untrust) {
+					this.untrust.checked = true;
+				}
 				break;
 			case 'rule2':
 				this.deletefile.checked = true;
 				this.globalban.checked = true;
 				this.banreason.value = 'Rule 2 (NSFW)';
 				this.banduration.value = '1d';
-				this.untrust.checked = true;
+		
+				if (this.untrust) {
+					this.untrust.checked = true;
+				}
 				break;
 			case 'rule3':
 				this.globalban.checked = true;
 				this.preservepost.checked = true;
 				this.banreason.value = 'Rule 3 (Hostility)';
 				this.banduration.value = '1d';
-				this.untrust.checked = true;
+
+				if (this.untrust) {
+					this.untrust.checked = true;
+				}
 				break;
 			case 'rule4':
 				this.globalban.checked = true;
@@ -87,7 +97,10 @@ class modMacroHandler {
 				this.preservepost.checked = true;
 				this.banreason.value = 'Rule 5 (Underage)';
 				this.banduration.value = '1y';
-				this.untrust.checked = true;
+				
+				if (this.untrust) {
+					this.untrust.checked = true;
+				}
 				break;
 			case 'banevasion':
 				this.deletefile.checked = true;
@@ -95,7 +108,10 @@ class modMacroHandler {
 				this.preservepost.checked = true;
 				this.banreason.value = 'ban evasion';
 				this.banduration.value = '1y';
-				this.untrust.checked = true;
+
+				if (this.untrust) {
+					this.untrust.checked = true;
+				}
 				break;
 		}
 	}

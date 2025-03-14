@@ -95,6 +95,9 @@ block content
 					a(href=`/${b}/manage/custompages.html`) #{__('Custom Pages')}
 					|   
 					a(href=`/${b}/manage/staff.html`) #{__('Staff')}
+					|
+					|
+					a(href=`/${b}/manage/trusted.html`) #{__('Trusted')}
 
 	if user.staffBoards && user.staffBoards.length > 0
 		hr(size=1)
@@ -130,9 +133,13 @@ block content
 					if permissions.get(Permissions.MANAGE_BOARD_CUSTOMISATION) || boardPermissions[b].get(Permissions.MANAGE_BOARD_CUSTOMISATION)
 						|   
 						a(href=`/${b}/manage/custompages.html`) #{__('Custom Pages')}
-					if permissions.get(Permissions.MANAGE_BOARD_TRUSTED) || boardPermissions[b].get(Permissions.MANAGE_BOARD_TRUSTED)
+					if permissions.get(Permissions.MANAGE_BOARD_STAFF) || boardPermissions[b].get(Permissions.MANAGE_BOARD_STAFF)
 						|   
 						a(href=`/${b}/manage/staff.html`) #{__('Staff')}
+					if permissions.get(Permissions.MANAGE_BOARD_TRUSTED) || boardPermissions[b].get(Permissions.MANAGE_BOARD_TRUSTED)
+						|
+						|
+						a(href=`/${b}/manage/trusted.html`) #{__('Trusted')}
 
 	if user.staffBoards.length > 0 ||  user.ownedBoards.length > 0
 		hr(size=1)
