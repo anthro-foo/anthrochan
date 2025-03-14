@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
 		if (match) {
 			if (match.ip) {
 				posts = await Posts.getBoardRecent(offset, limit, match.ip, null, res.locals.permissions);
-			} else if (match.account && res.locals.permissions.get(Permissions.VIEW_POST_ACCOUNT)) {
+			} else if (match.account && res.locals.permissions.get(Permissions.VIEW_RAW_ACCOUNT)) {
 				posts = await Posts.getBoardRecentByAccount(offset, limit, match.account, null, res.locals.permissions);			
 			}		
 		} else {

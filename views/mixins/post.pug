@@ -41,7 +41,7 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 					|
 					|
 					if (modview || manage || globalmanage) && post.account
-						if permissions.get(Permissions.VIEW_POST_ACCOUNT)
+						if permissions.get(Permissions.VIEW_RAW_ACCOUNT)
 							a.bold(href=`/globalmanage/recent.html?account=${encodeURIComponent(post.account)}`) #{post.account}
 						else
 							span.post-username Account Holder
