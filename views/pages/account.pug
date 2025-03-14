@@ -163,6 +163,17 @@ block content
 				include ../includes/forceactiontwofactor.pug
 				input(type='submit', value=__('Resign'))
 
+	if user.trustedBoards && user.trustedBoards.length > 0
+		hr(size=1)
+		h4.no-m-p #{__('Boards you are trusted on')}:
+		ul
+			for b in user.trustedBoards
+				li
+					a(href=`/${b}/index.html`) /#{b}/
+					|
+					|
+					a(href=`/${b}/catalog.html`) #{__('Catalog')}
+
 	hr(size=1)
 	h4.no-m-p #{__('Delete your account')}:
 	.form-wrapper.flexleft.mt-10

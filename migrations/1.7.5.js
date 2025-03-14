@@ -23,7 +23,7 @@ module.exports = async(db, redis) => {
 		Permissions.MANAGE_BOARD_GENERAL,
 		Permissions.MANAGE_BOARD_BANS,
 		Permissions.MANAGE_BOARD_LOGS,
-		Permissions.MANAGE_BOARD_TRUSTED,
+		Permissions.VIEW_BOARD_GLOBAL_BANS,
 	]);
 
 	const BOARD_STAFF = new Permission(BOARD_STAFF_DEFAULTS.base64);
@@ -38,14 +38,9 @@ module.exports = async(db, redis) => {
 
 	const BOARD_OWNER = new Permission(BOARD_OWNER_DEFAULTS.base64);
 	
-	const GLOBAL_STAFF = new Permission(TRUSTED_USER.base64);
+	const GLOBAL_STAFF = new Permission(BOARD_STAFF.base64);
 	GLOBAL_STAFF.setAll([
 		Permissions.BYPASS_BANS,
-
-		Permissions.MANAGE_BOARD_GENERAL,
-		Permissions.MANAGE_BOARD_BANS,
-		Permissions.MANAGE_BOARD_LOGS,
-		Permissions.VIEW_BOARD_GLOBAL_BANS,
 
 		Permissions.MANAGE_GLOBAL_GENERAL,
 		Permissions.MANAGE_GLOBAL_LOGS,
@@ -80,10 +75,10 @@ module.exports = async(db, redis) => {
 		{ $set: { trusted: {} } }
 	);
 	
-	console.log('Updating accounts with \'trusted_boards\'');
+	console.log('Updating accounts with \'trustedBoards\'');
 	await db.collection('accounts').updateMany(
-		{ trusted_boards: { $exists: false } },
-		{ $set: { trusted_boards: [] } }
+		{ trustedBoards: { $exists: false } },
+		{ $set: { trustedBoards: [] } }
 	);
 
 	console.log('Clearing globalsettings cache');

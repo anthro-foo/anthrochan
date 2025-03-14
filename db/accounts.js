@@ -50,7 +50,7 @@ module.exports = {
 			'permissions': Mongo.Binary(permissions.array),
 			'ownedBoards': [],
 			'staffBoards': [],
-			'trusted_boards': [],
+			'trustedBoards': [],
 			'twofactor': null,
 			web3,
 		});
@@ -200,7 +200,7 @@ module.exports = {
 			}
 		}, {
 			'$addToSet': {
-				'trusted_boards': board
+				'trustedBoards': board
 			}
 		});
 		cache.del(usernames.map(n => `users:${n}`));
@@ -228,7 +228,7 @@ module.exports = {
 			}
 		}, {
 			'$pull': {
-				'trusted_boards': board
+				'trustedBoards': board
 			}
 		});
 		cache.del(usernames.map(n => `users:${n}`));

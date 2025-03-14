@@ -235,7 +235,7 @@ async function wipe() {
 		Permissions.MANAGE_BOARD_GENERAL,
 		Permissions.MANAGE_BOARD_BANS,
 		Permissions.MANAGE_BOARD_LOGS,
-		Permissions.MANAGE_BOARD_TRUSTED,
+		Permissions.VIEW_BOARD_GLOBAL_BANS,
 	]);
 
 	const BOARD_STAFF = new Permission(BOARD_STAFF_DEFAULTS.base64);
@@ -250,15 +250,10 @@ async function wipe() {
 
 	const BOARD_OWNER = new Permission(BOARD_OWNER_DEFAULTS.base64);
 	
-	const GLOBAL_STAFF = new Permission(TRUSTED_USER.base64);
+	const GLOBAL_STAFF = new Permission(BOARD_STAFF.base64);
 	GLOBAL_STAFF.setAll([
 		Permissions.BYPASS_BANS,
 		
-		Permissions.MANAGE_BOARD_GENERAL,
-		Permissions.MANAGE_BOARD_BANS,
-		Permissions.MANAGE_BOARD_LOGS,
-		Permissions.VIEW_BOARD_GLOBAL_BANS,
-
 		Permissions.MANAGE_GLOBAL_GENERAL,
 		Permissions.MANAGE_GLOBAL_LOGS,
 		Permissions.MANAGE_GLOBAL_BANS,
