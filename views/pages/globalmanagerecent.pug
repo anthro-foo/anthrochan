@@ -11,7 +11,7 @@ block content
 	.wrapbar
 		+globalmanagenav('recent')
 		if page === 1 && !ip && !account
-			.jsonly#livetext(data-view-raw-ip=(viewRawIp?'true':'false') data-room=`globalmanage-recent-${viewRawIp === true ? 'raw' : 'hashed'}`)
+			.jsonly#livetext(data-view-raw-ip=(viewRawIp?'true':'false') data-view-raw-account=(viewRawAccount?'true':'false') data-room=`globalmanage-recent-${viewRawIp === true ? 'raw' : 'hashed'}`)
 				.dot#livecolor
 				|  #{__('Connecting...')} 
 				input.postform-style.ml-5.di#updatepostsbutton(type='button' value=__('Update'))
@@ -25,7 +25,7 @@ block content
 			if ip
 				h4.no-m-p #{__(`Global post history for %s`, ip)}
 				hr(size=1)
-			if account && permissions.get(Permissions.VIEW_RAW_ACCOUNT)
+			if account && viewRawAccount
 				h4.no-m-p #{__(`Global post history for %s`, account)}
 				hr(size=1)
 			for p in posts
