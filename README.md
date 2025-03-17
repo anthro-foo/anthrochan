@@ -12,11 +12,13 @@ Contact the author:
  - https://anthro.foo
 
 ## Features
- - [x] Multiple language support (🇬🇧 🇵🇹 🇧🇷 🇷🇺 🇮🇹 🇪🇸)
+ - [x] Media approval
+ - [x] Trust system
  - [x] Optional user created boards
  - [x] Multiple files per post
  - [x] Antispam/Anti-flood & DNSBL
  - [x] 3 customisable inbuilt captchas + 3 third party captchas (hcaptcha, recaptcha, yandex smartcaptcha)
+ - [x] Multiple language support (🇬🇧 🇵🇹 🇧🇷 🇷🇺 🇮🇹 🇪🇸)
  - [x] Two factor authentication (TOTP) for accounts
  - [x] Manage everything from the web panel
  - [x] Granular account permissions
@@ -26,6 +28,7 @@ Contact the author:
  - [x] [API documentation](https://fatchan.gitgud.site/jschan-docs/)
  - [x] Built-in webring (compatible w/ [lynxchan](https://gitlab.com/alogware/LynxChanAddon-Webring) & [infinity](https://gitlab.com/Tenicu/infinityaddon-webring))
  - [x] Beautiful bundled frontend with lots of themes and options, see below:
+
 
 ![screenshots](collage.gif "screenshots")
 
