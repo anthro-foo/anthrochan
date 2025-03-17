@@ -41,10 +41,7 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 					|
 					|
 					if (modview || manage || globalmanage) && post.account
-						if viewRawAccount
-							a.bold(href=`/globalmanage/recent.html?account=${encodeURIComponent(post.account)}`) #{post.account}
-						else
-							span.post-username Account Holder
+						a.bold(href=`recent.html?account=${encodeURIComponent(post.account)}`) #{post.account}
 					|
 					|
 					if !post.thread

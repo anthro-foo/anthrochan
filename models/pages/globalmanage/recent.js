@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
 		if (match) {
 			if (match.ip) {
 				posts = await Posts.getBoardRecent(offset, limit, match.ip, null, res.locals.permissions);
-			} else if (match.account && res.locals.permissions.get(Permissions.VIEW_RAW_ACCOUNT)) {
+			} else if (match.account) {
 				posts = await Posts.getBoardRecentByAccount(offset, limit, match.account, null, res.locals.permissions);			
 			}		
 		} 
@@ -41,7 +41,6 @@ module.exports = async (req, res, next) => {
 			posts,
 			permissions: res.locals.permissions,
 			viewRawIp: res.locals.permissions.get(Permissions.VIEW_RAW_IP) && !dontStoreRawIps,
-			viewRawAccount: res.locals.permissions.get(Permissions.VIEW_RAW_ACCOUNT),
 			page,
 			ip: match && match.ip ? req.query.ip : null,
 			account: match && match.account ? req.query.account : null,
