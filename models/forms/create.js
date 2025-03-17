@@ -56,7 +56,6 @@ module.exports = async (req, res) => {
 				'addedDate': new Date(),
 			},
 		},
-		'trusted': {},
 		'flags': {},
 		'assets': [],
 		'settings': {

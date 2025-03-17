@@ -497,12 +497,6 @@ module.exports = {
 			{ _id: { $in: postsIds } },  // Find all posts with matching _id
 			{ $set: { 'files.$[].approved': true } }  // Update all files in the array
 		);
-		// TODO trusted user system
-		// const files = posts.map(post => post.filename); // this doesn't work btw
-		// await Files.db.updateMany(
-			// { _id: { $in: files }},
-			// { $set: { 'moderation_status': approvalTypes.APPROVED }}
-		// );
 	},
 
 	approveFile: async (filename) => {
@@ -511,11 +505,6 @@ module.exports = {
 			{ '$set': { 'files.$[elem].approved': true } },
 			{ 'arrayFilters': [{ 'elem.filename': filename, 'elem.approved': false }] }
 		);
-		// TODO trusted user system
-		// await Files.db.updateOne(
-		// 	{ _id: filename },
-		// 	{ $set : { 'moderation_status': approvalTypes.APPROVED}}
-		// );
 	},
 
 	//takes array "ids" of mongo ids to get posts from any board

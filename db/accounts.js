@@ -50,7 +50,6 @@ module.exports = {
 			'permissions': Mongo.Binary(permissions.array),
 			'ownedBoards': [],
 			'staffBoards': [],
-			'trustedBoards': [],
 			'twofactor': null,
 			web3,
 		});
@@ -80,6 +79,26 @@ module.exports = {
 			}
 		});
 		cache.del(`users:${username}`);
+		return res;
+	},
+	
+	setAccountPermissionsMany: async (usernames, permissionsToSet, originalPermissions=null) => {
+		const filter = {
+			_id: { $in: usernames }
+		};
+		if (originalPermissions) {
+			filter.permissions = Mongo.Binary(originalPermissions.array);
+		}
+		const res = await db.updateMany(
+			filter,
+			{ $set: { permissions: Mongo.Binary(permissionsToSet.array)}}
+		);
+		if (usernames && usernames.length > 0) {
+			for (let i = 0, len = usernames.length; i < len; i++) {
+				const username = usernames[i];
+				cache.del(`users:${username}`);
+			}
+		}
 		return res;
 	},
 
@@ -193,20 +212,6 @@ module.exports = {
 		return res;
 	},
 	
-	addTrustedBoard: async (usernames, board) => {
-		const res = await db.updateMany({
-			'_id': {
-				'$in': usernames
-			}
-		}, {
-			'$addToSet': {
-				'trustedBoards': board
-			}
-		});
-		cache.del(usernames.map(n => `users:${n}`));
-		return res;
-	},
-
 	removeStaffBoard: async (usernames, board) => {
 		const res = await db.updateMany({
 			'_id': {
@@ -221,34 +226,6 @@ module.exports = {
 		return res;
 	},
 	
-	removeTrustedBoard: async (usernames, board) => {
-		const res = await db.updateMany({
-			'_id': {
-				'$in': usernames
-			}
-		}, {
-			'$pull': {
-				'trustedBoards': board
-			}
-		});
-		cache.del(usernames.map(n => `users:${n}`));
-		return res;
-	},
-	
-	removeAllTrustedBoard: async (usernames) => {
-		const res = await db.updateMany({
-			'_id': {
-				'$in': usernames
-			}
-		}, {
-			'$set': {
-				'trustedBoards': []
-			}
-		});
-		cache.del(usernames.map(n => `users:${n}`));
-		return res;
-	},
-
 	clearStaffAndOwnedBoards: async (usernames) => {
 		const res = await db.updateMany({
 			'_id': {

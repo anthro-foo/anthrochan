@@ -1,6 +1,7 @@
 'use strict';
 
-const { Accounts, Boards } = require(__dirname+'/../../db/');
+const { Accounts } = require(__dirname+'/../../db/')
+	, roleManager = require(__dirname+'/../../lib/permission/rolemanager.js');
 
 module.exports = async (req, res) => {
 	const { __ } = res.locals;
@@ -16,11 +17,7 @@ module.exports = async (req, res) => {
 	}
 	
 	if (accounts.size > 0) {
-		const accountsArray = [...accounts];
-		await Promise.all([
-			Accounts.removeAllTrustedBoard(accountsArray),
-			Boards.removeTrustedFromAll(accountsArray),
-		]);
+		await Accounts.setAccountPermissionsMany([...accounts], roleManager.roles.ANON, roleManager.roles.TRUSTED_USER);
 	}
 	
 	return {

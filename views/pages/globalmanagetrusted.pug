@@ -10,6 +10,13 @@ block content
 	+globalmanagenav('trusted')
 	hr(size=1)
 	.form-wrapper.flexleft
+		h4.no-m-p #{__('Search')}:
+		form.form-post.mv-5(action=`/globalmanage/trusted.html` method='GET')
+			input(type='hidden' value=page)
+			.row
+				.label #{__('Username')}
+				input(type='text' name='username' value=username)
+			input(type='submit', value=__('Filter'))
 		h4.no-m-p #{__('Add User')}:
 		form.form-post.mv-5(action=`/forms/global/addtrusted` method='POST' enctype='application/x-www-form-urlencoded')
 			input(type='hidden' name='_csrf' value=csrf)
@@ -18,10 +25,9 @@ block content
 				input(type='text' name='username' required)
 			input(type='submit', value=__('Add'))
 	hr(size=1)
-	h4.no-m-p #{__('Current Trusted Users')}:
+	h4.no-m-p #{__('Trusted Users')}:
 	//-ew
-	- const trustedEntries = [];
-	if trustedEntries.length > 0
+	if trusted && trusted.length > 0
 		form.form-post.nogrow(action=`/forms/global/deletetrusted` method='POST' enctype='application/x-www-form-urlencoded')
 			input(type='hidden' name='_csrf' value=csrf)
 			.table-container.flex-left.mv-5.text-center
@@ -29,16 +35,14 @@ block content
 					tr
 						th
 						th #{__('Username')}
-						th #{__('Date Added')}
-					for trusted in trustedEntries
+					for account in trusted
 						tr
-							td: input(type='checkbox' name='checkedtrusted' value=trusted[0])
-							td #{trusted[0]}
-							td 
-								time.reltime(datetime=trusted[1].addedDate) #{trusted[1].addedDate.toLocaleString(pageLanguage, {hourCycle:'h23'})}
-
+							td: input(type='checkbox' name='checkedtrusted' value=account._id)
+							td #{account._id}
+			.pages.mv-5
+				include ../includes/pages.pug
 			h4.no-m-p #{__('Delete Selected')}:
 			input(type='submit', value='Delete')
 
 	else
-		p #{__('None')}
+		p #{__('No results')}
