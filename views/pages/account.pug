@@ -22,6 +22,23 @@ block content
 	form(action='/forms/logout' method='post')
 		input(type='submit' value=__('Log out'))
 
+	if permissions.hasAny(Permissions.BYPASS_BANS, Permissions.BYPASS_SPAMCHECK, Permissions.BYPASS_RATELIMITS, Permissions.BYPASS_FILTER, Permissions.BYPASS_CAPTCHA, Permissions.BYPASS_FILE_APPROVAL)
+		hr(size=1)
+		h4.no-m-p #{__('Privilidges')}:
+			ul
+				if permissions.get(Permissions.BYPASS_BANS)
+					li Bypass bans
+				if permissions.get(Permissions.BYPASS_SPAMCHECK)
+					li Bypass spamcheck
+				if permissions.get(Permissions.BYPASS_RATELIMITS)
+					li Bypass ratelimits
+				if permissions.get(Permissions.BYPASS_FILTERS)
+					li Bypass filters
+				if permissions.get(Permissions.BYPASS_CAPTCHA)
+					li Bypass captcha
+				if permissions.get(Permissions.BYPASS_FILE_APPROVAL)
+					li Bypass file approval
+
 	if permissions.hasAny(Permissions.MANAGE_GLOBAL_GENERAL, Permissions.MANAGE_GLOBAL_BANS, Permissions.MANAGE_GLOBAL_BOARDS, Permissions.MANAGE_GLOBAL_LOGS, Permissions.MANAGE_GLOBAL_ACCOUNTS, Permissions.MANAGE_GLOBAL_NEWS, Permissions.MANAGE_GLOBAL_SETTINGS)
 		hr(size=1)
 		h4.no-m-p #{__('Global Management')}:
