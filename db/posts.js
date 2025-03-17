@@ -99,6 +99,7 @@ module.exports = {
 		}
 		
 		query['account'] = account;
+		query['nohide'] = true;
 		
 		if (!permissions.get(Permissions.VIEW_RAW_IP)) {
 			projection['ip.raw'] = 0;

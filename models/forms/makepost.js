@@ -484,6 +484,16 @@ module.exports = async (req, res) => {
 
 	//forceanon and sageonlyemail only allow sage email
 	let email = (isStaffOrGlobal || (!forceAnon && !sageOnlyEmail) || req.body.email === 'sage') ? req.body.email : null;
+	let nohide = false;
+	if (email && email !== 'sage') {
+		nohide = email.includes('nohide');
+		
+		if (email.includes('sage')) {
+			email = 'sage';
+		} else {
+			email = null;
+		}
+	}
 	//disablereplysubject
 	let subject = (!isStaffOrGlobal && req.body.thread && disableReplySubject) ? null : req.body.subject;
 
@@ -539,6 +549,7 @@ module.exports = async (req, res) => {
 		crossquotes, //quotes to other threads in same board
 		'backlinks': [], //posts replying to this post
 		account: res.locals.user ? res.locals.user.username : null,
+		nohide: nohide,
 	};
 
 	if (!req.body.thread) {
@@ -693,20 +704,20 @@ module.exports = async (req, res) => {
 		'cyclic': data.cyclic,
 		'signature': data.signature,
 		'address': data.address,
+		'nohide': data.nohide,
 	};
 	if (data.thread) {
 		//dont emit thread to this socket, because the room only exists when the thread is open
 		Socketio.emitRoom(`${res.locals.board._id}-${data.thread}`, 'newPost', projectedPost);
 	}
 	const { raw, cloak, type } = data.ip;
-	const { rawAccount, cloakAccount } = { rawAccount: data.account, cloakAccount: 'Account Holder' };
 	//but emit it to manage pages because they need to get all posts through socket including thread
-	Socketio.emitRoom('globalmanage-recent-hashed', 'newPost', { ...projectedPost, ip: { cloak, raw: null, type }, account: cloakAccount });
-	Socketio.emitRoom(`${res.locals.board._id}-manage-recent-hashed`, 'newPost', { ...projectedPost, ip: { cloak, raw: null, type }, account: cloakAccount });
+	Socketio.emitRoom('globalmanage-recent-hashed', 'newPost', { ...projectedPost, ip: { cloak, raw: null, type }, account: data.account });
+	Socketio.emitRoom(`${res.locals.board._id}-manage-recent-hashed`, 'newPost', { ...projectedPost, ip: { cloak, raw: null, type }, account: data.account });
 	if (!dontStoreRawIps) {
         //no need to emit to these rooms if raw IPs are not stored
-		Socketio.emitRoom('globalmanage-recent-raw', 'newPost', { ...projectedPost, ip: { cloak, raw, type }, account: rawAccount });
-		Socketio.emitRoom(`${res.locals.board._id}-manage-recent-raw`, 'newPost', { ...projectedPost, ip: { cloak, raw, type }, account: rawAccount });
+		Socketio.emitRoom('globalmanage-recent-raw', 'newPost', { ...projectedPost, ip: { cloak, raw, type }, account: data.account });
+		Socketio.emitRoom(`${res.locals.board._id}-manage-recent-raw`, 'newPost', { ...projectedPost, ip: { cloak, raw, type }, account: data.account });
 	}
 
 	//now add other pages to be built in background
