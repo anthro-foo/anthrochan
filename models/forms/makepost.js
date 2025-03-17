@@ -34,7 +34,9 @@ const { createHash, randomBytes } = require('crypto')
 	, buildQueue = require(__dirname+'/../../lib/build/queue.js')
 	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
 	, { buildThread } = require(__dirname+'/../../lib/build/tasks.js')
-	, FIELDS_TO_REPLACE = ['email', 'subject', 'message'];
+	, FIELDS_TO_REPLACE = ['name', 'email', 'subject', 'message']
+	, ipTypes = require(__dirname+'/../../lib/middleware/ip/iptypes.js')
+	, { createCIDR } = require('ip6addr');
 
 module.exports = async (req, res) => {
 
@@ -453,7 +455,15 @@ module.exports = async (req, res) => {
 		salt = (await randomBytesAsync(128)).toString('base64');
 	}
 	if (ids === true) {
-		const fullUserIdHash = createHash('sha256').update(salt + res.locals.ip.raw).digest('hex');
+		// Use ISP/home range	
+		let hrange;
+		if (res.locals.ip.type === ipTypes.IPV4) {
+			hrange = createCIDR(res.locals.ip.raw, 16).toString();
+		} else {
+			hrange = createCIDR(res.locals.ip.raw, 48).toString();
+		}
+		
+		const fullUserIdHash = createHash('sha256').update(salt + hrange).digest('hex');
 		userId = fullUserIdHash.substring(fullUserIdHash.length-6);
 	}
 	let country = null;
