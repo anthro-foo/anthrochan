@@ -62,6 +62,11 @@ block content
 				if permissions.get(Permissions.MANAGE_GLOBAL_SETTINGS)
 					|   
 					a(href=`/globalmanage/settings.html`) #{__('Global Settings')}
+				if permissions.get(Permissions.MANAGE_GLOBAL_TRUSTED)
+					|
+					|
+					a(href=`/globalmanage/trusted.html`) #{__('Trusted')}
+
 
 	if user.ownedBoards && user.ownedBoards.length > 0
 		hr(size=1)
@@ -95,10 +100,7 @@ block content
 					a(href=`/${b}/manage/custompages.html`) #{__('Custom Pages')}
 					|   
 					a(href=`/${b}/manage/staff.html`) #{__('Staff')}
-					|
-					|
-					a(href=`/${b}/manage/trusted.html`) #{__('Trusted')}
-
+					
 	if user.staffBoards && user.staffBoards.length > 0
 		hr(size=1)
 		h4.no-m-p #{__('Boards you are staff on')}:
@@ -136,11 +138,7 @@ block content
 					if permissions.get(Permissions.MANAGE_BOARD_STAFF) || boardPermissions[b].get(Permissions.MANAGE_BOARD_STAFF)
 						|   
 						a(href=`/${b}/manage/staff.html`) #{__('Staff')}
-					if permissions.get(Permissions.MANAGE_BOARD_TRUSTED) || boardPermissions[b].get(Permissions.MANAGE_BOARD_TRUSTED)
-						|
-						|
-						a(href=`/${b}/manage/trusted.html`) #{__('Trusted')}
-
+					
 	if user.staffBoards.length > 0 ||  user.ownedBoards.length > 0
 		hr(size=1)
 		h4.no-m-p #{__('Resign from a staff position')}:
@@ -162,17 +160,6 @@ block content
 						input(type='checkbox', name='confirm', value='true' required)
 				include ../includes/forceactiontwofactor.pug
 				input(type='submit', value=__('Resign'))
-
-	if user.trustedBoards && user.trustedBoards.length > 0
-		hr(size=1)
-		h4.no-m-p #{__('Boards you are trusted on')}:
-		ul
-			for b in user.trustedBoards
-				li
-					a(href=`/${b}/index.html`) /#{b}/
-					|
-					|
-					a(href=`/${b}/catalog.html`) #{__('Catalog')}
 
 	hr(size=1)
 	h4.no-m-p #{__('Delete your account')}:

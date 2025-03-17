@@ -18,7 +18,6 @@ module.exports = {
 		const errors = await checkSchema([
 			{ result: existsBody(req.body.username), expected: true, error: __('Missing username') },
 			{ result: lengthBody(req.body.username, 0, 50), expected: false, error: __('Username must be 50 characters or less') },
-			{ result: (res.locals.board.trusted[req.body.username] != null), expected: false, blocking: true, error: __('User is already trusted') },
 			{ result: async () => {
 				const numAccounts = await Accounts.countUsers([req.body.username]);
 				return numAccounts > 0;
@@ -34,7 +33,12 @@ module.exports = {
 		}
 		
 		try {
-			await addTrusted(req, res, next);
+			// await addTrusted(req, res, next);
+			return dynamicResponse(req, res, 200, 'message', {
+				'title': __('Success'),
+				'message': 'success',
+				'redirect': req.headers.referer || `/${req.params.board}/manage/trusted.html`,
+			});
 		} catch (error) {
 			return next(error);
 		}

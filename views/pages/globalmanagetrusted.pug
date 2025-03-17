@@ -1,18 +1,17 @@
 extends ../layout.pug
-include ../mixins/managenav.pug
-include ../mixins/boardheader.pug
+include ../mixins/globalmanagenav.pug
 
 block head
-	title /#{board._id}/ - #{__('Trusted Users')}
+	title #{__('Trusted Users')}
 
 block content
-	+boardheader(__('Trusted Users'))
+	h1.board-title #{__('Trusted Users')}
 	br
-	+managenav('trusted')
+	+globalmanagenav('trusted')
 	hr(size=1)
 	.form-wrapper.flexleft
 		h4.no-m-p #{__('Add User')}:
-		form.form-post.mv-5(action=`/forms/board/${board._id}/addtrusted` method='POST' enctype='application/x-www-form-urlencoded')
+		form.form-post.mv-5(action=`/forms/global/addtrusted` method='POST' enctype='application/x-www-form-urlencoded')
 			input(type='hidden' name='_csrf' value=csrf)
 			.row
 				.label #{__('Username')}
@@ -21,9 +20,9 @@ block content
 	hr(size=1)
 	h4.no-m-p #{__('Current Trusted Users')}:
 	//-ew
-	- const trustedEntries = Object.entries(board.trusted).sort((a, b) => new Date(a[1].addedDate) - new Date(b[1].addedDate));
+	- const trustedEntries = [];
 	if trustedEntries.length > 0
-		form.form-post.nogrow(action=`/forms/board/${board._id}/deletetrusted` method='POST' enctype='application/x-www-form-urlencoded')
+		form.form-post.nogrow(action=`/forms/global/deletetrusted` method='POST' enctype='application/x-www-form-urlencoded')
 			input(type='hidden' name='_csrf' value=csrf)
 			.table-container.flex-left.mv-5.text-center
 				table

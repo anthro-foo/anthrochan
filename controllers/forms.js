@@ -94,10 +94,6 @@ router.post('/board/:board/editstaff', useSession, sessionRefresh, csrf, Boards.
 	hasPerms.one(Permissions.MANAGE_BOARD_STAFF), editStaffController.paramConverter, editStaffController.controller); //edit staff permission
 router.post('/board/:board/deletestaff', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_BOARD_STAFF), deleteStaffController.paramConverter, deleteStaffController.controller); //delete board staff
-router.post('/board/:board/addtrusted', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
-	hasPerms.one(Permissions.MANAGE_BOARD_TRUSTED), addTrustedController.paramConverter, addTrustedController.controller); //edit staff permission
-router.post('/board/:board/deletetrusted', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
-	hasPerms.one(Permissions.MANAGE_BOARD_TRUSTED), deleteTrustedController.paramConverter, deleteTrustedController.controller); //edit staff permission
 
 //global management forms
 router.post('/global/editbans', geoIp, processIp, useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
@@ -126,6 +122,10 @@ router.post('/global/settings', geoIp, processIp, useSession, sessionRefresh, cs
 	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), globalSettingsController.paramConverter, globalSettingsController.controller); //global settings
 router.post('/global/clear', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), globalClearController.paramConverter, globalClearController.controller); //global clear
+router.post('/global/addtrusted', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_GLOBAL_TRUSTED), addTrustedController.paramConverter, addTrustedController.controller); // edit trusted
+router.post('/global/deletetrusted', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_GLOBAL_TRUSTED), deleteTrustedController.paramConverter, deleteTrustedController.controller); // edit trusted
 
 //create board
 router.post('/create', geoIp, processIp, useSession, sessionRefresh, isLoggedIn, calcPerms, verifyCaptcha, createBoardController.paramConverter, createBoardController.controller);

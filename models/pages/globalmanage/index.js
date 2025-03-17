@@ -13,6 +13,7 @@ module.exports = {
 	globalManageSettings: require(__dirname+'/settings.js'),
 	globalManageRoles: require(__dirname+'/roles.js'),
 	globalEditFilter: require(__dirname+'/editfilter.js'),
+	globalManageTrusted: require(__dirname+'/trusted.js'),
 	editNews: require(__dirname+'/editnews.js'),
 	editAccount: require(__dirname+'/editaccount.js'),
 	editRole: require(__dirname+'/editrole.js'),

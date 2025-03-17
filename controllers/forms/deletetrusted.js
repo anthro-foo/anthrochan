@@ -17,7 +17,7 @@ module.exports = {
 		
 		const errors = await checkSchema([
 			{ result: lengthBody(req.body.checkedtrusted, 1), expected: false, error: __('Must select at least one user to delete') },
-			{ result: existsBody(req.body.checkedtrusted) && req.body.checkedtrusted.some(s => !res.locals.board.trusted[s]), expected: false, error: __('Invalid user selection') },
+			// { result: existsBody(req.body.checkedtrusted) && req.body.checkedtrusted.some(s => !res.locals.board.trusted[s]), expected: false, error: __('Invalid user selection') },
 		]);
 
 		if (errors.length > 0) {
@@ -29,7 +29,12 @@ module.exports = {
 		}
 		
 		try {
-			await deleteTrusted(req, res, next);
+			// await deleteTrusted(req, res, next);
+			return dynamicResponse(req, res, 200, 'message', {
+				'title': __('Success'),
+				'message': 'success',
+				'redirect': req.headers.referer || `/${req.params.board}/manage/trusted.html`,
+			});
 		} catch (err) {
 			return next(err);
 		}	
