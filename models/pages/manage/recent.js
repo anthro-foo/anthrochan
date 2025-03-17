@@ -53,7 +53,7 @@ module.exports = async (req, res, next) => {
 			page,
 			postId,
 			queryIp: match && match.ip ? req.query.ip : null,
-			account: match && match.account ? req.query.account : null,
+			queryAccount: match && match.account ? req.query.account : null,
 			queryString,
 		});
 	}
