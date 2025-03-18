@@ -22,6 +22,7 @@ block content
 					b Making posts
 					ul.mv-0
 						li: a(href='#name-formatting') How do names, tripcodes and capcodes work?
+						li: a(href='#file-approval') How does the file approval system work?
 						li: a(href='#post-styling') What kind of styling options are available when making a post?
 						li: a(href='#post-info') What is the file size limit?
 					b Boards, users & permissions
@@ -49,8 +50,7 @@ block content
 				th: a(href='#name-formatting') Name formatting
 			tr
 				td.post-message
-					p When posting, you can format the name field to include a name, tripcode , capcode, any combination of the three including leaving the field completely blank. Instead of a blank name,  "Anonymous" is used, however this depends on board-specific configuration. The optional components are explained below.
-
+					p When posting, you can format the name field to include a name, tripcode , capcode, any combination of the three including leaving the field completely blank.
 					b Format
 					p 
 						| Names should be input like: 
@@ -105,6 +105,29 @@ block content
 					b Capcode
 					p A capcode is a component of the name field only available to authenticated users. This includes admins, global staff, board owners and board staff. If there is no text after the ##, the role will be displayed alone. Leaving a space and putting custom text will be prefixed by the role name. This way, the role is always shown to prevent role impersonation.
 	.table-container.flex-center.mv-5
+		.anchor#file-approval
+		table
+			tr
+				th: a(href='#file-approval') File approval
+			tr
+				td
+					b File approval
+					p 
+						| To protect users and honor the SFW only nature of this site. I implemented file approval.
+						| New users will have their files pending approval, and need a moderator to verify that 
+						| rules are not broken. Before a file is approved a 'File Pending Approval' replacement is 
+						| shown, but after approval users will see the original file.
+					b Trust system 
+					p
+						| Users may wish to create an account and become 'Trusted' to bypass file approval. 
+						| To become trusted you need to build a post history and demonstrate to staff you
+						| follow the SFW only nature of this site. Make sure you are logged in while posting,
+						| if you use a VPN you may also want to include 'nohide' option in email to attach 
+						| your account name to posts so that staff may view your post history. When you become 
+						| trusted you are free to stop using 'nohide'. Default posting behavior hides account 
+						| names from staff, 'nohide' is an opt-in feature to help us.
+
+	.table-container.flex-center.mv-5
 		.anchor#post-styling
 		table
 			tr
@@ -123,7 +146,7 @@ block content
 			tr
 				td glowtext
 				td
-					span.glowtext You should kill your neighbour. With a shovel.
+					span.glowtext Do not investigate
 			tr
 				td ==title==
 				td
@@ -248,74 +271,6 @@ block content
 						| Some moderation interfaces, for example the ban duration when moderating posts, or the ban duration for post filtering use a shorthand for times/length. This format supports years, months, weeks, days, hours, minutes and seconds.
 						| An input of "3mo" would mean 3 months and "1y2mo3w4d5h6m7s" would mean 1 year, 2 months, 3 weeks, 4 days, 5 hours, 6 minutes and 7 seconds. Units of time should be in descending order, so "2w1mo" is invalid.
 						| However you may use "6w" for example to input 6 weeks, and are not required to use "1mo2w".
-	.table-container.flex-center.mv-5
-		.anchor#make-a-board
-		table
-			tr
-				th: a(href='#make-a-board') How do I make my own board?
-			tr
-				td
-					p
-						a(href='/register.html') Register
-						|  an account, then 
-						a(href='/create.html') create a board
-						|. Please avoid making excessive amounts of boards, duplicate or boards similar to an existing one unless you expect that many users will migrate to the new board for whatever reason e.g. tyrannical moderation.
-	.table-container.flex-center.mv-5
-		.anchor#antispam
-		table
-			tr
-				th: a(href='#antispam') What do the board settings for antispam do?
-			tr
-				td
-					p Lock Mode: Choose to lock posting new threads or all posts.
-					p Captcha Mode: Choose to enforce captchas for posting threads or all posts.
-					p PPH Trigger Threshold: Trigger an action after a certain amount of PPH.
-					p PPH Trigger Action: The action to trigger.
-					p TPH Trigger Threshold: Trigger an action after a certain amount of TPH.
-					p TPH Trigger Action: The action to trigger.
-					p Trigger Reset Lock Mode: If a trigger threshold was reached, reset the lock mode to this at the end of the hour.
-					p Trigger Reset Captcha Mode: If a trigger threshold was reached, reset the captcha mode to this at the end of the hour.
-					p Early 404: When a new thread is posted, delete any existing threads with less than #{early404Replies} replies beyond the first 1/#{early404Fraction} of threads.
-					p Disable anonymizer file posting: Prevent users posting images through anonymizers such as Tor hidden services, lokinet SNApps or i2p eepsites.
-					p Blocked Countries: Block country codes (based on geo Ip data) from posting.
-	.table-container.flex-center.mv-5
-		.anchor#filters
-		table
-			tr
-				th: a(href='#filters') What do the filter options do?
-			tr
-				td
-					p Filters: Newline separated list of words or phrases to match in posts. Checks name, message, email, subject, and filenames.
-					p Strict Filtering: More aggressively match filters, by normalising the input compared against the filters.
-					p Filter Mode: What to do when a post matches a filter.
-					p Block/Ban Message: The message returned if a post is blocked, or the ban reason if a poster is banned.
-					p Filter Auto Ban Duration: How long to automatically ban for when filter mode is set to ban. Input the duration in time format described in the #[a(href='#moderation') moderation section].
-					p Filter Bans Appealable: Whether or not a ban given by this filter can be appealed. This can be useful if the ban hits an innocent user by mistake.
-					p Replace Text: Text to substitute in for a replace filter. This is how word filters are added.
-	.table-container.flex-center.mv-5
-		.anchor#archive-reverse-url-format
-		table
-			tr
-				th: a(href='#archive-reverse-url-format') What is the archive/reverse image search link url format?
-			tr
-				td
-					p
-						| Put a link with 
-						span.mono %s
-						|  where the url of the page/file should go for reverse image search or archive links. For example 
-						span.mono https://tineye.com/search?url=#[span.bold %s]
-						| .
-	.table-container.flex-center.mv-5
-		.anchor#twofactor-enforcement
-		table
-			tr
-				th: a(href='#twofactor-enforcement') How does 2FA enforcement work?
-			tr
-				td
-					p There are two options included in global management settings that allow admins to increase security by enforcing the use of 2FA for all accounts and/or actions.
-					p Force Account 2FA: Forces all accounts to have 2FA, or else the user is redirected to the 2FA setup page.
-					p Force Action 2FA: If an account has 2FA enabled, the 2FA code must be input for: changing global settings, changing board settings, resigning from a staff position, deleting accounts, deleting your own account, or deleting a board.
-					p The granularity of what actions require 2FA will be expanded and customisable in a future release.
 	.table-container.flex-center.mv-5
 		.anchor#contact
 		table
