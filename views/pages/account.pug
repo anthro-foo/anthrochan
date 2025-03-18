@@ -24,7 +24,7 @@ block content
 
 	if permissions.hasAny(Permissions.BYPASS_BANS, Permissions.BYPASS_SPAMCHECK, Permissions.BYPASS_RATELIMITS, Permissions.BYPASS_FILTER, Permissions.BYPASS_CAPTCHA, Permissions.BYPASS_FILE_APPROVAL)
 		hr(size=1)
-		h4.no-m-p #{__('Privilidges')}:
+		h4.no-m-p #{__('Privileges')}:
 			ul
 				if permissions.get(Permissions.BYPASS_BANS)
 					li Bypass bans
