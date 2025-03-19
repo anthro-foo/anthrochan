@@ -50,9 +50,11 @@ class modMacroHandler {
 				this.approve.checked = true;
 				break;
 			case 'rule1':
+				this.deleteipglobal.checked = true;
 				this.deletefile.checked = true;
 				this.globalban.checked = true;
 				this.widerange.checked = true;
+				this.noappeal.checked = true;
 				this.preservepost.checked = true;
 				this.banreason.value = 'rule 1';
 				this.banduration.value = '10y';
@@ -91,10 +93,12 @@ class modMacroHandler {
 				this.globalban.checked = true;
 				this.widerange.checked = true;
 				this.preservepost.checked = true;
+				this.noappeal.checked = true;
 				this.banreason.value = 'rule 5';
 				this.banduration.value = '1y';
 				break;
 			case 'banevasion':
+				this.deleteipglobal.checked = true;
 				this.deletefile.checked = true;
 				this.globalban.checked = true;
 				this.preservepost.checked = true;

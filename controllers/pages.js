@@ -22,7 +22,7 @@ const express  = require('express')
 		manageBoard, manageThread, manageLogs, manageCatalog, manageCustomPages, manageStaff, editStaff, editPost } = require(__dirname+'/../models/pages/manage/')
 	, { globalManageTrusted, globalManageApproval, globalManageSettings, globalManageReports, globalManageBans, globalManageBoards, globalManageFilters, globalEditFilter, editNews, editAccount, editRole,
 		globalManageRecent, globalManageAccounts, globalManageNews, globalManageLogs, globalManageRoles } = require(__dirname+'/../models/pages/globalmanage/')
-	, { bans, banned, changePassword, blockBypass, home, register, login, create, myPermissions, sessions, setupTwoFactor,
+	, { banned, changePassword, blockBypass, home, register, login, create, myPermissions, sessions, setupTwoFactor,
 		board, catalog, banners, boardSettings, globalSettings, randombanner, news, captchaPage, overboard, overboardCatalog,
 		captcha, thread, modlog, modloglist, account, boardlist, customPage, csrfPage, noncePage } = require(__dirname+'/../models/pages/')
 	, threadParamConverter = paramConverter({ processThreadIdParam: true })
@@ -40,9 +40,6 @@ router.get('/news.html', news);
 
 //banned page
 router.get('/banned.html', geoIp, processIp, useSession, sessionRefresh, calcPerms, banned);
-
-//bans page
-router.get('/bans.html', bans);
 
 //board list
 router.get('/boards.(html|json)', boardlist);
