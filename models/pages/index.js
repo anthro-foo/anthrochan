@@ -9,6 +9,7 @@ module.exports = {
 	setupTwoFactor: require(__dirname+'/twofactor.js'),
 	myPermissions: require(__dirname+'/mypermissions.js'),
 	home: require(__dirname+'/home.js'),
+	bans: require(__dirname+'/bans.js'),
 	banned: require(__dirname+'/banned.js'),
 	login: require(__dirname+'/login.js'),
 	create: require(__dirname+'/create.js'),

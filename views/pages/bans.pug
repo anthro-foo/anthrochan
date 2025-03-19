@@ -1,0 +1,24 @@
+extends ../layout.pug
+include ../mixins/ban.pug
+
+block head
+	title #{__('Ban Log')}
+
+block content
+	h1.board-title #{__('Ban Log')}
+	hr(size=1)
+	if bans.length === 0
+		p #{__('No bans.')}
+	else
+		.table-container.mv-10.text-center.horscroll
+			table.bantable
+				tr
+					th #{__('Reason')}
+					th #{__('Issuer')}
+					th #{__('Expiry')}
+					th #{__('Post(s)')}
+					th #{__('Seen?')}
+					th #{__('Appealable?')}
+		
+				for ban in bans
+					+ban(ban, false, true)
