@@ -11,7 +11,8 @@ module.exports = async (req, res) => {
 	const banDate = new Date();
 	const banExpiry = new Date(banDate.getTime() + (req.body.ban_duration || defaultBanDuration)); //uses config default if missing or malformed
 	const banReason = req.body.ban_reason || req.body.log_message || __('No reason specified');
-	const allowAppeal = (req.body.no_appeal || req.body.ban_q || req.body.ban_h) ? false : true; //dont allow appeals for range bans
+	// const allowAppeal = (req.body.no_appeal || req.body.ban_q || req.body.ban_h) ? false : true; //dont allow appeals for range bans
+	const allowAppeal = req.body.no_appeal ? false : true; //dont allow appeals for range bans
 
 	const bans = [];
 

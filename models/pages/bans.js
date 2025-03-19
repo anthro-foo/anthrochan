@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
 	let bans;
 	try {
 		const allbans = await Bans.getGlobalBans();
-		bans = allbans.slice(-30);
+		bans = allbans.slice(0, 30);
 	} catch (err) {
 		return next(err);
 	}
