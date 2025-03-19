@@ -55,8 +55,9 @@ class modMacroHandler {
 				this.globalban.checked = true;
 				this.widerange.checked = true;
 				this.noappeal.checked = true;
-				this.banreason.value = 'Rule 1 (Illegal)';
-				this.banduration.value = '1y';
+				this.preservepost.checked = true;
+				this.banreason.value = 'rule 1';
+				this.banduration.value = '10y';
 				
 				if (this.untrust) {
 					this.untrust.checked = true;
@@ -65,8 +66,10 @@ class modMacroHandler {
 			case 'rule2':
 				this.deletefile.checked = true;
 				this.globalban.checked = true;
-				this.banreason.value = 'Rule 2 (NSFW)';
-				this.banduration.value = '1d';
+				this.widerange.checked = true;
+				this.preservepost.checked = true;
+				this.banreason.value = 'rule 2';
+				this.banduration.value = '1h';
 		
 				if (this.untrust) {
 					this.untrust.checked = true;
@@ -74,36 +77,33 @@ class modMacroHandler {
 				break;
 			case 'rule3':
 				this.globalban.checked = true;
+				this.widerange.checked = true;
 				this.preservepost.checked = true;
-				this.banreason.value = 'Rule 3 (Hostility)';
+				this.banreason.value = 'rule 3';
 				this.banduration.value = '1d';
 				break;
 			case 'rule4':
 				this.globalban.checked = true;
 				this.widerange.checked = true;
-				this.noappeal.checked = true;
 				this.preservepost.checked = true;
-				this.banreason.value = 'Rule 4 (Spam)';
+				this.banreason.value = 'rule 4';
 				this.banduration.value = '4h';
 				break;
 			case 'rule5':
 				this.globalban.checked = true;
 				this.widerange.checked = true;
-				this.noappeal.checked = true;
 				this.preservepost.checked = true;
-				this.banreason.value = 'Rule 5 (Underage)';
+				this.noappeal.checked = true;
+				this.banreason.value = 'rule 5';
 				this.banduration.value = '1y';
 				break;
 			case 'banevasion':
+				this.deleteipglobal.checked = true;
 				this.deletefile.checked = true;
 				this.globalban.checked = true;
 				this.preservepost.checked = true;
 				this.banreason.value = 'ban evasion';
 				this.banduration.value = '1y';
-
-				if (this.untrust) {
-					this.untrust.checked = true;
-				}
 				break;
 		}
 	}
