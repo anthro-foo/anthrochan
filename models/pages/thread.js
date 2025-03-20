@@ -3,12 +3,14 @@
 const { buildThread } = require(__dirname+'/../../lib/build/tasks.js');
 
 module.exports = async (req, res, next) => {
+	const lastReplies = req.url.includes('+50.html');
 
 	let html, json;
 	try {
 		const buildThreadData = await buildThread({
 			threadId: res.locals.thread.postId,
-			board: res.locals.board
+			board: res.locals.board,
+			lastReplies: lastReplies,
 		});
 		/* unlikely, but postsExists middleware can be true, but this can be null if deleted. so just next() to 404
 		wont matter in the build-workers that call this because they dont destructure and never cause the bug */

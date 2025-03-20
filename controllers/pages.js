@@ -53,7 +53,7 @@ router.get('/catalog.(html|json)', overboardCatalog); //overboard catalog view
 
 //board pages
 router.get('/:board/:page(1[0-9]{1,}|[2-9][0-9]{0,}|index).(html|json)', Boards.exists, setBoardLanguage, board); //index
-router.get('/:board/thread/:id([1-9][0-9]{0,}).(html|json)', Boards.exists, setBoardLanguage, threadParamConverter, Posts.threadExistsMiddleware, thread); //thread view
+router.get('/:board/thread/:id([1-9][0-9]{0,})(\\+50)?.(html|json)', Boards.exists, setBoardLanguage, threadParamConverter, Posts.threadExistsMiddleware, thread); //thread view
 router.get('/:board/catalog.(html|json)', Boards.exists, setBoardLanguage, catalog); //catalog
 router.get('/:board/logs.(html|json)', Boards.exists, setBoardLanguage, modloglist);//modlog list
 router.get('/:board/logs/:date(\\d{2}-\\d{2}-\\d{4}).(html|json)', Boards.exists, setBoardLanguage, logParamConverter, modlog); //daily log
@@ -68,7 +68,7 @@ router.get('/:board/manage/catalog.html', useSession, sessionRefresh, isLoggedIn
 	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, manageCatalog);
 router.get('/:board/manage/:page(1[0-9]{1,}|[2-9][0-9]{0,}|index).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
 	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, manageBoard);
-router.get('/:board/manage/thread/:id([1-9][0-9]{0,}).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, threadParamConverter, calcPerms,
+router.get('/:board/manage/thread/:id([1-9][0-9]{0,})(\\+50)?.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, threadParamConverter, calcPerms,
 	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, Posts.threadExistsMiddleware, manageThread);
 router.get('/:board/manage/editpost/:id([1-9][0-9]{0,}).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, threadParamConverter, calcPerms,
 	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, Posts.postExistsMiddleware, editPost);

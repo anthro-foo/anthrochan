@@ -218,7 +218,7 @@ window.addEventListener('settingsReady', function() { //after domcontentloaded
 		}, 50);
 	};
 
-	let jsonParts = window.location.pathname.replace(/\.html$/, '.json').split('/');
+	let jsonParts = window.location.pathname.replace(/\.html$/, '.json').replace('+50', '').split('/');
 	let jsonPath;
 	if (isModView) {
 		jsonParts.splice(2,1); //remove manage from json url
@@ -279,7 +279,7 @@ window.addEventListener('settingsReady', function() { //after domcontentloaded
 		if (supportsWebSockets) {
 			updateButton.style.display = 'none';
 			if (!room) {
-				const roomParts = window.location.pathname.replace(/\.html$/, '').split('/');
+				const roomParts = window.location.pathname.replace(/\.html$/, '').replace('+50', '').split('/');
 				room = `${roomParts[1]}-${roomParts[roomParts.length-1]}`;
 			}
 			socket = io({

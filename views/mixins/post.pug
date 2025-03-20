@@ -79,6 +79,13 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 				if !post.thread && (truncate || manage || globalmanage)
 					|  
 					span.noselect: a(href=`${postURL}`) [#{__('Open')}]
+				if post.replyposts && post.replyposts > 50
+					|
+					|
+					if lastReplies
+						span.noselect: a(href=`${postURL}`) [#{__('View All')}]
+					else
+						span.noselect: a(href=`/${post.board}/${(modview || manage || globalmanage) ? 'manage/' : ''}thread/${post.postId}+50.html`) [#{__('Last 50')}]
 				select.jsonly.postmenu
 					option(value='single') #{__('Hide')}
 					if post.userId
