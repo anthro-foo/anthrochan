@@ -1,4 +1,4 @@
-/* globals __ isRecent banmessage isGlobalRecent isThread post extraLocals isModView io setLocalStorage */
+/* globals __ isRecent banmessage isGlobalRecent isThread post extraLocals isModView io setLocalStorage isManage */
 let liveEnabled = localStorage.getItem('live') == 'true';
 let scrollEnabled = localStorage.getItem('scroll') == 'true';
 let socket;
@@ -125,6 +125,10 @@ window.addEventListener('settingsReady', function() { //after domcontentloaded
 				existingBanMessage.remove();
 			} else {
 				postContainer.insertAdjacentHTML('beforeend', banMessageHtml);
+			}
+		} else if (data.type === 'move') {
+			if (!(isManage || isModView)) {
+				window.location.href = `/${data.newBoard}/thread/${data.newPostId}.html`;
 			}
 		}
 	};

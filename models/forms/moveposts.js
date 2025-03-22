@@ -141,10 +141,8 @@ module.exports = async (req, res) => {
 		]);
 	}
 	
-	//emit markPost moves
-	/* for (let i = 0; i < moveEmits.length; i++) {
-		Socketio.emitRoom(moveEmits[i].room, 'markPost', { postId: moveEmits[i].postId, type: 'move' });
-	} */
+	// emit Move and redirect client
+	Socketio.emitRoom(`${thread.board}-${thread.postId}`, 'markPost', { newBoard: destinationBoard, postId: thread.postId, newPostId: destinationThreadId, type: 'move' });
 
 	return {
 		message: __('Moved posts'),
