@@ -231,6 +231,7 @@ module.exports = async (req, res, next) => {
 					}
 				}
 				messages.push(message);
+				redirect = `/${res.locals.destinationBoard._id}/manage/thread/${res.locals.destinationThread.postId}.html`;
 				break;
 			}
 			default:
