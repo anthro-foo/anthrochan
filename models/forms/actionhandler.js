@@ -374,12 +374,16 @@ module.exports = async (req, res, next) => {
 					}
 				};
 			}
-			modlog[post.board].postLinks.push({
-				postId: post.postId,
-				thread: res.locals.destinationThread ? res.locals.destinationThread.postId : post.thread,
-				board: res.locals.destinationBoard ? res.locals.destinationBoard._id : post.board,
-			});
-		}
+			
+			if ((req.body.move && !post.thread) || (!req.body.move)) {
+				modlog[post.board].postLinks.push({
+					postId: req.body.move ? res.locals.destinationThread.postId : post.postId,
+					thread: res.locals.destinationThread ? res.locals.destinationThread.postId : post.thread,
+					board: res.locals.destinationBoard ? res.locals.destinationBoard._id : post.board,
+				});						
+			}				
+		}		
+		
 		const modlogDocuments = [];
 		for (let i = 0; i < affectedBoardNames.length; i++) {
 			const boardName = affectedBoardNames[i];
