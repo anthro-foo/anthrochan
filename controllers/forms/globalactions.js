@@ -14,7 +14,6 @@ module.exports = {
 		timeFields: ['ban_duration'],
 		trimFields: ['postpassword', 'report_reason', 'ban_reason', 'log_message'],
 		allowedArrays: ['checkedreports', 'globalcheckedposts'],
-		numberFields: ['move_to_thread'],
 		objectIdArrays: ['globalcheckedposts']
 	}),
 
