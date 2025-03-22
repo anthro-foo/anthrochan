@@ -39,12 +39,10 @@ details.toggle-label#actionform
 					input#report(type='text', name='report_reason', placeholder=__('Report reason') autocomplete='off')
 				label
 					input.post-check(type='checkbox', name='move' value='1')
-					| #{__('Move')}
+					| #{__('Move Thread')}
 				.row
 					label.mr-1
 						input(id='movetoboardtext', type='text', name='move_to_board', placeholder=__('Board') autocomplete='off')
-					label
-						input(id='movetothreadnumber', type='number', name='move_to_thread', placeholder=__('Thread No.') autocomplete='off')
 			.col.mr-5
 				label
 					input.post-check(id='reportbancheck', type='checkbox', name='report_ban' value='1')
