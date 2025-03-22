@@ -578,7 +578,7 @@ table {
 	max-width: 50px;
 }
 
-input[name="move_to_board"], input[name="move_to_thread"] {
+input[name="move_to_board"] {
 	max-width: 80px;
 }
 
