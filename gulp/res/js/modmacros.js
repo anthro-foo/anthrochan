@@ -3,103 +3,133 @@ class modMacroHandler {
 		this.dropdown = dropdown;
 		this.dropdown.selectedIndex = 0; // reset on page refresh, but let it stick
 		
-		// checks
-		this.approve = document.getElementById('approvecheck');
-		this.delete = document.getElementById('deletecheck');
-		this.deleteipglobal = document.getElementById('deleteipglobalcheck');
-		this.deletefile = document.getElementById('deletefilecheck');
-		this.globalban = document.getElementById('globalbancheck');
-		this.widerange = document.getElementById('widerangecheck');
-		this.noappeal = document.getElementById('noappealcheck');
-		this.preservepost = document.getElementById('preservepostcheck');
-		this.untrust = document.getElementById('untrustcheck');
-
-		// text
-		this.banreason = document.getElementById('banreasontext');
-		this.banduration = document.getElementById('bandurationtext');
+		this.inputMap = new Map();
+		const inputs = document.querySelectorAll('.actions input');
 		
+		inputs.forEach(input => {
+			this.inputMap.set(input.name, input);
+			input.addEventListener('change', () => {
+				if (!input.parentElement) {
+					return;
+				}
+				const parent = input.parentElement;
+				switch (input.type) {
+					case 'text':
+						if (input.value !== '') {
+							parent.classList.add('modified');	
+						} else {
+							parent.classList.remove('modified');	
+						}
+						break;
+					case 'checkbox':
+						if (input.checked) {
+							parent.classList.add('modified');	
+						} else {
+							parent.classList.remove('modified');	
+						}
+						break;
+				}
+			});
+		});
+
 		this.reset();
 		dropdown.addEventListener('change', e => this.change(e));
 	}
 	
 	reset() {
-		this.approve.checked = false;
-		this.delete.checked = false;
-		this.deleteipglobal.checked = false;
-		this.deletefile.checked = false;
-		this.globalban.checked = false;
-		this.widerange.checked = false;
-		this.noappeal.checked = false;
-		this.preservepost.checked = false;
-		
-		if (this.untrust) {
-			this.untrust.checked = false;
+		for (const input of this.inputMap.values()) {
+			switch (input.type) {
+				case 'checkbox':
+					input.checked = false;
+					input.dispatchEvent(new Event('change', { bubbles: true }));
+					break;
+				case 'text':
+					input.value = '';
+					input.dispatchEvent(new Event('change', { bubbles: true }));
+			}
+		}	
+	}
+	
+	set(name, value) {
+		if (!name) {
+			return;
 		}
-				
-		this.banreason.value = '';
-		this.banduration.value = '';
+		const input = this.inputMap.get(name);
+		if (!input) {
+			return;
+		}
+		switch (input.type) {
+			case 'checkbox':
+				input.checked = value ? true : false;
+				break;
+			case 'text':
+				input.value = value;
+				break;
+		}
+		input.dispatchEvent(new Event('change', { bubbles: true }));
 	}
 	
 	change(e) {
 		let selectedValue = e.target.value;
-		
 		this.reset();
-
+		
 		switch (selectedValue) {
-			case 'approvefile':
-				this.approve.checked = true;
+			case 'clear':
+				this.reset();
+				break;
+			case 'approvefiles':
+				this.set('approve', true);
+				break;
+			case 'denyfiles':
+				this.set('deny', true);
 				break;
 			case 'rule1':
-				this.deletefile.checked = true;
-				this.globalban.checked = true;
-				this.widerange.checked = true;
-				this.preservepost.checked = true;
-				this.banreason.value = 'rule 1';
-				this.banduration.value = '10y';
+				this.set('delete_file', true);
+				this.set('global_ban', true);
+				this.set('wide_range', true);
+				this.set('preserve_post', true);
+				this.set('ban_reason', 'rule 1');
+				this.set('ban_duration', '10y');
 				
-				if (this.untrust) {
-					this.untrust.checked = true;
-				}
+				this.set('untrust', true);
 				break;
 			case 'rule2':
-				this.deletefile.checked = true;
-				this.globalban.checked = true;
-				this.widerange.checked = true;
-				this.preservepost.checked = true;
-				this.banreason.value = 'rule 2';
-				this.banduration.value = '1h';
-		
-				if (this.untrust) {
-					this.untrust.checked = true;
-				}
+				this.set('delete_file', true);
+				this.set('global_ban', true);
+				this.set('wide_range', true);
+				this.set('preserve_post', true);
+				this.set('ban_reason', 'rule 2');
+				this.set('ban_duration', '1h');
+				
+				this.set('untrust', true);
 				break;
 			case 'rule3':
-				this.globalban.checked = true;
-				this.widerange.checked = true;
-				this.preservepost.checked = true;
-				this.banreason.value = 'rule 3';
-				this.banduration.value = '1d';
+				this.set('global_ban', true);
+				this.set('wide_range', true);
+				this.set('preserve_post', true);
+				this.set('ban_reason', 'rule 3');
+				this.set('ban_duration', '1d');
 				break;
 			case 'rule4':
-				this.globalban.checked = true;
-				this.widerange.checked = true;
-				this.preservepost.checked = true;
-				this.banreason.value = 'rule 4';
-				this.banduration.value = '4h';
+				this.set('global_ban', true);
+				this.set('wide_range', true);
+				this.set('preserve_post', true);
+				this.set('ban_reason', 'rule 4');
+				this.set('ban_duration', '4h');
 				break;
 			case 'rule5':
-				this.globalban.checked = true;
-				this.widerange.checked = true;
-				this.preservepost.checked = true;
-				this.banreason.value = 'rule 5';
-				this.banduration.value = '1y';
+				this.set('global_ban', true);
+				this.set('wide_range', true);
+				this.set('preserve_post', true);
+				this.set('ban_reason', 'rule 5');
+				this.set('ban_duration', '1y');
 				break;
 			case 'banevasion':
-				this.deletefile.checked = true;
-				this.globalban.checked = true;
-				this.preservepost.checked = true;
-				this.banreason.value = 'ban evasion';
-				this.banduration.value = '1y';
+				this.set('global_ban', true);
+				this.set('wide_range', true);
+				this.set('preserve_post', true);
+				this.set('ban_reason', 'ban evasion');
+				this.set('ban_duration', '1h');
 				break;
 		}
 	}

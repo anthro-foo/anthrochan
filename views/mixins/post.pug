@@ -29,7 +29,7 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 						- const ip = viewRawIp === true ? post.ip.raw : post.ip.cloak;
 						a.bold(href=`${upLevel ? '../' : ''}recent.html?ip=${encodeURIComponent(ip)}`) [#{ip}]
 					else if modview
-						a.bold(href=`${upLevel ? '../' : ''}recent.html?postid=${post.postId}`) [+]
+						a.bold(href=`${upLevel ? '../' : ''}recent.html?postid=${post.postId}`) [ + ]
 					else if globalmanage
 						a.bold(class='post-board', href=`/${post.board}/manage/index.html`) /#{post.board}/
 						|  
