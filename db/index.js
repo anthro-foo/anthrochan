@@ -2,6 +2,7 @@
 
 module.exports = {
 
+	Assets: require(__dirname+'/assets.js'),
 	Posts: require(__dirname+'/posts.js'),
 	Boards: require(__dirname+'/boards.js'),
 	Stats: require(__dirname+'/stats.js'),

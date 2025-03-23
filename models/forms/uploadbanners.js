@@ -8,14 +8,14 @@ const { remove, pathExists } = require('fs-extra')
 	, getDimensions = require(__dirname+'/../../lib/file/image/getdimensions.js')
 	, deleteTempFiles = require(__dirname+'/../../lib/file/deletetempfiles.js')
 	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
-	, { Boards } = require(__dirname+'/../../db/')
+	, { Assets } = require(__dirname+'/../../db/')
 	, buildQueue = require(__dirname+'/../../lib/build/queue.js');
 
 module.exports = async (req, res) => {
 
 	const { __, __n } = res.locals;
 	const { globalLimits, checkRealMimeTypes } = config.get;
-	const redirect = `/${req.params.board}/manage/assets.html`;
+	const redirect = '/globalmanage/assets.html';
 
 	for (let i = 0; i < res.locals.numFiles; i++) {
 		if (!mimeTypes.allowed(req.files.file[i].mimetype, {
@@ -71,7 +71,7 @@ module.exports = async (req, res) => {
 		file.filename = file.sha256 + file.extension;
 
 		//check if already exists
-		const exists = await pathExists(`${uploadDirectory}/banner/${req.params.board}/${file.filename}`);
+		const exists = await pathExists(`${uploadDirectory}/banner/${file.filename}`);
 
 		if (exists) {
 			await remove(file.tempFilePath);
@@ -82,7 +82,7 @@ module.exports = async (req, res) => {
 		filenames.push(file.filename);
 
 		//then upload it
-		await moveUpload(file, file.filename, `banner/${req.params.board}`);
+		await moveUpload(file, file.filename, 'banner/');
 
 		//and delete the temp file
 		await remove(file.tempFilePath);
@@ -101,17 +101,16 @@ module.exports = async (req, res) => {
 	}
 
 	// add banners to the db
-	await Boards.addBanners(req.params.board, filenames);
-
-	// add banners to board in memory
-	res.locals.board.banners = res.locals.board.banners.concat(filenames);
+	await Assets.addBanners(filenames);
+	// get new banners and recache
+	const banners = await Assets.getBanners();
 
 	if (filenames.length > 0) {
 		//add public banners page to build queue
 		buildQueue.push({
 			'task': 'buildBanners',
 			'options': {
-				'board': res.locals.board,
+				'banners': banners,
 			}
 		});
 	}

@@ -4,39 +4,35 @@
 const { remove } = require('fs-extra')
 	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
 	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
-	, { Boards } = require(__dirname+'/../../db/')
+	, { Assets } = require(__dirname+'/../../db/')
 	, buildQueue = require(__dirname+'/../../lib/build/queue.js');
 
 module.exports = async (req, res) => {
 
 	const { __ } = res.locals;
-	const redirect = `/${req.params.board}/manage/assets.html`;
+	const redirect = '/globalmanage/assets.html';
 
 	//delete file of all selected banners
 	await Promise.all(req.body.checkedbanners.map(filename => {
-		remove(`${uploadDirectory}/banner/${req.params.board}/${filename}`);
+		remove(`${uploadDirectory}/banner/${filename}`);
 	}));
 
 	//remove from db
-	await Boards.removeBanners(req.params.board, req.body.checkedbanners);
-
-	//update res locals banners in memory
-	const beforeBanners = res.locals.board.banners.length;
-	res.locals.board.banners = res.locals.board.banners.filter(banner => {
-		return !req.body.checkedbanners.includes(banner);
-	});
+	await Assets.removeBanners(req.body.checkedbanners);
+	// get new banners and recache
+	const banners = await Assets.getBanners();
 
 	//rebuild public banners page
 	buildQueue.push({
 		'task': 'buildBanners',
 		'options': {
-			'board': res.locals.board,
+			'banners': banners,
 		}
 	});
 
 	return dynamicResponse(req, res, 200, 'message', {
 		'title': __('Success'),
-		'message': __('Deleted %s banners', beforeBanners - res.locals.board.banners.length),
+		'message': __('Deleted %s banners', req.body.checkedbanners.length),
 		'redirect': redirect
 	});
 };

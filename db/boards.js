@@ -33,17 +33,6 @@ module.exports = {
 		return board;
 	},
 
-	randomBanner: async (name) => {
-		let banner = await cache.srand(`banners:${name}`);
-		if (!banner) {
-			const board = await module.exports.findOne(name);
-			if (board) {
-				banner = board.banners[Math.floor(Math.random()*board.banners.length)];
-			}
-		}
-		return banner;
-	},
-
 	insertOne: (data) => {
 		cache.del(`board:${data._id}`); //removing cached no_exist
 		if (!data.settings.unlistedLocal) {
@@ -105,18 +94,6 @@ module.exports = {
 				}
 			}
 		);
-	},
-
-	removeBanners: (board, filenames) => {
-		cache.del(`board:${board}`);
-		cache.del(`banners:${board}`);
-		return module.exports.removeFromArray(board, 'banners', filenames);
-	},
-
-	addBanners: (board, filenames) => {
-		cache.del(`board:${board}`);
-		cache.del(`banners:${board}`);
-		return module.exports.addToArray(board, 'banners', filenames);
 	},
 
 	removeAssets: (board, filenames) => {

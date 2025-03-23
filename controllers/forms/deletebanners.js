@@ -23,18 +23,8 @@ module.exports = {
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Bad request'),
 				'errors': errors,
-				'redirect': `/${req.params.board}/manage/assets.html`
+				'redirect': '/globalmanage/assets.html'
 			});
-		}
-
-		for (let i = 0; i < req.body.checkedbanners.length; i++) {
-			if (!res.locals.board.banners.includes(req.body.checkedbanners[i])) {
-				return dynamicResponse(req, res, 400, 'message', {
-					'title': __('Bad request'),
-					'message': __('Invalid banners selected'),
-					'redirect': `/${req.params.board}/manage/assets.html`
-				});
-			}
 		}
 
 		try {

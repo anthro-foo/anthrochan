@@ -1,16 +1,11 @@
 'use strict';
 
-const Boards = require(__dirname+'/../../db/boards.js');
+const Assets = require(__dirname+'/../../db/assets.js');
 
 module.exports = async (req, res, next) => {
-
-	if (!req.query.board || typeof req.query.board !== 'string') {
-		return next();
-	}
-
 	let banner;
 	try {
-		banner = await Boards.randomBanner(req.query.board);
+		banner = await Assets.randomBanner();
 	} catch (err) {
 		return next(err);
 	}
@@ -20,6 +15,6 @@ module.exports = async (req, res, next) => {
 		return res.redirect('/file/defaultbanner.png');
 	}
 
-	return res.redirect(`/banner/${req.query.board}/${banner}`);
+	return res.redirect(`/banner/${banner}`);
 
 };

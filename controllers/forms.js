@@ -67,24 +67,24 @@ router.post('/board/:board/deletefilter', useSession, sessionRefresh, csrf, Boar
 router.post('/board/:board/deleteboard', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_BOARDS), deleteBoardController.paramConverter, deleteBoardController.controller); //delete board
 
-//board crud banners, flags, assets, custompages
-router.post('/board/:board/addbanners', geoIp, useSession, sessionRefresh, Boards.exists, setBoardLanguage, fileMiddlewares.banner, csrf, calcPerms, isLoggedIn,
+// CRUD banners, flags, assets, custompages
+router.post('/addbanners', geoIp, useSession, sessionRefresh, fileMiddlewares.banner, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, uploadBannersController.controller); //add banners
-router.post('/board/:board/deletebanners', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
+router.post('/deletebanners', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteBannersController.paramConverter, deleteBannersController.controller); //delete banners
-router.post('/board/:board/addassets', geoIp, useSession, sessionRefresh, Boards.exists, setBoardLanguage, fileMiddlewares.asset, csrf, calcPerms, isLoggedIn,
+router.post('/addassets', geoIp, useSession, sessionRefresh, fileMiddlewares.asset, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, addAssetsController.controller); //add assets
-router.post('/board/:board/deleteassets', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
+router.post('/deleteassets', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteAssetsController.paramConverter, deleteAssetsController.controller); //delete assets
-router.post('/board/:board/addflags', geoIp, useSession, sessionRefresh, Boards.exists, setBoardLanguage, fileMiddlewares.flag, csrf, calcPerms, isLoggedIn,
+router.post('/addflags', geoIp, useSession, sessionRefresh, fileMiddlewares.flag, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, addFlagsController.controller); //add flags
-router.post('/board/:board/deleteflags', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
+router.post('/deleteflags', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteFlagsController.paramConverter, deleteFlagsController.controller); //delete flags
-router.post('/board/:board/addcustompages', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
+router.post('/addcustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), addCustomPageController.paramConverter, addCustomPageController.controller); //add custom pages
-router.post('/board/:board/deletecustompages', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
+router.post('/deletecustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteCustomPageController.paramConverter, deleteCustomPageController.controller); //delete custom pages
-router.post('/board/:board/editcustompage', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
+router.post('/editcustompage', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), editCustomPageController.paramConverter, editCustomPageController.controller); //edit custom page
 
 //global management forms
