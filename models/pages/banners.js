@@ -6,7 +6,8 @@ module.exports = async (req, res, next) => {
 
 	let html, json;
 	try {
-		({ html, json } = await buildBanners({ board: res.locals.board }));
+		const banners = null;
+		({ html, json } = await buildBanners({}));
 	} catch (err) {
 		return next(err);
 	}

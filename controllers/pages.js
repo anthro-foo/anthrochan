@@ -18,9 +18,9 @@ const express  = require('express')
 	, setMinimal = require(__dirname+'/../lib/middleware/misc/setminimal.js')
 	, { setBoardLanguage, setQueryLanguage } = require(__dirname+'/../lib/middleware/locale/locale.js')
 	//page models
-	, { manageRecent, manageReports, manageAssets, manageSettings, manageBans, manageFilters, editFilter, editCustomPage,
-		manageBoard, manageThread, manageLogs, manageCatalog, manageCustomPages, editPost } = require(__dirname+'/../models/pages/manage/')
-	, { globalManageTrusted, globalManageApproval, globalManageSettings, globalManageReports, globalManageBans, globalManageBoards, globalManageFilters, globalEditFilter, editNews, editAccount, editRole,
+	, { manageRecent, manageReports, manageSettings, manageBans, manageFilters, editFilter, editCustomPage,
+		manageBoard, manageThread, manageLogs, manageCatalog, editPost } = require(__dirname+'/../models/pages/manage/')
+	, { globalManageAssets, globalManageCustomPages, globalManageTrusted, globalManageApproval, globalManageSettings, globalManageReports, globalManageBans, globalManageBoards, globalManageFilters, globalEditFilter, editNews, editAccount, editRole,
 		globalManageRecent, globalManageAccounts, globalManageNews, globalManageLogs, globalManageRoles } = require(__dirname+'/../models/pages/globalmanage/')
 	, { bans, banned, changePassword, blockBypass, home, register, login, create, myPermissions, sessions, setupTwoFactor,
 		board, catalog, banners, boardSettings, globalSettings, randombanner, news, captchaPage, overboard, overboardCatalog,
@@ -51,17 +51,19 @@ router.get('/boards.(html|json)', boardlist);
 router.get('/overboard.(html|json)', overboard); //overboard
 router.get('/catalog.(html|json)', overboardCatalog); //overboard catalog view
 
+//assets
+router.get('/banners.(html|json)', banners); //banners
+router.get('/randombanner', randombanner); //random banner
+router.get('/custompage/:page.(html|json)', customPage); //board custom page
+
 //board pages
 router.get('/:board/:page(1[0-9]{1,}|[2-9][0-9]{0,}|index).(html|json)', Boards.exists, setBoardLanguage, board); //index
 router.get('/:board/thread/:id([1-9][0-9]{0,})(\\+50)?.(html|json)', Boards.exists, setBoardLanguage, threadParamConverter, Posts.threadExistsMiddleware, thread); //thread view
 router.get('/:board/catalog.(html|json)', Boards.exists, setBoardLanguage, catalog); //catalog
 router.get('/:board/logs.(html|json)', Boards.exists, setBoardLanguage, modloglist);//modlog list
 router.get('/:board/logs/:date(\\d{2}-\\d{2}-\\d{4}).(html|json)', Boards.exists, setBoardLanguage, logParamConverter, modlog); //daily log
-router.get('/:board/custompage/:page.(html|json)', Boards.exists, setBoardLanguage, customPage); //board custom page
-router.get('/:board/banners.(html|json)', Boards.exists, setBoardLanguage, banners); //banners
 router.get('/:board/settings.json', Boards.exists, setBoardLanguage, boardSettings); //public board settings
 router.get('/settings.json', globalSettings); //public global settings
-router.get('/randombanner', randombanner); //random banner
 
 //board manage pages
 router.get('/:board/manage/catalog.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
@@ -82,10 +84,6 @@ router.get('/:board/manage/bans.html', useSession, sessionRefresh, isLoggedIn, B
 	hasPerms.one(Permissions.MANAGE_BANS), csrf, manageBans);
 router.get('/:board/manage/settings.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
 	hasPerms.one(Permissions.MANAGE_BOARD_SETTINGS), csrf, manageSettings);
-router.get('/:board/manage/assets.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, manageAssets);
-router.get('/:board/manage/custompages.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, manageCustomPages);
 router.get('/:board/manage/editcustompage/:custompageid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
 	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, custompageParamConverter, editCustomPage);
 router.get('/:board/manage/filters.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
@@ -116,6 +114,10 @@ router.get('/globalmanage/filters.html', useSession, sessionRefresh, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), csrf, globalManageFilters);
 router.get('/globalmanage/settings.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
 	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), csrf, globalManageSettings);
+router.get('/globalmanage/assets.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
+	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), csrf, globalManageAssets);
+router.get('/globalmanage/custompages.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
+	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), csrf, globalManageCustomPages);
 router.get('/globalmanage/editnews/:newsid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,
 	hasPerms.one(Permissions.MANAGE_NEWS), csrf, newsParamConverter, editNews);
 router.get('/globalmanage/editfilter/:filterid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,

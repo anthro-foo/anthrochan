@@ -4,10 +4,10 @@ include ../mixins/boardheader.pug
 include ../mixins/fileform.pug
 
 block head
-	title /#{board._id}/ - #{__('Assets')}
+	title /#{board._id}/ - #{__('Global Assets')}
 
 block content
-	+boardheader(__('Assets'))
+	+boardheader(__('Global Assets'))
 	br
 	+managenav('assets')
 	hr(size=1)
