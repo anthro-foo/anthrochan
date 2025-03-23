@@ -52,19 +52,19 @@ if (!isCatalog) { //dont show embed buttons in catalog
 			},
 			{
 				linkRegex: /^https?:\/\/(?:www\.)?vocaroo\.com\/.+/i,
-							toHtml: (url) => {
-								try {
-									const urlObject = new URL(url);
-									const vocarooId = urlObject.pathname;
-									if (vocarooId) {
-										return [
-											'<iframe class="vocaroo" width="300" height="60" src="" frameborder="0" allow="autoplay"></iframe>',
-											`https://vocaroo.com/embed${vocarooId}`
-										];
-									}
-								} catch (e) { /*invalid url*/ }
-								return null;
-							}
+				toHtml: (url) => {
+					try {
+						const urlObject = new URL(url);
+						const vocarooId = urlObject.pathname;
+						if (vocarooId) {
+							return [
+								'<iframe class="vocaroo" width="300" height="60" src="" frameborder="0" allow="autoplay"></iframe>',
+								`https://vocaroo.com/embed${vocarooId}`
+							];
+						}
+					} catch (e) { /*invalid url*/ }
+					return null;
+				}
 			},
 			//TODO: add more of these
 		];
