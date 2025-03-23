@@ -3,6 +3,7 @@
 const { createHash, randomBytes } = require('crypto')
 	, randomBytesAsync = require('util').promisify(randomBytes)
 	, { remove, emptyDir, pathExists, stat: fsStat } = require('fs-extra')
+	, path = require('path')
 	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
 	, Mongo = require(__dirname+'/../../db/db.js')
 	, Socketio = require(__dirname+'/../../lib/misc/socketio.js')
@@ -464,12 +465,13 @@ module.exports = async (req, res) => {
 		};
 	}
 	if (customFlags === true) {
-		if (req.body.customflag && res.locals.board.flags[req.body.customflag] != null) {
+		if (req.body.customflag) {
+			const name = path.parse(req.body.customflag).name;
 			//if customflags allowed, and its a valid selection
 			country = {
-				name: req.body.customflag,
-				code: req.body.customflag,
-				src: res.locals.board.flags[req.body.customflag],
+				name: name,
+				code: name,
+				src: req.body.customflag,
 				custom: true, //this will help
 			};
 		}

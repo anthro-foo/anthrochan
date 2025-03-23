@@ -75,5 +75,31 @@ module.exports = {
 		cache.del('banners');
 		return module.exports.removeFromArray('banners', filenames);
 	},
+	
+	getFlags: async () => {
+		let flags = await cache.sgetall('flags');
+		if (flags.length === 0) {
+			let assets = await db.findOne(
+				{ _id: 'assets' },
+				{ flags: 1, _id: 0}
+			);
+			
+			if (assets && assets.flags) {
+				cache.sadd('flags', assets.flags);
+				flags = assets.flags;
+			}
+		}
 
+		return flags;
+	},
+	
+	addFlags: (files) => {
+		cache.del('flags');
+		return module.exports.addToArray('flags', files);
+	},
+	
+	removeFlags: (files) => {
+		cache.del('flags');
+		return module.exports.removeFromArray('flags', files);
+	},
 };

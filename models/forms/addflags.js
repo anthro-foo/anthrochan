@@ -1,22 +1,20 @@
 'use strict';
 
 const path = require('path')
-	, { remove } = require('fs-extra')
+	, { remove, pathExists } = require('fs-extra')
 	, config = require(__dirname+'/../../lib/misc/config.js')
 	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
 	, moveUpload = require(__dirname+'/../../lib/file/moveupload.js')
 	, mimeTypes = require(__dirname+'/../../lib/file/mimetypes.js')
 	, deleteTempFiles = require(__dirname+'/../../lib/file/deletetempfiles.js')
 	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
-	, { countryCodesSet } = require(__dirname+'/../../lib/misc/countries.js')
-	, { Boards } = require(__dirname+'/../../db/')
-	, buildQueue = require(__dirname+'/../../lib/build/queue.js');
+	, { Assets } = require(__dirname+'/../../db/');
 
 module.exports = async (req, res) => {
 
-	const { __ } = res.locals;
+	const { __, __n } = res.locals;
 	const { checkRealMimeTypes } = config.get;
-	const redirect = `/${req.params.board}/manage/assets.html`;
+	const redirect = '/globalmanage/assets.html';
 
 	// check all mime types before we try saving anything
 	for (let i = 0; i < res.locals.numFiles; i++) {
@@ -50,22 +48,25 @@ module.exports = async (req, res) => {
 		}
 	}
 
-	const newFlags = {};
+	const filenames = [];
 	for (let i = 0; i < res.locals.numFiles; i++) {
 		const file = req.files.file[i];
-		let noExt = path.parse(file.name).name;
-		file.filename = noExt + file.sha256 + file.extension;
+		file.noExt = path.parse(file.name).name;
+		file.filename = file.noExt + file.extension;
 
-		//match case for real country flags
-		if (noExt.length === 2 && countryCodesSet.has(noExt.toUpperCase())) {
-			noExt = noExt.toUpperCase();
+		//check if already exists
+		const exists = await pathExists(`${uploadDirectory}/flag/${file.filename}`);
+
+		if (exists) {
+			await remove(file.tempFilePath);
+			continue;
 		}
 
-		//add to list after checking it doesnt already exist
-		newFlags[noExt] = file.filename;
+		// add to list after checking it doesnt already exist
+		filenames.push(file.filename);
 
 		//then upload it
-		await moveUpload(file, file.filename, `flag/${req.params.board}`);
+		await moveUpload(file, file.filename, 'flag/');
 
 		//and delete the temp file
 		await remove(file.tempFilePath);
@@ -73,31 +74,26 @@ module.exports = async (req, res) => {
 	}
 
 	deleteTempFiles(req).catch(console.error);
+	
+	// no new flags
+	if (filenames.length === 0) {
+		return dynamicResponse(req, res, 400, 'message', {
+			'title': __('Bad request'),
+			'message': __n('Flag already exist', res.locals.numFiles),
+			'redirect': redirect
+		});
+	}
 
-	const updatedFlags = { ...res.locals.board.flags, ...newFlags };
+	// add banners to the db
+	await Assets.addFlags(filenames);
+	// get new flags and recache
+	await Assets.getFlags();
 
-	// add flags in db
-	await Boards.setFlags(req.params.board, updatedFlags);
-
-	await remove(`${uploadDirectory}/html/${req.params.board}/thread/`);
-	buildQueue.push({
-		'task': 'buildBoardMultiple',
-		'options': {
-			'board': res.locals.board,
-			'startpage': 1,
-			'endpage': Math.ceil(res.locals.board.settings.threadLimit/10),
-		}
-	});
-	buildQueue.push({
-		'task': 'buildCatalog',
-		'options': {
-			'board': res.locals.board,
-		}
-	});
+	await remove(`${uploadDirectory}/html/`);
 
 	return dynamicResponse(req, res, 200, 'message', {
 		'title': __('Success'),
-		'message': __('Uploaded %s new flags.', res.locals.numFiles),
+		'message': __('Uploaded %s new flags.', filenames.length),
 		'redirect': redirect
 	});
 

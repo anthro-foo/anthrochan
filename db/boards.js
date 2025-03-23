@@ -23,9 +23,6 @@ module.exports = {
 			board = await db.findOne({ '_id': name });
 			if (board) {
 				cache.set(`board:${name}`, board, 3600);
-				if (board.banners.length > 0) {
-					cache.sadd(`banners:${name}`, board.banners);
-				}
 			} else {
 				cache.set(`board:${name}`, 'no_exist', 600);
 			}
@@ -43,7 +40,6 @@ module.exports = {
 
 	deleteOne: (board) => {
 		cache.del(`board:${board}`);
-		cache.del(`banners:${board}`);
 		cache.srem('boards:listed', board);
 		cache.srem('triggered', board);
 		return db.deleteOne({ '_id': board });
@@ -104,18 +100,6 @@ module.exports = {
 	addAssets: (board, filenames) => {
 		cache.del(`board:${board}`);
 		return module.exports.addToArray(board, 'assets', filenames);
-	},
-
-	setFlags: (board, flags) => {
-		cache.del(`board:${board}`);
-		//could use dot notation and set flags.x for only changes? seems a bit unsafe though and couldnt have . in name
-		return db.updateOne({
-			'_id': board,
-		}, {
-			'$set': {
-				'flags': flags,
-			}
-		});
 	},
 
 	getLocalListed: async () => {

@@ -32,7 +32,7 @@ mixin catalogtile(post, index, overboard=false)
 			if post.country && post.country.code
 				if post.country.custom === true
 					span(title=post.country.name)
-						img.customflag(src=`/flag/${post.board}/${post.country.src}` alt=' ' loading='lazy')
+						img.customflag(src=`/flag/${post.country.src}` alt=' ' loading='lazy')
 					| 
 				else
 					span(class=`flag flag-${post.country.code.toLowerCase()}` title=post.country.name alt=post.country.name)

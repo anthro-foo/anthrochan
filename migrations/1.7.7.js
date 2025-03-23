@@ -90,9 +90,22 @@ module.exports = async(db, redis) => {
 		}
 	);
 	
-	console.log('Removing board staff');
-	await db.collection('boards').updateMany({}, { $unset: { staff: '', owner: '' } });
-	await db.collection('accounts').updateMany({}, { $unset: { ownedBoards: '', staffBoards: '' } });
+	console.log('Removing board staff and assets');
+	await db.collection('boards').updateMany(
+		{}, 
+		{ $unset: { staff: '', owner: '', flags: '', banners: '' } });
+	await db.collection('accounts').updateMany(
+		{}, 
+		{ $unset: { ownedBoards: '', staffBoards: '' } });
+	
+	console.log('Remove old asset files');
+	/* await Promise.all([
+		del([ 'static/html/*' ]),
+		del([ 'static/json/*' ]),
+		del([ 'static/banner/*' ]),
+		del([ 'static/flag/*' ]),
+		del([ 'static/asset/*' ]),
+	]); */
 	
 	console.log('Clearing all cache');
 	await redis.deletePattern('*');
