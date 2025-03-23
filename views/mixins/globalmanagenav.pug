@@ -2,7 +2,8 @@ mixin globalmanagenav(selected, upLevel)
 	nav.pages
 		if permissions.get(Permissions.MANAGE_GENERAL)
 			a(href=`${upLevel ? '../' : ''}recent.html` class=(selected === 'recent' ? 'bold' : '')) [#{__('Recent')}]
-			|  
+			|
+			|
 			a(href=`${upLevel ? '../' : ''}reports.html` class=(selected === 'reports' ? 'bold' : '')) [#{__('Reports')}]
 		if permissions.get(Permissions.MANAGE_FILE_APPROVAL)
 			|
@@ -32,6 +33,14 @@ mixin globalmanagenav(selected, upLevel)
 		if permissions.get(Permissions.MANAGE_GLOBAL_SETTINGS)
 			|  
 			a(href=`${upLevel ? '../' : ''}settings.html` class=(selected === 'settings' ? 'bold' : '')) [#{__('Settings')}]
+		if permissions.get(Permissions.MANAGE_ASSETS)
+			|
+			|
+			a(href=`${upLevel ? '../' : ''}assets.html` class=(selected === 'assets' ? 'bold' : '')) [#{__('Assets')}]
+		if permissions.get(Permissions.MANAGE_ASSETS)
+			|
+			|
+			a(href=`${upLevel ? '../' : ''}custompages.html` class=(selected === 'custompages' ? 'bold' : '')) [#{__('Custome Pages')}]
 		if permissions.get(Permissions.MANAGE_TRUSTED)
 			|  
 			a(href=`${upLevel ? '../' : ''}trusted.html` class=(selected === 'trusted' ? 'bold' : '')) [#{__('Trusted')}]

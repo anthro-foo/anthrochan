@@ -115,9 +115,9 @@ router.get('/globalmanage/filters.html', useSession, sessionRefresh, isLoggedIn,
 router.get('/globalmanage/settings.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
 	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), csrf, globalManageSettings);
 router.get('/globalmanage/assets.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), csrf, globalManageAssets);
+	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, globalManageAssets);
 router.get('/globalmanage/custompages.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), csrf, globalManageCustomPages);
+	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, globalManageCustomPages);
 router.get('/globalmanage/editnews/:newsid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,
 	hasPerms.one(Permissions.MANAGE_NEWS), csrf, newsParamConverter, editNews);
 router.get('/globalmanage/editfilter/:filterid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,

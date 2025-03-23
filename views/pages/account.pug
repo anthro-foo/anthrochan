@@ -92,6 +92,14 @@ block content
 					|
 					|
 					a(href=`/globalmanage/settings.html`) #{__('Global Settings')}
+				if permissions.get(Permissions.MANAGE_ASSETS)
+					|
+					|
+					a(href=`/globalmanage/assets.html`) #{__('Assets')}
+				if permissions.get(Permissions.MANAGE_ASSETS)
+					|
+					|
+					a(href=`/globalmanage/custompages.html`) #{__('Custom Pages')}
 				if permissions.get(Permissions.MANAGE_TRUSTED)
 					|
 					|
@@ -123,12 +131,7 @@ block content
 					if permissions.get(Permissions.MANAGE_BOARD_SETTINGS)
 						|   
 						a(href=`/${b}/manage/settings.html`) #{__('Settings')}
-					if permissions.get(Permissions.MANAGE_ASSETS)
-						|   
-						a(href=`/${b}/manage/assets.html`) #{__('Assets')}
-					if permissions.get(Permissions.MANAGE_ASSETS)
-						|   
-						a(href=`/${b}/manage/custompages.html`) #{__('Custom Pages')}
+					
 					
 	hr(size=1)
 	h4.no-m-p #{__('Delete your account')}:
