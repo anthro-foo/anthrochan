@@ -28,14 +28,14 @@ block content
 			if postId || (queryIp && queryIp === ip)
 				h4.no-m-p #{__('Post history for %s', ip)}
 					|
-					if permissions.get(Permissions.MANAGE_GLOBAL_GENERAL)
+					if permissions.get(Permissions.MANAGE_GENERAL)
 						|  
 						a(href=`/globalmanage/recent.html?ip=${encodeURIComponent(ip)}`) [#{__('See Global Post History')}]
 				hr(size=1)
 			if queryAccount
 				h4.no-m-p #{__('Post history for %s', queryAccount)}
 					|
-					if permissions.get(Permissions.MANAGE_GLOBAL_GENERAL)
+					if permissions.get(Permissions.MANAGE_GENERAL)
 						|  
 						a(href=`/globalmanage/recent.html?account=${encodeURIComponent(queryAccount)}`) [#{__('See Global Post History')}]
 				hr(size=1)

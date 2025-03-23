@@ -16,9 +16,6 @@ block content
 			.row
 				.label #{__('Username')}
 				input(type='text' name='username' value=username)
-			.row
-				.label #{__('Board URI')}
-				input(type='text' name='uri' value=uri)
 			input(type='submit', value=__('Filter'))
 		h4.mv-5 #{__('Accounts')}:
 		if accounts && accounts.length > 0
@@ -29,8 +26,6 @@ block content
 						tr
 							th
 							th #{__('Username')}
-							th #{__('Own Boards')}
-							th #{__('Staff Boards')}
 							th #{__('Last Active')}
 							th #{__('2FA')}
 							th #{__('Role')}
@@ -40,25 +35,7 @@ block content
 								td
 									input.postform-style(type='checkbox', name='checkedaccounts' value=account._id)
 									| 
-									if permissions.get(Permissions.MANAGE_GLOBAL_BOARDS)
-										.prev-show
-											input(type='checkbox', name='delete_owned_boards' value=account._id)
-											| #{__('Delete all owned boards')}:
 								td #{account._id}
-								td
-									if account.ownedBoards.length > 0
-										for b in account.ownedBoards
-											a(href=`/${b}/index.html`) /#{b}/
-											|  
-									else
-										| -
-								td
-									if account.staffBoards.length > 0
-										for b in account.staffBoards
-											a(href=`/${b}/index.html`) /#{b}/
-											|  
-									else
-										| -		
 								td
 									if account.lastActiveDate
 										time.reltime(datetime=account.lastActiveDate.toISOString()) #{account.lastActiveDate.toLocaleString(pageLanguage, {hourCycle:'h23'})}

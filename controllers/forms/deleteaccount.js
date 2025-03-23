@@ -6,7 +6,7 @@ const deleteAccount = require(__dirname+'/../../models/forms/deleteaccount.js')
 	, paramConverter = require(__dirname+'/../../lib/middleware/input/paramconverter.js')
 	, config = require(__dirname+'/../../lib/misc/config.js')
 	, doTwoFactor = require(__dirname+'/../../lib/misc/dotwofactor.js')
-	, { checkSchema, numberBody, existsBody, lengthBody } = require(__dirname+'/../../lib/input/schema.js');
+	, { checkSchema, existsBody, lengthBody } = require(__dirname+'/../../lib/input/schema.js');
 
 module.exports = {
 
@@ -19,8 +19,6 @@ module.exports = {
 		const { forceActionTwofactor } = config.get;
 
 		const { __ } = res.locals;
-
-		const { staffBoards, ownedBoards } = res.locals.user;
 
 		const errors = await checkSchema([
 			{ result: existsBody(req.body.twofactor) ? lengthBody(req.body.twofactor, 0, 6) : false, expected: false, error: __('Invalid 2FA code') },
@@ -43,7 +41,6 @@ module.exports = {
 				}
 			}, expected: true, error: __('Invalid 2FA Code') },
 			{ result: existsBody(req.body.confirm), expected: true, error: __('Missing confirmation') },
-			{ result: (numberBody(ownedBoards.length, 0, 0) && numberBody(staffBoards.length, 0, 0)), expected: true, error: __('You cannot delete your account while you hold staff position on any board') },
 		]);
 
 		if (errors.length > 0) {

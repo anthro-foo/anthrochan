@@ -48,8 +48,6 @@ module.exports = {
 			original,
 			passwordHash,
 			'permissions': Mongo.Binary(permissions.array),
-			'ownedBoards': [],
-			'staffBoards': [],
 			'twofactor': null,
 			web3,
 		});
@@ -172,98 +170,6 @@ module.exports = {
 		});
 		cache.del(usernames.map(n => `users:${n}`));
 		return res;
-	},
-
-	addOwnedBoard: async (username, board) => {
-		const res = await db.updateOne({
-			'_id': username
-		}, {
-			'$addToSet': {
-				'ownedBoards': board
-			}
-		});
-		cache.del(`users:${username}`);
-		return res;
-	},
-
-	removeOwnedBoard: async (username, board) => {
-		const res = await db.updateOne({
-			'_id': username
-		}, {
-			'$pull': {
-				'ownedBoards': board
-			}
-		});
-		cache.del(`users:${username}`);
-		return res;
-	},
-
-	addStaffBoard: async (usernames, board) => {
-		const res = await db.updateMany({
-			'_id': {
-				'$in': usernames
-			}
-		}, {
-			'$addToSet': {
-				'staffBoards': board
-			}
-		});
-		cache.del(usernames.map(n => `users:${n}`));
-		return res;
-	},
-	
-	removeStaffBoard: async (usernames, board) => {
-		const res = await db.updateMany({
-			'_id': {
-				'$in': usernames
-			}
-		}, {
-			'$pull': {
-				'staffBoards': board
-			}
-		});
-		cache.del(usernames.map(n => `users:${n}`));
-		return res;
-	},
-	
-	clearStaffAndOwnedBoards: async (usernames) => {
-		const res = await db.updateMany({
-			'_id': {
-				'$in': usernames
-			}
-		}, {
-			'$set': {
-				'staffBoards': [],
-				'ownedBoards': [],
-			}
-		});
-		cache.del(usernames.map(n => `users:${n}`));
-		return res;
-	},
-
-	getOwnedOrStaffBoards: (usernames) => {
-		return db.find({
-			'_id': {
-				'$in': usernames
-			},
-			'$or': [
-				{
-					'ownedBoards.0': {
-						'$exists': true
-					},
-				},
-				{
-					'staffBoards.0': {
-						'$exists': true
-					}
-				}
-			]
-		}, {
-			'projection': {
-				'ownedBoards': 1,
-				'staffBoards': 1,
-			}
-		}).toArray();
 	},
 
 	deleteAll: () => {

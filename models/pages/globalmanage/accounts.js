@@ -16,17 +16,6 @@ module.exports = async (req, res, next) => {
 	if (username) {
 		filter['_id'] = username;
 	}
-	const uri = (typeof req.query.uri === 'string' ? req.query.uri  : null);
-	if (uri) {
-		filter['$or'] = [
-			{
-				'ownedBoards': uri
-			},
-			{
-				'staffBoards': uri
-			},
-		];
-	}
 
 	let accounts, maxPage;
 	try {
@@ -47,7 +36,6 @@ module.exports = async (req, res, next) => {
 			user: res.locals.user,
 			queryString,
 			username,
-			uri,
 			accounts,
 			page,
 			maxPage,

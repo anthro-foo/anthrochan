@@ -60,7 +60,7 @@ module.exports = async (req, res) => {
 	let redirect = `/${req.params.board}/`;
 	let salt = null;
 	let thread = null;
-	const isStaffOrGlobal = res.locals.permissions.hasAny(Permissions.MANAGE_GLOBAL_GENERAL, Permissions.MANAGE_BOARD_GENERAL);
+	const isMod = res.locals.permissions.get(Permissions.MANAGE_GENERAL);
 	const isAdmin = res.locals.permissions.hasAny(Permissions.VIEW_RAW_IP);
 	const { blockedCountries, threadLimit, ids, userPostSpoiler,
 		pphTrigger, tphTrigger, tphTriggerAction, pphTriggerAction,
@@ -70,7 +70,7 @@ module.exports = async (req, res) => {
 	//
 	// Check if country is blocked
 	//
-	if (!isStaffOrGlobal
+	if (!isMod
 		// && !res.locals.permissions.get(Permissions.BYPASS_FILTERS) //TODO: new permission for "bypass blocks" or something
 		&& res.locals.country
 		&& blockedCountries.includes(res.locals.country.code)) {
@@ -281,7 +281,7 @@ module.exports = async (req, res) => {
 			//get metadata
 			let processedFile = {
 				filename: file.filename,
-				spoiler: (!isStaffOrGlobal || userPostSpoiler) && req.body.spoiler && req.body.spoiler.includes(file.sha256),
+				spoiler: (!isMod || userPostSpoiler) && req.body.spoiler && req.body.spoiler.includes(file.sha256),
 				hash: file.sha256,
 				originalFilename: req.body.strip_filename && req.body.strip_filename.includes(file.sha256) ? file.filename : file.name,
 				mimetype: file.mimetype,
@@ -480,10 +480,10 @@ module.exports = async (req, res) => {
 	}
 
 	//spoiler files only if board settings allow
-	const spoiler = (!isStaffOrGlobal || userPostSpoiler) && req.body.spoiler_all ? true : false;
+	const spoiler = (!isMod || userPostSpoiler) && req.body.spoiler_all ? true : false;
 
 	//forceanon and sageonlyemail only allow sage email
-	let email = (isStaffOrGlobal || (!forceAnon && !sageOnlyEmail) || req.body.email === 'sage') ? req.body.email : null;
+	let email = (isMod || (!forceAnon && !sageOnlyEmail) || req.body.email === 'sage') ? req.body.email : null;
 	let nohide = false;
 	if (email && email !== 'sage') {
 		nohide = email.includes('nohide');
@@ -495,16 +495,13 @@ module.exports = async (req, res) => {
 		}
 	}
 	//disablereplysubject
-	let subject = (!isStaffOrGlobal && req.body.thread && disableReplySubject) ? null : req.body.subject;
+	let subject = (!isMod && req.body.thread && disableReplySubject) ? null : req.body.subject;
 
 	//get name, trip and cap
 	const { name, tripcode, capcode } = await nameHandler(
 		req.body.name,
 		res.locals.permissions,
 		res.locals.board.settings,
-		res.locals.board.owner,
-		res.locals.board.staff,
-		res.locals.user ? res.locals.user.username : null,
 		__ //i18n translation local
 	);
 	//get message, quotes and crossquote array

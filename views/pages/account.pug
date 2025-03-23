@@ -24,7 +24,7 @@ block content
 
 	if permissions.hasAny(Permissions.BYPASS_BANS, Permissions.BYPASS_SPAMCHECK, Permissions.BYPASS_RATELIMITS, Permissions.BYPASS_FILTER, Permissions.BYPASS_CAPTCHA, Permissions.BYPASS_FILE_APPROVAL)
 		hr(size=1)
-		h4.no-m-p #{__('Privileges')}:
+		h4.no-m-p #{__('Your Privileges')}:
 			ul
 				if permissions.get(Permissions.BYPASS_BANS)
 					li Bypass bans
@@ -38,58 +38,68 @@ block content
 					li Bypass captcha
 				if permissions.get(Permissions.BYPASS_FILE_APPROVAL)
 					li Bypass file approval
+				if permissions.get(Permissions.BYPASS_DNSBL)
+					li Bypass DNSBL
+				if permissions.get(Permissions.BYPASS_ANONYMIZER_RESTRICTIONS)
+					li Bypass Anonymizer Restrictions
 
-	if permissions.hasAny(Permissions.MANAGE_GLOBAL_GENERAL, Permissions.MANAGE_GLOBAL_BANS, Permissions.MANAGE_GLOBAL_BOARDS, Permissions.MANAGE_GLOBAL_LOGS, Permissions.MANAGE_GLOBAL_ACCOUNTS, Permissions.MANAGE_GLOBAL_NEWS, Permissions.MANAGE_GLOBAL_SETTINGS)
+	if permissions.get(Permissions.VIEW_MANAGE)
 		hr(size=1)
 		h4.no-m-p #{__('Global Management')}:
 		ul
 			li
-				if permissions.get(Permissions.MANAGE_GLOBAL_GENERAL)
+				if permissions.get(Permissions.MANAGE_GENERAL)
 					a(href=`/globalmanage/recent.html`) #{__('Recent')}
 					|   
 					a(href=`/globalmanage/reports.html`) #{__('Reports')}
 						if globalReportCount > 0
 							b  (#{globalReportCount})
+				if permissions.get(Permissions.MANAGE_FILE_APPROVAL)
 					|
 					|
 					a(href=`/globalmanage/approval.html`) #{__('Approvals')}
 						if globalApprovalCount > 0
 							b  (#{globalApprovalCount})
-				if permissions.get(Permissions.MANAGE_GLOBAL_BANS)
-					|   
+				if permissions.get(Permissions.MANAGE_BANS)
+					|
+					|
 					a(href=`/globalmanage/bans.html`) #{__('Bans')}
-				if permissions.get(Permissions.MANAGE_GLOBAL_BOARDS)
-					|   
+				if permissions.get(Permissions.MANAGE_BOARDS)
+					|
+					|
 					a(href=`/globalmanage/boards.html`) #{__('Boards')}
-				if permissions.get(Permissions.MANAGE_GLOBAL_LOGS)
-					|   
+				if permissions.get(Permissions.MANAGE_LOGS)
+					|
+					|
 					a(href=`/globalmanage/globallogs.html`) #{__('Logs')}
-				if permissions.get(Permissions.MANAGE_GLOBAL_ACCOUNTS)
-					|   
+				if permissions.get(Permissions.MANAGE_ACCOUNTS)
+					|
+					|
 					a(href=`/globalmanage/accounts.html`) #{__('Accounts')}
-				if permissions.get(Permissions.MANAGE_GLOBAL_ROLES)
-					|   
+				if permissions.get(Permissions.MANAGE_ROLES)
+					|
+					|
 					a(href=`/globalmanage/roles.html`) #{__('Roles')}
-				if permissions.get(Permissions.MANAGE_GLOBAL_NEWS)
-					|   
+				if permissions.get(Permissions.MANAGE_NEWS)
+					|
+					|
 					a(href=`/globalmanage/news.html`) #{__('News')}
 				if permissions.get(Permissions.MANAGE_GLOBAL_SETTINGS)
-					|   
+					|
+					|
 					a(href=`/globalmanage/filters.html`) #{__('Filters')}
 				if permissions.get(Permissions.MANAGE_GLOBAL_SETTINGS)
-					|   
+					|
+					|
 					a(href=`/globalmanage/settings.html`) #{__('Global Settings')}
-				if permissions.get(Permissions.MANAGE_GLOBAL_TRUSTED)
+				if permissions.get(Permissions.MANAGE_TRUSTED)
 					|
 					|
 					a(href=`/globalmanage/trusted.html`) #{__('Trusted')}
-
-
-	if user.ownedBoards && user.ownedBoards.length > 0
 		hr(size=1)
-		h4.no-m-p #{__('Boards you own')}:
+		h4.no-m-p #{__('Board Management')}:
 		ul
-			for b in user.ownedBoards
+			for b in boards
 				li
 					a(href=`/${b}/index.html`) /#{b}/
 					|  -  
@@ -97,87 +107,29 @@ block content
 					|    
 					a(href=`/${b}/manage/catalog.html`) #{__('Mod Catalog')}
 					|   
-					a(href=`/${b}/manage/recent.html`) #{__('Recent')}
-					|
-					|
-					a(href=`/${b}/manage/reports.html`) #{__('Reports')}
-						if boardReportCountMap[b]
-							b  (#{boardReportCountMap[b]})
-					|   
-					a(href=`/${b}/manage/bans.html`) #{__('Bans')}
-					|   
-					a(href=`/${b}/manage/logs.html`) #{__('Logs')}
-					|   
-					a(href=`/${b}/manage/filters.html`) #{__('Filters')}
-					|   
-					a(href=`/${b}/manage/settings.html`) #{__('Settings')}
-					|   
-					a(href=`/${b}/manage/assets.html`) #{__('Assets')}
-					|   
-					a(href=`/${b}/manage/custompages.html`) #{__('Custom Pages')}
-					|   
-					a(href=`/${b}/manage/staff.html`) #{__('Staff')}
-					
-	if user.staffBoards && user.staffBoards.length > 0
-		hr(size=1)
-		h4.no-m-p #{__('Boards you are staff on')}:
-		ul
-			for b in user.staffBoards
-				li
-					if permissions.get(Permissions.MANAGE_BOARD_GENERAL) || boardPermissions[b].get(Permissions.MANAGE_BOARD_GENERAL)
-						a(href=`/${b}/index.html`) /#{b}/
-						|  -  
-						a(href=`/${b}/manage/index.html`) #{__('Mod Index')}
-						|    
-						a(href=`/${b}/manage/catalog.html`) #{__('Mod Catalog')}
-						|   
+					if (permissions.get(Permissions.MANAGE_GENERAL))
 						a(href=`/${b}/manage/recent.html`) #{__('Recent')}
 						|
 						|
 						a(href=`/${b}/manage/reports.html`) #{__('Reports')}
-							if boardReportCountMap[b]
+							//- if boardReportCountMap[b]
 								b  (#{boardReportCountMap[b]})
-					if permissions.get(Permissions.MANAGE_BOARD_BANS) || boardPermissions[b].get(Permissions.MANAGE_BOARD_BANS)
+					if permissions.get(Permissions.MANAGE_BANS)
 						|   
 						a(href=`/${b}/manage/bans.html`) #{__('Bans')}
-					if permissions.get(Permissions.MANAGE_BOARD_LOGS) || boardPermissions[b].get(Permissions.MANAGE_BOARD_LOGS)
+					if permissions.get(Permissions.MANAGE_LOGS)
 						|   
 						a(href=`/${b}/manage/logs.html`) #{__('Logs')}
-					if permissions.get(Permissions.MANAGE_BOARD_SETTINGS) || boardPermissions[b].get(Permissions.MANAGE_BOARD_SETTINGS)
+					if permissions.get(Permissions.MANAGE_BOARD_SETTINGS)
 						|   
 						a(href=`/${b}/manage/settings.html`) #{__('Settings')}
-					if permissions.get(Permissions.MANAGE_BOARD_CUSTOMISATION) || boardPermissions[b].get(Permissions.MANAGE_BOARD_CUSTOMISATION)
+					if permissions.get(Permissions.MANAGE_ASSETS)
 						|   
 						a(href=`/${b}/manage/assets.html`) #{__('Assets')}
-					if permissions.get(Permissions.MANAGE_BOARD_CUSTOMISATION) || boardPermissions[b].get(Permissions.MANAGE_BOARD_CUSTOMISATION)
+					if permissions.get(Permissions.MANAGE_ASSETS)
 						|   
 						a(href=`/${b}/manage/custompages.html`) #{__('Custom Pages')}
-					if permissions.get(Permissions.MANAGE_BOARD_STAFF) || boardPermissions[b].get(Permissions.MANAGE_BOARD_STAFF)
-						|   
-						a(href=`/${b}/manage/staff.html`) #{__('Staff')}
 					
-	if user.staffBoards.length > 0 ||  user.ownedBoards.length > 0
-		hr(size=1)
-		h4.no-m-p #{__('Resign from a staff position')}:
-		.form-wrapper.flexleft.mt-10
-			form.form-post(action=`/forms/resign`, enctype='application/x-www-form-urlencoded', method='POST')
-				input(type='hidden' name='_csrf' value=csrf)
-				.row
-					.label #{__('Boards')}
-					select(name='board' size='5')
-						optgroup(label=__('You own'))
-							each board in user.ownedBoards
-								option(value=board) #{board}
-						optgroup(label=__('You moderate'))
-							each board in user.staffBoards
-								option(value=board) #{board}
-				.row
-					.label #{__("I'm sure")}
-					label.postform-style.ph-5
-						input(type='checkbox', name='confirm', value='true' required)
-				include ../includes/forceactiontwofactor.pug
-				input(type='submit', value=__('Resign'))
-
 	hr(size=1)
 	h4.no-m-p #{__('Delete your account')}:
 	.form-wrapper.flexleft.mt-10

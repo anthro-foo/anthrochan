@@ -5,7 +5,7 @@ const { Bans } = require(__dirname+'/../../db/')
 
 module.exports = async (req, res) => {
 
-	const showGlobal = res.locals.permissions.get(Permissions.VIEW_BOARD_GLOBAL_BANS);
+	const showGlobal = res.locals.permissions.get(Permissions.MANAGE_BANS);
 	const bansBoard = req.params && req.params.board
 		? (showGlobal
 			? req.params.board

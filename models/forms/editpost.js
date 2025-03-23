@@ -74,9 +74,6 @@ todo: handle some more situations
 		req.body.name,
 		res.locals.permissions,
 		board.settings,
-		board.owner,
-		board.staff,
-		res.locals.user ? res.locals.user.username : null,
 		res.locals.__
 	);
 	//new message and quotes

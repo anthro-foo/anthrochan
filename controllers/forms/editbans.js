@@ -47,7 +47,7 @@ module.exports = {
 			});
 		}
 
-		const showGlobal = res.locals.permissions.get(Permissions.VIEW_BOARD_GLOBAL_BANS);
+		const showGlobal = res.locals.permissions.get(Permissions.MANAGE_BANS);
 		res.locals.bansBoard = req.params.board
 			? (showGlobal
 				? req.params.board

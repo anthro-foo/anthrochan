@@ -1,10 +1,8 @@
 'use strict';
 
-const { Boards, Accounts, Modlogs } = require(__dirname+'/../../db/')
+const { Boards, Modlogs } = require(__dirname+'/../../db/')
 	, ModlogActions = require(__dirname+'/../../lib/input/modlogactions.js')
-	, { Binary } = require(__dirname+'/../../db/db.js')
 	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
-	, roleManager = require(__dirname+'/../../lib/permission/rolemanager.js')
 	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
 	, restrictedURIs = new Set(['captcha', 'forms', 'randombanner', 'all'])
 	, { ensureDir } = require('fs-extra')
@@ -17,8 +15,7 @@ module.exports = async (req, res) => {
 
 	const { name, description } = req.body
 		, uri = req.body.uri.toLowerCase()
-		, tags = (req.body.tags || '').split(/\r?\n/).filter(n => n)
-		, owner = req.session.user;
+		, tags = (req.body.tags || '').split(/\r?\n/).filter(n => n);
 
 	if (restrictedURIs.has(uri)) {
 		return dynamicResponse(req, res, 400, 'message', {
@@ -41,7 +38,6 @@ module.exports = async (req, res) => {
 
 	const newBoard = {
 		'_id': uri,
-		owner,
 		tags,
 		'banners': [],
 		'sequence_value': 1,
@@ -50,12 +46,6 @@ module.exports = async (req, res) => {
 		'ips': 0,
 		'lastPostTimestamp': null,
 		'webring': false,
-		'staff': {
-			[owner]: {
-				'permissions': Binary(roleManager.roles.BOARD_OWNER_DEFAULTS.array),
-				'addedDate': new Date(),
-			},
-		},
 		'flags': {},
 		'assets': [],
 		'settings': {
@@ -82,7 +72,6 @@ module.exports = async (req, res) => {
 			}
 		}),
 		Boards.insertOne(newBoard),
-		Accounts.addOwnedBoard(owner, uri),
 		ensureDir(`${uploadDirectory}/html/${uri}`),
 		ensureDir(`${uploadDirectory}/json/${uri}`),
 		ensureDir(`${uploadDirectory}/banner/${uri}`),

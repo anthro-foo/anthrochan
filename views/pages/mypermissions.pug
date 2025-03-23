@@ -9,21 +9,9 @@ block content
 		h1.board-title #{__('My Permissions')}
 	br
 	hr(size=1)
-	h4.no-m-p #{__('Board-specific permissions')}
-	if user.ownedBoards && user.ownedBoards.length > 0 || user.staffBoards && user.staffBoards.length > 0
-		ul
-			for b in user.ownedBoards
-				li
-					a(href=`/${b}/manage/mypermissions.html`) /#{b}/
-			for b in user.staffBoards
-				li
-					a(href=`/${b}/manage/mypermissions.html`) /#{b}/
-	else
-		p #{__('None')}
-	hr(size=1)
 	h4.mv-5 #{__('Account permissions')}
 		|
-		if permissions.get(Permissions.MANAGE_GLOBAL_ACCOUNTS)
+		if permissions.get(Permissions.MANAGE_ACCOUNTS)
 			|  
 			a(href=`/globalmanage/editaccount/${user.username}.html`) [#{__('Edit')}]
 	- const jsonPermissions = permissions.toJSON();

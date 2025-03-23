@@ -1,6 +1,6 @@
 mixin managenav(selected, upLevel)
 	nav.pages
-		if permissions.get(Permissions.MANAGE_BOARD_GENERAL)
+		if permissions.get(Permissions.VIEW_MANAGE)
 			a(href=`${upLevel ? '../..' : '..'}/index.html`) [#{__('Go Back')}]
 			|
 			|
@@ -12,14 +12,15 @@ mixin managenav(selected, upLevel)
 				|  
 			a(href=`${upLevel ? '../' : ''}catalog.html` class=(selected === 'catalog' ? 'bold' : '')) [#{__('Mod Catalog')}]
 			|  
+		if permissions.get(Permissions.MANAGE_GENERAL)
 			a(href=`${upLevel ? '../' : ''}recent.html` class=(selected === 'recent' ? 'bold' : '')) [#{__('Recent')}]
 			|
 			|
 			a(href=`${upLevel ? '../' : ''}reports.html` class=(selected === 'reports' ? 'bold' : '')) [#{__('Reports')}]
-		if permissions.get(Permissions.MANAGE_BOARD_BANS)
+		if permissions.get(Permissions.MANAGE_BANS)
 			|  
 			a(href=`${upLevel ? '../' : ''}bans.html` class=(selected === 'bans' ? 'bold' : '')) [#{__('Bans')}]
-		if permissions.get(Permissions.MANAGE_BOARD_LOGS)
+		if permissions.get(Permissions.MANAGE_LOGS)
 			|  
 			a(href=`${upLevel ? '../' : ''}logs.html` class=(selected === 'logs' ? 'bold' : '')) [#{__('Logs')}]
 		if permissions.get(Permissions.MANAGE_BOARD_SETTINGS)
@@ -28,11 +29,8 @@ mixin managenav(selected, upLevel)
 		if permissions.get(Permissions.MANAGE_BOARD_SETTINGS)
 			|  
 			a(href=`${upLevel ? '../' : ''}settings.html` class=(selected === 'settings' ? 'bold' : '')) [#{__('Settings')}]
-		if permissions.get(Permissions.MANAGE_BOARD_CUSTOMISATION)
+		if permissions.get(Permissions.MANAGE_ASSETS)
 			|  
 			a(href=`${upLevel ? '../' : ''}assets.html` class=(selected === 'assets' ? 'bold' : '')) [#{__('Assets')}]
 			|  
 			a(href=`${upLevel ? '../' : ''}custompages.html` class=(selected === 'custompages' ? 'bold' : '')) [#{__('Custom Pages')}]
-		if permissions.get(Permissions.MANAGE_BOARD_STAFF)
-			|  
-			a(href=`${upLevel ? '../' : ''}staff.html` class=(selected === 'staff' ? 'bold' : '')) [#{__('Staff')}]

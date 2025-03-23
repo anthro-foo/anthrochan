@@ -30,16 +30,16 @@ module.exports = {
 		const errors = await checkSchema([
 			{ result: lengthBody(req.body.checkedposts, 1), expected: false, blocking: true, error: __('Must select at least one post') },
 			{ result: lengthBody(res.locals.actions.validActions, 1), expected: false, blocking: true, error: __('No actions selected') },
-			{ result: lengthBody(req.body.checkedposts, 1, globalLimits.multiInputs.posts.anon), permission: Permissions.MANAGE_BOARD_GENERAL, expected: false, error: __('Must not select >%s posts per request', globalLimits.multiInputs.posts.anon) },
+			{ result: lengthBody(req.body.checkedposts, 1, globalLimits.multiInputs.posts.anon), permission: Permissions.MANAGE_GENERAL, expected: false, error: __('Must not select >%s posts per request', globalLimits.multiInputs.posts.anon) },
 			{ result: lengthBody(req.body.checkedposts, 1, globalLimits.multiInputs.posts.staff), expected: false, error: __('Must not select >%s posts per request', globalLimits.multiInputs.posts.staff) },
 			{ result: (existsBody(req.body.report_ban) && !req.body.checkedreports), expected: false, error: __('Must select post and reports to ban reporter') },
 			{ result: (existsBody(req.body.checkedreports) && !req.body.report_ban), expected: false, error: __('Must select a report action if checked reports') },
 			{ result: (existsBody(req.body.checkedreports) && !req.body.checkedposts), expected: false, error: __('Must check parent post if checking reports for report action') },
 			{ result: (existsBody(req.body.checkedreports) && existsBody(req.body.checkedposts) && lengthBody(req.body.checkedreports, 1, req.body.checkedposts.length*5)), expected: false, error: __('Invalid number of reports checked') },
 			{ result: res.locals.actions.hasPermission, expected: true, blocking: true, error: __('No permission') },
-			{ result: (existsBody(req.body.delete) && !res.locals.board.settings.userPostDelete), permission: Permissions.MANAGE_BOARD_GENERAL, expected: false, error: __('User post deletion is disabled on this board') },
-			{ result: (existsBody(req.body.spoiler) && !res.locals.board.settings.userPostSpoiler), permission: Permissions.MANAGE_BOARD_GENERAL, expected: false, error: __('User file spoiling is disabled on this board') },
-			{ result: (existsBody(req.body.unlink_file) && !res.locals.board.settings.userPostUnlink), permission: Permissions.MANAGE_BOARD_GENERAL, expected: false, error: __('User file unlinking is disabled on this board') },
+			{ result: (existsBody(req.body.delete) && !res.locals.board.settings.userPostDelete), permission: Permissions.MANAGE_GENERAL, expected: false, error: __('User post deletion is disabled on this board') },
+			{ result: (existsBody(req.body.spoiler) && !res.locals.board.settings.userPostSpoiler), permission: Permissions.MANAGE_GENERAL, expected: false, error: __('User file spoiling is disabled on this board') },
+			{ result: (existsBody(req.body.unlink_file) && !res.locals.board.settings.userPostUnlink), permission: Permissions.MANAGE_GENERAL, expected: false, error: __('User file unlinking is disabled on this board') },
 			{ result: (existsBody(req.body.edit) && lengthBody(req.body.checkedposts, 1, 1)), expected: false, error: __('Must select only 1 post for edit action') },
 			{ result: lengthBody(req.body.postpassword, 0, globalLimits.fieldLength.postpassword), expected: false, error: __('Password must be %s characters or less', globalLimits.fieldLength.postpassword) },
 			{ result: lengthBody(req.body.report_reason, 0, globalLimits.fieldLength.report_reason), expected: false, error: __('Report must be %s characters or less', globalLimits.fieldLength.report_reason) },
@@ -56,11 +56,10 @@ module.exports = {
 					}
 
 					const destinationBoard = await Boards.findOne(req.body.move_to_board);
-					if (res.locals.permissions.get(Permissions.MANAGE_GLOBAL_GENERAL)
-						|| (res.locals.permissions.get(Permissions.MANAGE_BOARD_GENERAL)
-							&& destinationBoard && destinationBoard.staff[res.locals.user.username] != null)) {
+					if (res.locals.permissions.get(Permissions.MANAGE_GENERAL) && destinationBoard) {
 						res.locals.destinationBoard = destinationBoard;
 					}
+
 					return res.locals.destinationBoard != null;
 				}
 				return true;

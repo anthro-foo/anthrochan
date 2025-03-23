@@ -44,8 +44,8 @@ module.exports = async (req, res, next) => {
 		Handle checking passwords (in a time-constant) when doing actions that require a password.
 		Staff skip this section because they don't need passwords to do such actions.
 	*/
-	const isStaffOrGlobal = res.locals.permissions.hasAny(Permissions.MANAGE_GLOBAL_GENERAL, Permissions.MANAGE_BOARD_GENERAL);
-	if (!isStaffOrGlobal && res.locals.actions.numPasswords > 0) {
+	const isMod = res.locals.permissions.get(Permissions.MANAGE_GENERAL);
+	if (!isMod && res.locals.actions.numPasswords > 0) {
 		let passwordPosts = [];
 		if (req.body.postpassword && req.body.postpassword.length > 0) {
 			const inputPasswordHash = createHash('sha256').update(postPasswordSecret + req.body.postpassword).digest('base64');
@@ -119,7 +119,7 @@ module.exports = async (req, res, next) => {
 	if (deleting) {
 
 		//OP delete protection. for old OPs or with a lot of replies
-		if (!isStaffOrGlobal) { //TODO: make this use a permission bit
+		if (!isMod) { //TODO: make this use a permission bit
 			const { deleteProtectionAge, deleteProtectionCount } = res.locals.board.settings;
 			if (deleteProtectionAge > 0 || deleteProtectionCount > 0) {
 				const protectedThread = res.locals.posts.some(p => {
@@ -356,7 +356,7 @@ module.exports = async (req, res, next) => {
 		const message = req.body.log_message || null;
 		let logUser = null;
 		//could even do if (req.session.user) {...}, but might cause cross-board log username contamination
-		if (isStaffOrGlobal) {
+		if (isMod) {
 			logUser = req.session.user;
 		}
 		for (let i = 0; i < res.locals.posts.length; i++) {

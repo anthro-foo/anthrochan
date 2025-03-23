@@ -153,8 +153,6 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 								+filependingapproval()
 							else
 								.post-file-src(data-type=type data-attachment=(file.attachment ? "true" : "false"))
-									if (manage || modview || globalmanage) && !file.approved
-										.overlay-text File pending approval
 									a(target='_blank' href=`/file/${file.filename}`)
 										if post.spoiler || file.spoiler
 											div.spoilerimg.file-thumb

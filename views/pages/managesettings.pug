@@ -11,16 +11,7 @@ block content
 	+boardheader(__('Settings'))
 	br
 	+managenav('settings')
-	if permissions.get(Permissions.MANAGE_BOARD_OWNER)
-		hr(size=1)
-		h4.no-m-p #{__('Transfer ownership')}:
-		.form-wrapper.flexleft.mt-10
-			form.form-post(action=`/forms/board/${board._id}/transfer`, enctype='application/x-www-form-urlencoded', method='POST')
-				input(type='hidden' name='_csrf' value=csrf)
-				.row
-					.label #{__('New owner username')}:
-					input(type='text' name='username' placeholder=board.owner required)
-				input(type='submit', value=__('Submit'))
+	if permissions.get(Permissions.MANAGE_BOARDS)
 		hr(size=1)
 		h4.no-m-p #{__('Delete board')}:
 		.form-wrapper.flexleft.mt-10

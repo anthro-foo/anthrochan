@@ -18,8 +18,8 @@ const express  = require('express')
 	, setMinimal = require(__dirname+'/../lib/middleware/misc/setminimal.js')
 	, { setBoardLanguage, setQueryLanguage } = require(__dirname+'/../lib/middleware/locale/locale.js')
 	//page models
-	, { manageRecent, manageReports, manageAssets, manageSettings, manageBans, manageFilters, editFilter, editCustomPage, manageMyPermissions,
-		manageBoard, manageThread, manageLogs, manageCatalog, manageCustomPages, manageStaff, editStaff, editPost } = require(__dirname+'/../models/pages/manage/')
+	, { manageRecent, manageReports, manageAssets, manageSettings, manageBans, manageFilters, editFilter, editCustomPage,
+		manageBoard, manageThread, manageLogs, manageCatalog, manageCustomPages, editPost } = require(__dirname+'/../models/pages/manage/')
 	, { globalManageTrusted, globalManageApproval, globalManageSettings, globalManageReports, globalManageBans, globalManageBoards, globalManageFilters, globalEditFilter, editNews, editAccount, editRole,
 		globalManageRecent, globalManageAccounts, globalManageNews, globalManageLogs, globalManageRoles } = require(__dirname+'/../models/pages/globalmanage/')
 	, { bans, banned, changePassword, blockBypass, home, register, login, create, myPermissions, sessions, setupTwoFactor,
@@ -65,35 +65,29 @@ router.get('/randombanner', randombanner); //random banner
 
 //board manage pages
 router.get('/:board/manage/catalog.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, manageCatalog);
+	hasPerms.one(Permissions.VIEW_MANAGE), csrf, manageCatalog);
 router.get('/:board/manage/:page(1[0-9]{1,}|[2-9][0-9]{0,}|index).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, manageBoard);
+	hasPerms.one(Permissions.VIEW_MANAGE), csrf, manageBoard);
 router.get('/:board/manage/thread/:id([1-9][0-9]{0,})(\\+50)?.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, threadParamConverter, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, Posts.threadExistsMiddleware, manageThread);
+	hasPerms.one(Permissions.VIEW_MANAGE), csrf, Posts.threadExistsMiddleware, manageThread);
 router.get('/:board/manage/editpost/:id([1-9][0-9]{0,}).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, threadParamConverter, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, Posts.postExistsMiddleware, editPost);
+	hasPerms.one(Permissions.MANAGE_BOARD_SETTINGS), csrf, Posts.postExistsMiddleware, editPost);
 router.get('/:board/manage/reports.(html|json)', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, manageReports);
+	hasPerms.one(Permissions.MANAGE_GENERAL), csrf, manageReports);
 router.get('/:board/manage/recent.(html|json)', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, manageRecent);
-router.get('/:board/manage/mypermissions.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), manageMyPermissions);
+	hasPerms.one(Permissions.MANAGE_GENERAL), csrf, manageRecent);
 router.get('/:board/manage/logs.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_LOGS), csrf, manageLogs);
+	hasPerms.one(Permissions.MANAGE_LOGS), csrf, manageLogs);
 router.get('/:board/manage/bans.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_BANS), csrf, manageBans);
+	hasPerms.one(Permissions.MANAGE_BANS), csrf, manageBans);
 router.get('/:board/manage/settings.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
 	hasPerms.one(Permissions.MANAGE_BOARD_SETTINGS), csrf, manageSettings);
 router.get('/:board/manage/assets.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_CUSTOMISATION), csrf, manageAssets);
+	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, manageAssets);
 router.get('/:board/manage/custompages.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_CUSTOMISATION), csrf, manageCustomPages);
+	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, manageCustomPages);
 router.get('/:board/manage/editcustompage/:custompageid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_CUSTOMISATION), csrf, custompageParamConverter, editCustomPage);
-router.get('/:board/manage/staff.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_STAFF), csrf, manageStaff);
-router.get('/:board/manage/editstaff/:staffusername([a-zA-Z0-9]{1,50}).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_STAFF), csrf, editStaff);
+	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, custompageParamConverter, editCustomPage);
 router.get('/:board/manage/filters.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
 	hasPerms.one(Permissions.MANAGE_BOARD_SETTINGS), csrf, manageFilters);
 router.get('/:board/manage/editfilter/:filterid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
@@ -101,37 +95,37 @@ router.get('/:board/manage/editfilter/:filterid([a-f0-9]{24}).html', useSession,
 
 //global manage pages
 router.get('/globalmanage/approval.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_GENERAL), csrf, globalManageApproval);
+	hasPerms.one(Permissions.MANAGE_FILE_APPROVAL), csrf, globalManageApproval);
 router.get('/globalmanage/reports.(html|json)', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_GENERAL), csrf, globalManageReports);
+	hasPerms.one(Permissions.MANAGE_GENERAL), csrf, globalManageReports);
 router.get('/globalmanage/recent.(html|json)', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_GENERAL), csrf, globalManageRecent);
+	hasPerms.one(Permissions.MANAGE_GENERAL), csrf, globalManageRecent);
 router.get('/globalmanage/globallogs.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_LOGS), csrf, globalManageLogs);
+	hasPerms.one(Permissions.MANAGE_LOGS), csrf, globalManageLogs);
 router.get('/globalmanage/bans.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_BANS), csrf, globalManageBans);
+	hasPerms.one(Permissions.MANAGE_BANS), csrf, globalManageBans);
 router.get('/globalmanage/boards.(html|json)', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_BOARDS), globalManageBoards);
+	hasPerms.one(Permissions.MANAGE_BOARDS), globalManageBoards);
 router.get('/globalmanage/news.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_NEWS), csrf, globalManageNews);
+	hasPerms.one(Permissions.MANAGE_NEWS), csrf, globalManageNews);
 router.get('/globalmanage/accounts.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_ACCOUNTS), csrf, globalManageAccounts);
+	hasPerms.one(Permissions.MANAGE_ACCOUNTS), csrf, globalManageAccounts);
 router.get('/globalmanage/roles.(html|json)', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_ROLES), csrf, globalManageRoles);
+	hasPerms.one(Permissions.MANAGE_ROLES), csrf, globalManageRoles);
 router.get('/globalmanage/filters.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
 	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), csrf, globalManageFilters);
 router.get('/globalmanage/settings.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
 	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), csrf, globalManageSettings);
 router.get('/globalmanage/editnews/:newsid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_NEWS), csrf, newsParamConverter, editNews);
+	hasPerms.one(Permissions.MANAGE_NEWS), csrf, newsParamConverter, editNews);
 router.get('/globalmanage/editfilter/:filterid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,
 	hasPerms.one(Permissions.MANAGE_GLOBAL_SETTINGS), csrf, filterParamConverter, globalEditFilter);
 router.get('/globalmanage/editaccount/:accountusername([a-zA-Z0-9]{1,50}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_ACCOUNTS), csrf, editAccount);
+	hasPerms.one(Permissions.MANAGE_ACCOUNTS), csrf, editAccount);
 router.get('/globalmanage/editrole/:roleid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_ROLES), csrf, roleParamConverter, editRole);
+	hasPerms.one(Permissions.MANAGE_ROLES), csrf, roleParamConverter, editRole);
 router.get('/globalmanage/trusted.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_GLOBAL_TRUSTED), csrf, globalManageTrusted);
+	hasPerms.one(Permissions.MANAGE_TRUSTED), csrf, globalManageTrusted);
 
 //captcha
 router.get('/captcha', geoIp, processIp, captcha); //get captcha image and cookie

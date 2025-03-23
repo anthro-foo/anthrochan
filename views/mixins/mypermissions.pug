@@ -1,5 +1,5 @@
-mixin mypermissions(jsonPermissions, boardOnly=false)
-	- const permissionKeys = boardOnly ? Object.keys(jsonPermissions).filter(p => manageBoardBits.includes(parseInt(p))) : Object.keys(jsonPermissions)
+mixin mypermissions(jsonPermissions)
+	- const permissionKeys = Object.keys(jsonPermissions)
 	for bit, index in permissionKeys
 		if index > 0 && jsonPermissions[bit].title
 			hr(size=1)

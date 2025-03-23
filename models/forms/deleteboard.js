@@ -23,8 +23,6 @@ module.exports = async (uri, board) => {
 		await deletePosts(allPosts, uri, deleteLocals, true);
 	}
 	await Promise.all([
-		Accounts.removeOwnedBoard(board.owner, uri), //remove board from owner account
-		Object.keys(board.staff).length > 0 ? Accounts.removeStaffBoard(Object.keys(board.staff), uri) : void 0, //remove staffboard from staff accounts
 		Modlogs.deleteBoard(uri), //modlogs for the board
 		Bans.deleteBoard(uri), //bans for the board
 		Filters.deleteBoard(uri), //filters for the board

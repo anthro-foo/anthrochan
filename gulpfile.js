@@ -143,11 +143,11 @@ gulp.task('check-for-favicon-update', function(done) {
 async function password() {
 	const { Accounts } = require(__dirname+'/db/');
 	const randomPassword = randomBytes(20).toString('base64');
-	await Accounts.changePassword('admin', randomPassword);
+	await Accounts.changePassword('floof', randomPassword);
 	const ROOT = new Permission();
 	ROOT.setAll(Permission.allPermissions);
-	await Accounts.setAccountPermissions('admin', ROOT);
-	console.log('=====LOGIN DETAILS=====\nusername: admin\npassword:', randomPassword, '\n=======================');
+	await Accounts.setAccountPermissions('floof', ROOT);
+	console.log('=====LOGIN DETAILS=====\nusername: floof\npassword:', randomPassword, '\n=======================');
 }
 
 async function ips() {
@@ -218,6 +218,7 @@ async function wipe() {
 	await Posts.db.createIndex({ 'board': 1, 'reports.0': 1 }, { 'partialFilterExpression': { 'reports.0': { '$exists': true } } });
 	await Posts.db.createIndex({ 'globalreports.0': 1 }, { 'partialFilterExpression': {	'globalreports.0': { '$exists': true } } });
 
+	console.log('Creating new roles');
 	const ANON = new Permission();
 	ANON.setAll([
 		Permissions.CREATE_ACCOUNT,
@@ -227,36 +228,25 @@ async function wipe() {
 	const TRUSTED_USER = new Permission(ANON.base64);
 	TRUSTED_USER.setAll([
 		Permissions.BYPASS_CAPTCHA,
+		Permissions.BYPASS_FILTERS,
 		Permissions.BYPASS_FILE_APPROVAL,
 	]);
-	
-	const BOARD_STAFF_DEFAULTS = new Permission(TRUSTED_USER.base64);
-	BOARD_STAFF_DEFAULTS.setAll([
-		Permissions.MANAGE_BOARD_GENERAL,
-		Permissions.MANAGE_BOARD_BANS,
-		Permissions.MANAGE_BOARD_LOGS,
-		Permissions.VIEW_BOARD_GLOBAL_BANS,
-	]);
 
-	const BOARD_STAFF = new Permission(BOARD_STAFF_DEFAULTS.base64);
+	const APPROVER = new Permission(TRUSTED_USER.base64);
+	APPROVER.setAll([
+		Permissions.VIEW_MANAGE,
 
-	const BOARD_OWNER_DEFAULTS = new Permission(BOARD_STAFF.base64);
-	BOARD_OWNER_DEFAULTS.setAll([
-		Permissions.MANAGE_BOARD_OWNER,
-		Permissions.MANAGE_BOARD_STAFF,
-		Permissions.MANAGE_BOARD_CUSTOMISATION,
-		Permissions.MANAGE_BOARD_SETTINGS,
-	]);
-
-	const BOARD_OWNER = new Permission(BOARD_OWNER_DEFAULTS.base64);
-	
-	const GLOBAL_STAFF = new Permission(BOARD_STAFF.base64);
-	GLOBAL_STAFF.setAll([
 		Permissions.BYPASS_BANS,
 		
-		Permissions.MANAGE_GLOBAL_GENERAL,
-		Permissions.MANAGE_GLOBAL_LOGS,
-		Permissions.MANAGE_GLOBAL_BANS,
+		Permissions.MANAGE_FILE_APPROVAL,		
+	]);
+	
+	const MOD = new Permission(APPROVER.base64);
+	MOD.setAll([
+		Permissions.MANAGE_GENERAL,
+		Permissions.MANAGE_BANS,
+		Permissions.MANAGE_LOGS,
+		Permissions.MANAGE_TRUSTED,
 	]);
 
 	const ADMIN = new Permission();
@@ -265,14 +255,15 @@ async function wipe() {
 	const ROOT = new Permission();
 	ROOT.setAll(Permission.allPermissions);
 
-	await Roles.db.insertMany([
+	console.log('Clearing existing roles');
+	await db.collection('roles').deleteMany({});
+
+	console.log('Adding Anon, Trusted User, Approver, Mod, Admin, Root roles');
+	await db.collection('roles').insertMany([
 		{ name: 'ANON', permissions: Binary(ANON.array) },
 		{ name: 'TRUSTED_USER', permissions: Binary(TRUSTED_USER.array) },
-		{ name: 'BOARD_STAFF', permissions: Binary(BOARD_STAFF.array) },
-		{ name: 'BOARD_OWNER', permissions: Binary(BOARD_OWNER.array) },
-		{ name: 'BOARD_STAFF_DEFAULTS', permissions: Binary(BOARD_STAFF_DEFAULTS.array) },
-		{ name: 'BOARD_OWNER_DEFAULTS', permissions: Binary(BOARD_OWNER_DEFAULTS.array) },
-		{ name: 'GLOBAL_STAFF', permissions: Binary(GLOBAL_STAFF.array) },
+		{ name: 'APPROVER', permissions: Binary(APPROVER.array) },
+		{ name: 'MOD', permissions: Binary(MOD.array) },
 		{ name: 'ADMIN', permissions: Binary(ADMIN.array) },
 		{ name: 'ROOT', permissions: Binary(ROOT.array) },
 	]);
