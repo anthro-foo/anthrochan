@@ -64,6 +64,7 @@ module.exports = {
 				}
 				return true;
 			}, expected: true, error: __('Destination for move does not exist, or you do not have permission') },
+			{ result: existsBody(req.body.approve) && existsBody(req.body.deny), expected: false, error: __('You may only bulk approve or deny, not both.') },
 		], res.locals.permissions);
 
 		if (errors.length > 0) {
