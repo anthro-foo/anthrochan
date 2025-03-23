@@ -291,15 +291,16 @@ class postFormHandler {
 			let formData;
 			
 			const submitter = e.submitter;
-			if (submitter.id === 'approval-input') {
+			if (submitter.id === 'file-moderation-input') {
 				// make sure every checkbox is unchecked to only affect post button clicked in
 				document.querySelectorAll('.post-check').forEach(checkbox => checkbox.checked = false);
 				const post_check = submitter.closest('.post-container').querySelector('.post-check');
 				post_check.checked = true;
+				
 				formData = new FormData(this.form);
 				post_check.checked = false;
-				formData.append('approve', true);
-				formData.append('file_moderation_status', submitter.name);
+
+				formData.append(submitter.name, '1');
 				formData.append('file_moderation_filename', submitter.dataset.filename);
 			} else {
 				formData = new FormData(this.form);

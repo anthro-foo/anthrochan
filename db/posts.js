@@ -492,7 +492,7 @@ module.exports = {
 		return result[0]?.total_unapproved_files || 0;
 	},
 
-	approveFiles: async (posts) => {
+	bulkApproveFiles: async (posts) => {
 		const postsIds = posts.map(post => post._id);
 		await db.updateMany(
 			{ _id: { $in: postsIds } },  // Find all posts with matching _id

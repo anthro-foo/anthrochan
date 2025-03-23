@@ -1482,13 +1482,7 @@ table.boardtable .nobreak {
 	pointer-events: none;
 }
 
-.post-file-src .overlay-text {
-	/* offset to center over image */
-    position: absolute;
-	top: 10px;
-    left: 50%;
-    transform: translate(-50%, 0%);
-
+.file-approval-text {
 	/* don't select or click text */
 	user-select: none;
 	pointer-events: none;
@@ -1497,31 +1491,22 @@ table.boardtable .nobreak {
     color: red;
 	font-size: 1rem;
 	text-align: center;
-    text-shadow: 2px 2px 10px black;
 }
 
-.approval-button-container {
+.file-approval-button-container {
 	display: flex;
 	width: 100%;
 } 
-
-input.nsfw-button {
-	flex: 1;
-	background-color: yellow;
-	text-align: center;
-	color: black;
-	font-weight: bold;
-}
 
 input.approve-button {
 	flex: 2;
 	background-color: green;
 	text-align: center;
-	color: black;
+	color: white;
 	font-weight: bold;
 }
 
-input.illegal-button {
+input.deny-button {
 	flex: 1;
 	background-color: red;
 	text-align: center;

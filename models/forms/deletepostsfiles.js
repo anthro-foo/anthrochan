@@ -9,10 +9,11 @@ module.exports = async (locals, unlinkOnly) => {
 
 	const { posts, __, __n } = locals;
 	const { pruneImmediately } = config.get;
-
-	//get filenames from all the posts
+	const filenameToDelete = locals.filename;
+	
+	// Get file metadata from posts
 	let files = [];
-	for (let i = 0; i < posts.length; i++) {
+	for (let i=0; i<posts.length; i++) {
 		const post = posts[i];
 		if (post.files.length > 0) {
 			files = files.concat(post.files.map(file => {
@@ -26,6 +27,12 @@ module.exports = async (locals, unlinkOnly) => {
 		}
 	}
 	files = [...new Set(files)];
+	
+	if (filenameToDelete) {
+		files = files.filter(file => {
+			return file.filename === filenameToDelete;
+		});
+	}
 
 	if (files.length == 0) {
 		return {
@@ -33,20 +40,20 @@ module.exports = async (locals, unlinkOnly) => {
 		};
 	}
 
-	if (files.length > 0) {
-		const fileNames = files.map(x => x.filename);
-		await Files.decrement(fileNames);
-		if (pruneImmediately) {
-			await pruneFiles(fileNames);
-		}
+	const fileNames = files.map(x => x.filename);
+	await Files.decrement(fileNames);
+	if (pruneImmediately) {
+		await pruneFiles(fileNames);
 	}
 
 	if (unlinkOnly) {
 		return {
 			message: __n('Unlinked %s files', files.length),
-			action:'$set',
+			action:'$pull',
 			query: {
-				'files': []
+				'files': {
+					'filename': {$in: fileNames}
+				}
 			}
 		};
 	} else {
@@ -55,11 +62,12 @@ module.exports = async (locals, unlinkOnly) => {
 		return {
 			message: __n('Deleted %s files from server', files.length),
 			//NOTE: only deletes from selected posts. other posts with same image will 404
-			action:'$set',
+			action:'$pull',
 			query: {
-				'files': []
+				'files': {
+					'filename': {$in: fileNames}
+				}
 			}
 		};
 	}
-
 };

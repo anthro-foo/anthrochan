@@ -73,15 +73,6 @@ module.exports = async (req, res, next) => {
 	const combinedQuery = {};
 	let recalculateThreadMetadata = false;
 
-	// handle approvals first, may lead to ban and/or deletions later
-	if (req.body.approve) {
-		const { message, log_message } = await moderateFiles(req, res);
-
-		req.body.log_message = log_message;
-		modlogActions.push(message);
-		messages.push(message);
-	}
-
 	const deleting = req.body.delete || req.body.delete_ip_board || req.body.delete_ip_global || req.body.delete_ip_thread;
 
 	//affected boards, their threads, and how many pages each one has before the actions
@@ -242,6 +233,18 @@ module.exports = async (req, res, next) => {
 				});
 		}	
 	} else {
+		// handle approvals first, may lead to file deletion
+		if (req.body.approve || req.body.deny) {
+			const { log_message, message } = await moderateFiles(req, res);
+
+			if (req.body.log_message) {
+				req.body.log_message = req.body.log_message.concat(log_message);
+			} else {
+				req.body.log_message = log_message;
+			}
+			modlogActions.push(ModlogActions.MODERATE_FILES);
+			messages.push(message);
+		}
 
 		// if it was getting deleted/moved, dont do these actions
 		if (req.body.unlink_file || req.body.delete_file) {

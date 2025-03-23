@@ -1,5 +1,5 @@
 mixin fileapproval(filename)
-	.approval-button-container(filename)
-		input.nsfw-button(id='approval-input' type='submit' name='nsfw' value='N', data-filename=filename)
-		input.approve-button(id='approval-input' type='submit' name='approve' value='A', data-filename=filename)
-		input.illegal-button(id='approval-input' type='submit' name='illegal' value='I', data-filename=filename)
+	.file-approval-text File pending approval
+	.file-approval-button-container(filename)
+		input.approve-button(id='file-moderation-input' type='submit' name='approve' value='Approve', data-filename=filename)
+		input.deny-button(id='file-moderation-input' type='submit' name='deny' value='Deny', data-filename=filename)
