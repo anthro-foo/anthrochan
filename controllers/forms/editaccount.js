@@ -31,9 +31,11 @@ module.exports = {
 			{ result: !existsBody(req.body.template) //no template, OR the template is a valid one
 				|| inArrayBody(req.body.template, [
 					roleManager.roles.ANON.base64,
-					roleManager.roles.TRUSTED_USER.base64,
+					roleManager.roles.TRUSTED.base64,
 					roleManager.roles.APPROVER.base64,
-					roleManager.roles.MOD.base64]),
+					roleManager.roles.MOD.base64,
+					roleManager.roles.MANAGER.base64,
+				]),
 			expected: true, error: __('Invalid template selection') },
 			{ result: () => {
 				//not applying a template, OR the user doesn't have root perms, has to be a function to execute after the async result above.

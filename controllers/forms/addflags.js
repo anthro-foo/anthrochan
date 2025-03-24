@@ -8,8 +8,6 @@ const addFlags = require(__dirname+'/../../models/forms/addflags.js')
 
 module.exports = {
 
-	//paramConverter: paramConverter({}),
-
 	controller: async (req, res, next) => {
 
 		const { __ } = res.locals;

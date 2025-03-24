@@ -37,7 +37,7 @@ mixin globalmanagenav(selected, upLevel)
 			|
 			|
 			a(href=`${upLevel ? '../' : ''}assets.html` class=(selected === 'assets' ? 'bold' : '')) [#{__('Assets')}]
-		if permissions.get(Permissions.MANAGE_ASSETS)
+		//- if permissions.get(Permissions.MANAGE_ASSETS)
 			|
 			|
 			a(href=`${upLevel ? '../' : ''}custompages.html` class=(selected === 'custompages' ? 'bold' : '')) [#{__('Custome Pages')}]

@@ -15,7 +15,7 @@ module.exports = async (req, res, next) => {
 		filter['_id'] = username;
 	}
 	
-	filter['permissions'] = Mongo.Binary(roleManager.roles.TRUSTED_USER.array);
+	filter['permissions'] = Mongo.Binary(roleManager.roles.TRUSTED.array);
 
 	let trusted, maxPage;
 	try {

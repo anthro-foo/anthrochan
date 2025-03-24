@@ -5,7 +5,7 @@ const { Files } = require(__dirname+'/../../db/')
 	, { func: pruneFiles } = require(__dirname+'/../../schedules/tasks/prune.js')
 	, deletePostFiles = require(__dirname+'/../../lib/file/deletepostfiles.js');
 
-module.exports = async (locals, unlinkOnly) => {
+module.exports = async (locals) => {
 
 	const { posts, __, __n } = locals;
 	const { pruneImmediately } = config.get;
@@ -46,28 +46,15 @@ module.exports = async (locals, unlinkOnly) => {
 		await pruneFiles(fileNames);
 	}
 
-	if (unlinkOnly) {
-		return {
-			message: __n('Unlinked %s files', files.length),
-			action:'$pull',
-			query: {
-				'files': {
-					'filename': {$in: fileNames}
-				}
+	await deletePostFiles(files);
+	return {
+		message: __n('Deleted %s files from server', files.length),
+		//NOTE: only deletes from selected posts. other posts with same image will 404
+		action:'$pull',
+		query: {
+			'files': {
+				'filename': {$in: fileNames}
 			}
-		};
-	} else {
-		//delete all the files
-		await deletePostFiles(files);
-		return {
-			message: __n('Deleted %s files from server', files.length),
-			//NOTE: only deletes from selected posts. other posts with same image will 404
-			action:'$pull',
-			query: {
-				'files': {
-					'filename': {$in: fileNames}
-				}
-			}
-		};
-	}
+		}
+	};
 };

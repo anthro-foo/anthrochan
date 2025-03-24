@@ -247,14 +247,10 @@ module.exports = async (req, res, next) => {
 		}
 
 		// if it was getting deleted/moved, dont do these actions
-		if (req.body.unlink_file || req.body.delete_file) {
-			const { message, action, query } = await deletePostsFiles(res.locals, req.body.unlink_file);
+		if (req.body.delete_file) {
+			const { message, action, query } = await deletePostsFiles(res.locals);
 			if (action) {
-				if (req.body.unlink_file) {
-					modlogActions.push(ModlogActions.UNLINK_FILES);
-				} else if (req.body.delete_file) {
-					modlogActions.push(ModlogActions.DELETE_FILES);
-				}
+				modlogActions.push(ModlogActions.DELETE_FILES);
 				recalculateThreadMetadata = true;
 				combinedQuery[action] = { ...combinedQuery[action], ...query};
 			}
@@ -615,7 +611,7 @@ module.exports = async (req, res, next) => {
 						}
 					});
 
-				} else if (req.body.lock || req.body.bumplock || req.body.cyclic || req.body.unlink_file) {
+				} else if (req.body.lock || req.body.bumplock || req.body.cyclic) {
 
 					buildQueue.push({
 						'task': 'buildBoardMultiple',

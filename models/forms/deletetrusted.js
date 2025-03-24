@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
 
 	const { __ } = res.locals;
 	
-	const updated = await Accounts.setAccountPermissionsMany(req.body.checkedtrusted, roleManager.roles.ANON, roleManager.roles.TRUSTED_USER).then(r => r.matchedCount);
+	const updated = await Accounts.setAccountPermissionsMany(req.body.checkedtrusted, roleManager.roles.ANON, roleManager.roles.TRUSTED).then(r => r.matchedCount);
 	
 	if (updated === 0) {
 		return dynamicResponse(req, res, 400, 'message', {

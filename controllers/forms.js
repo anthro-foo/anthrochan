@@ -72,20 +72,23 @@ router.post('/addbanners', geoIp, useSession, sessionRefresh, fileMiddlewares.ba
 	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, uploadBannersController.controller); //add banners
 router.post('/deletebanners', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteBannersController.paramConverter, deleteBannersController.controller); //delete banners
-router.post('/addassets', geoIp, useSession, sessionRefresh, fileMiddlewares.asset, csrf, calcPerms, isLoggedIn,
-	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, addAssetsController.controller); //add assets
-router.post('/deleteassets', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
-	hasPerms.one(Permissions.MANAGE_ASSETS), deleteAssetsController.paramConverter, deleteAssetsController.controller); //delete assets
 router.post('/addflags', geoIp, useSession, sessionRefresh, fileMiddlewares.flag, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, addFlagsController.controller); //add flags
 router.post('/deleteflags', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteFlagsController.paramConverter, deleteFlagsController.controller); //delete flags
+
+/*
+router.post('/addassets', geoIp, useSession, sessionRefresh, fileMiddlewares.asset, csrf, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, addAssetsController.controller); //add assets
+router.post('/deleteassets', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_ASSETS), deleteAssetsController.paramConverter, deleteAssetsController.controller); //delete assets
 router.post('/addcustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), addCustomPageController.paramConverter, addCustomPageController.controller); //add custom pages
 router.post('/deletecustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteCustomPageController.paramConverter, deleteCustomPageController.controller); //delete custom pages
 router.post('/editcustompage', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), editCustomPageController.paramConverter, editCustomPageController.controller); //edit custom page
+*/
 
 //global management forms
 router.post('/global/editbans', geoIp, processIp, useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,

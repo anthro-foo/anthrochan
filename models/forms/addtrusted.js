@@ -7,7 +7,7 @@ const { Accounts } = require(__dirname+'/../../db/')
 module.exports = async (req, res) => {
 	const { __,} = res.locals;
 	
-	const updated = await Accounts.setAccountPermissions(req.body.username, roleManager.roles.TRUSTED_USER).then(r => r.matchedCount);
+	const updated = await Accounts.setAccountPermissions(req.body.username, roleManager.roles.TRUSTED).then(r => r.matchedCount);
 	
 	if (updated === 0) {
 		return dynamicResponse(req, res, 400, 'message', {

@@ -61,8 +61,8 @@ module.exports = async (req, res) => {
 	let redirect = `/${req.params.board}/`;
 	let salt = null;
 	let thread = null;
-	const isMod = res.locals.permissions.get(Permissions.MANAGE_GENERAL);
-	const isAdmin = res.locals.permissions.hasAny(Permissions.VIEW_RAW_IP);
+	const isMod = res.locals.permissions.get(Permissions.VIEW_MANAGE);
+	const canBypassLock = res.locals.permissions.hasAny(Permissions.MANAGE_BOARD_SETTING);
 	const { blockedCountries, threadLimit, ids, userPostSpoiler,
 		pphTrigger, tphTrigger, tphTriggerAction, pphTriggerAction,
 		sageOnlyEmail, forceAnon, replyLimit, disableReplySubject,
@@ -87,7 +87,7 @@ module.exports = async (req, res) => {
 	// Check if board/thread creation locked
 	//
 	if ((lockMode === 2 || (lockMode === 1 && !req.body.thread)) //if board lock, or thread lock and its a new thread
-		&& !isAdmin) { // and not admin
+		&& !canBypassLock) { // and not admin
 		await deleteTempFiles(req).catch(console.error);
 		return dynamicResponse(req, res, 400, 'message', {
 			'title': __('Bad request'),
@@ -117,7 +117,7 @@ module.exports = async (req, res) => {
 		redirect += `thread/${req.body.thread}.html`;
 
 		// If thread locked, delete reply
-		if (thread.locked && !isAdmin) {
+		if (thread.locked && !canBypassLock) {
 			await deleteTempFiles(req).catch(console.error);
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Bad request'),

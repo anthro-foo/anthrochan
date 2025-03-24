@@ -399,23 +399,6 @@ int main() {...}
 		expect(response.ok).toBe(true);
 	});
 
-	test('unlink file',  async () => {
-		const params = new URLSearchParams({
-			_csrf: csrfToken,
-			unlink_file: '1',
-			checkedposts: postId,
-		});
-		const response = await fetch('http://localhost/forms/board/test/modactions', {
-			headers: {
-				'x-using-xhr': 'true',
-				'cookie': sessionCookie,
-			},
-			method: 'POST',
-			body: params,
-		});
-		expect(response.ok).toBe(true);
-	});
-
 	test('make post with already spoilered image',  async () => {
 		const threadParams = new FormData({
 			message: Math.random(),

@@ -2,6 +2,8 @@
 
 const { Permissions } = require(__dirname+'/../lib/permission/permissions.js')
 	, Permission = require(__dirname+'/../lib/permission/permission.js')
+	, fs = require('fs-extra')
+	, uploadDirectory = require(__dirname+'/../lib/file/uploaddirectory.js')
 	, { Binary } = require('mongodb');
 
 module.exports = async(db, redis) => {
@@ -13,14 +15,14 @@ module.exports = async(db, redis) => {
 		Permissions.USE_MARKDOWN_GENERAL,
 	]);
 
-	const TRUSTED_USER = new Permission(ANON.base64);
-	TRUSTED_USER.setAll([
+	const TRUSTED = new Permission(ANON.base64);
+	TRUSTED.setAll([
 		Permissions.BYPASS_CAPTCHA,
 		Permissions.BYPASS_FILTERS,
 		Permissions.BYPASS_FILE_APPROVAL,
 	]);
 
-	const APPROVER = new Permission(TRUSTED_USER.base64);
+	const APPROVER = new Permission(TRUSTED.base64);
 	APPROVER.setAll([
 		Permissions.VIEW_MANAGE,
 
@@ -36,6 +38,12 @@ module.exports = async(db, redis) => {
 		Permissions.MANAGE_LOGS,
 		Permissions.MANAGE_TRUSTED,
 	]);
+	
+	const MANAGER = new Permission(MOD.base64);
+	MANAGER.setAll([
+		Permissions.MANAGE_BOARD_SETTINGS,
+		Permissions.MANAGE_ASSETS,
+	]);	
 
 	const ROOT = new Permission();
 	ROOT.setAll(Permission.allPermissions);
@@ -46,14 +54,15 @@ module.exports = async(db, redis) => {
 	console.log('Adding Anon, Trusted User, Approver, Mod, Root roles');
 	await db.collection('roles').insertMany([
 		{ name: 'ANON', permissions: Binary(ANON.array) },
-		{ name: 'TRUSTED_USER', permissions: Binary(TRUSTED_USER.array) },
+		{ name: 'TRUSTED', permissions: Binary(TRUSTED.array) },
 		{ name: 'APPROVER', permissions: Binary(APPROVER.array) },
 		{ name: 'MOD', permissions: Binary(MOD.array) },
+		{ name: 'MANAGER', permissions: Binary(MANAGER.array) },
 		{ name: 'ROOT', permissions: Binary(ROOT.array) },
 	]);
 	
 	console.log('Updating previous accounts to new roles');
-	console.log('Updating anon');
+	console.log('Updating anons');
 	await db.collection('accounts').updateMany(
 		{ permissions: Binary(Buffer.from('CAAAQAAAIAA=', 'base64'), 0)},
 		{ $set: 
@@ -62,16 +71,16 @@ module.exports = async(db, redis) => {
 			}
 		}
 	);
-	console.log('Updating trusted user');
+	console.log('Updating trusted users');
 	await db.collection('accounts').updateMany(
 		{ permissions: Binary(Buffer.from('CuAAQAAAIAA=', 'base64'), 0)},
 		{ $set: 
 			{
-				permissions: Binary(TRUSTED_USER.array)
+				permissions: Binary(TRUSTED.array)
 			}
 		}
 	);
-	console.log('Updating mod user');
+	console.log('Updating mod users');
 	await db.collection('accounts').updateMany(
 		{ permissions: Binary(Buffer.from('LecTWcCAIAA=', 'base64'), 0)},
 		{ $set: 
@@ -98,14 +107,11 @@ module.exports = async(db, redis) => {
 		{}, 
 		{ $unset: { ownedBoards: '', staffBoards: '' } });
 	
-	console.log('Remove old asset files');
-	/* await Promise.all([
-		del([ 'static/html/*' ]),
-		del([ 'static/json/*' ]),
-		del([ 'static/banner/*' ]),
-		del([ 'static/flag/*' ]),
-		del([ 'static/asset/*' ]),
-	]); */
+	console.log('Ensure banner and flag folders exist');
+	await Promise.all([
+		fs.ensureDir(`${uploadDirectory}/banner`),
+		fs.ensureDir(`${uploadDirectory}/flag`),
+	]);
 	
 	console.log('Clearing all cache');
 	await redis.deletePattern('*');

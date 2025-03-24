@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
 	}
 	
 	if (accounts.size > 0) {
-		await Accounts.setAccountPermissionsMany([...accounts], roleManager.roles.ANON, roleManager.roles.TRUSTED_USER);
+		await Accounts.setAccountPermissionsMany([...accounts], roleManager.roles.ANON, roleManager.roles.TRUSTED);
 	}
 	
 	return {

@@ -39,7 +39,6 @@ module.exports = {
 			{ result: res.locals.actions.hasPermission, expected: true, blocking: true, error: __('No permission') },
 			{ result: (existsBody(req.body.delete) && !res.locals.board.settings.userPostDelete), permission: Permissions.MANAGE_GENERAL, expected: false, error: __('User post deletion is disabled on this board') },
 			{ result: (existsBody(req.body.spoiler) && !res.locals.board.settings.userPostSpoiler), permission: Permissions.MANAGE_GENERAL, expected: false, error: __('User file spoiling is disabled on this board') },
-			{ result: (existsBody(req.body.unlink_file) && !res.locals.board.settings.userPostUnlink), permission: Permissions.MANAGE_GENERAL, expected: false, error: __('User file unlinking is disabled on this board') },
 			{ result: (existsBody(req.body.edit) && lengthBody(req.body.checkedposts, 1, 1)), expected: false, error: __('Must select only 1 post for edit action') },
 			{ result: lengthBody(req.body.postpassword, 0, globalLimits.fieldLength.postpassword), expected: false, error: __('Password must be %s characters or less', globalLimits.fieldLength.postpassword) },
 			{ result: lengthBody(req.body.report_reason, 0, globalLimits.fieldLength.report_reason), expected: false, error: __('Report must be %s characters or less', globalLimits.fieldLength.report_reason) },
@@ -56,14 +55,12 @@ module.exports = {
 					}
 
 					const destinationBoard = await Boards.findOne(req.body.move_to_board);
-					if (res.locals.permissions.get(Permissions.MANAGE_GENERAL) && destinationBoard) {
-						res.locals.destinationBoard = destinationBoard;
-					}
+					res.locals.destinationBoard = destinationBoard;
 
 					return res.locals.destinationBoard != null;
 				}
 				return true;
-			}, expected: true, error: __('Destination for move does not exist, or you do not have permission') },
+			}, expected: true, error: __('Destination for move does not exist') },
 			{ result: existsBody(req.body.approve) && existsBody(req.body.deny), expected: false, error: __('You may only bulk approve or deny, not both.') },
 		], res.locals.permissions);
 

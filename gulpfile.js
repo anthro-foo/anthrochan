@@ -225,14 +225,14 @@ async function wipe() {
 		Permissions.USE_MARKDOWN_GENERAL,
 	]);
 
-	const TRUSTED_USER = new Permission(ANON.base64);
-	TRUSTED_USER.setAll([
+	const TRUSTED = new Permission(ANON.base64);
+	TRUSTED.setAll([
 		Permissions.BYPASS_CAPTCHA,
 		Permissions.BYPASS_FILTERS,
 		Permissions.BYPASS_FILE_APPROVAL,
 	]);
 
-	const APPROVER = new Permission(TRUSTED_USER.base64);
+	const APPROVER = new Permission(TRUSTED.base64);
 	APPROVER.setAll([
 		Permissions.VIEW_MANAGE,
 
@@ -261,7 +261,7 @@ async function wipe() {
 	console.log('Adding Anon, Trusted User, Approver, Mod, Admin, Root roles');
 	await db.collection('roles').insertMany([
 		{ name: 'ANON', permissions: Binary(ANON.array) },
-		{ name: 'TRUSTED_USER', permissions: Binary(TRUSTED_USER.array) },
+		{ name: 'TRUSTED', permissions: Binary(TRUSTED.array) },
 		{ name: 'APPROVER', permissions: Binary(APPROVER.array) },
 		{ name: 'MOD', permissions: Binary(MOD.array) },
 		{ name: 'ADMIN', permissions: Binary(ADMIN.array) },

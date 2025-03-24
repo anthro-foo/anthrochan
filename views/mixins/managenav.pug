@@ -29,8 +29,3 @@ mixin managenav(selected, upLevel)
 		if permissions.get(Permissions.MANAGE_BOARD_SETTINGS)
 			|  
 			a(href=`${upLevel ? '../' : ''}settings.html` class=(selected === 'settings' ? 'bold' : '')) [#{__('Settings')}]
-		if permissions.get(Permissions.MANAGE_ASSETS)
-			|  
-			a(href=`${upLevel ? '../' : ''}assets.html` class=(selected === 'assets' ? 'bold' : '')) [#{__('Assets')}]
-			|  
-			a(href=`${upLevel ? '../' : ''}custompages.html` class=(selected === 'custompages' ? 'bold' : '')) [#{__('Custom Pages')}]
