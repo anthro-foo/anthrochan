@@ -64,7 +64,7 @@ module.exports = async(db, redis) => {
 	console.log('Updating previous accounts to new roles');
 	console.log('Updating anons');
 	await db.collection('accounts').updateMany(
-		{ permissions: Binary(Buffer.from('CAAAQAAAIAA=', 'base64'), 0)},
+		{ permissions: Binary(Buffer.from('CAAAAAAAIAA=', 'base64'), 0)},
 		{ $set: 
 			{
 				permissions: Binary(ANON.array)
@@ -73,7 +73,7 @@ module.exports = async(db, redis) => {
 	);
 	console.log('Updating trusted users');
 	await db.collection('accounts').updateMany(
-		{ permissions: Binary(Buffer.from('CuAAQAAAIAA=', 'base64'), 0)},
+		{ permissions: Binary(Buffer.from('CAMAAAAAIAA=', 'base64'), 0)},
 		{ $set: 
 			{
 				permissions: Binary(TRUSTED.array)
@@ -82,7 +82,7 @@ module.exports = async(db, redis) => {
 	);
 	console.log('Updating mod users');
 	await db.collection('accounts').updateMany(
-		{ permissions: Binary(Buffer.from('LecTWcCAIAA=', 'base64'), 0)},
+		{ permissions: Binary(Buffer.from('CCMMGcCAIAA=', 'base64'), 0)},
 		{ $set: 
 			{
 				permissions: Binary(MOD.array)
@@ -91,7 +91,7 @@ module.exports = async(db, redis) => {
 	);
 	console.log('Updating root user');
 	await db.collection('accounts').updateMany(
-		{ permissions: Binary(Buffer.from('////8/yAMAA=', 'base64'), 0)},
+		{ permissions: Binary(Buffer.from('2D/P+/iAMAA=', 'base64'), 0)},
 		{ $set: 
 			{
 				permissions: Binary(ROOT.array)
