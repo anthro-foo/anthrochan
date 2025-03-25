@@ -23,7 +23,7 @@ const express  = require('express')
 	, { globalManageAssets, globalManageCustomPages, globalManageTrusted, globalManageApproval, globalManageSettings, globalManageReports, globalManageBans, globalManageBoards, globalManageFilters, globalEditFilter, editNews, editAccount, editRole,
 		globalManageRecent, globalManageAccounts, globalManageNews, globalManageLogs, globalManageRoles } = require(__dirname+'/../models/pages/globalmanage/')
 	, { bans, banned, changePassword, blockBypass, home, register, login, create, myPermissions, sessions, setupTwoFactor,
-		board, catalog, banners, boardSettings, globalSettings, randombanner, randomnotfoundimage, news, captchaPage, overboard, overboardCatalog,
+		board, catalog, banners, pages, boardSettings, globalSettings, randombanner, randomnotfoundimage, news, captchaPage, overboard, overboardCatalog,
 		captcha, thread, modlog, modloglist, account, boardlist, customPage, csrfPage, noncePage } = require(__dirname+'/../models/pages/')
 	, threadParamConverter = paramConverter({ processThreadIdParam: true })
 	, logParamConverter = paramConverter({ processDateParam: true })
@@ -53,8 +53,9 @@ router.get('/catalog.(html|json)', overboardCatalog); //overboard catalog view
 
 //assets
 router.get('/banners.(html|json)', banners); //banners
+router.get('/pages.(html|json)', pages); // list of custom pages
 router.get('/randombanner', randombanner); //random banner
-router.get('/randomnotfoundimage', randomnotfoundimage); //random banner
+router.get('/randomnotfoundimage', randomnotfoundimage); // random not found image
 router.get('/custompage/:page.(html|json)', customPage); //board custom page
 
 //board pages

@@ -140,4 +140,8 @@ module.exports = {
 		cache.del('notfoundimages');
 		return module.exports.removeFromArray('notfoundimages', filenames);
 	},
+	
+	getCustomPages: async () => {
+		return [];
+	},
 };

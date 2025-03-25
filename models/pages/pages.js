@@ -1,14 +1,14 @@
 'use strict';
 
-const { buildBanners } = require(__dirname+'/../../lib/build/tasks.js')
+const { buildCustomPages } = require(__dirname+'/../../lib/build/tasks.js')
 	, { Assets } = require(__dirname+'/../../db/index.js');
 
 module.exports = async (req, res, next) => {
 
 	let html, json;
 	try {
-		const banners = await Assets.getBanners();
-		({ html, json } = await buildBanners({'banners': banners}));
+		const custompages = await Assets.getCustomPages();
+		({ html, json } = await buildCustomPages({'custompages': custompages}));
 	} catch (err) {
 		return next(err);
 	}
@@ -19,4 +19,4 @@ module.exports = async (req, res, next) => {
 		return res.set('Cache-Control', 'public, max-age=60').send(html);
 	}
 
-};
+}

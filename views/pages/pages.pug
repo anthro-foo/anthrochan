@@ -1,0 +1,19 @@
+extends ../layout.pug
+include ../mixins/boardheader.pug
+include ../mixins/boardnav.pug
+
+block head
+	title #{__('Pages')}
+
+block content
+	include ../includes/stickynav.pug
+	if custompages && custompages.length > 0
+		.table-container.flex-center.mv-11
+			table.table-body
+				tr.table-row
+					td
+						each page in custompages
+							a(href=`custompage/${page.filename}`) #{__(page.name)}
+	else
+		p #{__('Site has no pages yet.')}
+	include ../includes/stickynav.pug
