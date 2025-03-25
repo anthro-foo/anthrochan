@@ -92,12 +92,6 @@ router.post('/addassets', geoIp, useSession, sessionRefresh, fileMiddlewares.ass
 	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, addAssetsController.controller); //add assets
 router.post('/deleteassets', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteAssetsController.paramConverter, deleteAssetsController.controller); //delete assets
-router.post('/addcustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
-	hasPerms.one(Permissions.MANAGE_ASSETS), addCustomPageController.paramConverter, addCustomPageController.controller); //add custom pages
-router.post('/deletecustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
-	hasPerms.one(Permissions.MANAGE_ASSETS), deleteCustomPageController.paramConverter, deleteCustomPageController.controller); //delete custom pages
-router.post('/editcustompage', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
-	hasPerms.one(Permissions.MANAGE_ASSETS), editCustomPageController.paramConverter, editCustomPageController.controller); //edit custom page
 */
 
 //global management forms
