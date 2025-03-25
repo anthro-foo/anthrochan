@@ -1,6 +1,5 @@
 extends ../layout.pug
-include ../mixins/boardheader.pug
-include ../mixins/boardnav.pug
+include ../mixins/custompage.pug
 
 block head
 	title #{__('Pages')}
@@ -13,7 +12,7 @@ block content
 				tr.table-row
 					td
 						each page in custompages
-							a(href=`custompage/${page.filename}`) #{__(page.name)}
+							+custompage(page)
 	else
 		p #{__('Site has no pages yet.')}
 	include ../includes/stickynav.pug

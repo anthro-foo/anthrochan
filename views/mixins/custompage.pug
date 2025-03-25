@@ -7,6 +7,8 @@ mixin custompage(page, manage=false)
 						input.left.post-check(type='checkbox', name='checkedcustompages' value=page.page)  
 						a.left(href=`/custompage/${page.page}.html`) #{page.title}
 						a.right.ml-5(href=`/globalmanage/editcustompage/${page._id}.html`) [#{__('Edit')}]
+					else
+						a.left(href=`/custompage/${page.page}.html`) #{page.title}
 					- const pageDate = new Date(page.date);
 					time.right.reltime(datetime=pageDate.toISOString()) #{pageDate.toLocaleString(pageLanguage, {hourCycle:'h23'})}
 			tr

@@ -2,11 +2,11 @@ extends ../layout.pug
 include ../mixins/custompage.pug
 
 block head
-	title /#{board._id}/ - #{customPage.title}
+	title #{customPage.title}
 
 block content
 	.board-header
-		a.no-decoration(href=`/${board._id}/index.html`)
-			h1.board-title /#{board._id}/ - #{customPage.title}
+		a.no-decoration(href='/pages.html')
+			h1.board-title #{customPage.title}
 	include ../includes/stickynav.pug
 	+custompage(customPage)

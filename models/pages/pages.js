@@ -1,13 +1,13 @@
 'use strict';
 
 const { buildCustomPages } = require(__dirname+'/../../lib/build/tasks.js')
-	, { Assets } = require(__dirname+'/../../db/index.js');
+	, { CustomPages } = require(__dirname+'/../../db/index.js');
 
 module.exports = async (req, res, next) => {
 
 	let html, json;
 	try {
-		const custompages = await Assets.getCustomPages();
+		const custompages = await CustomPages.find();
 		({ html, json } = await buildCustomPages({'custompages': custompages}));
 	} catch (err) {
 		return next(err);

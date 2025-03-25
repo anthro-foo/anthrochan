@@ -80,6 +80,8 @@ router.post('/addnotfoundimages', geoIp, useSession, sessionRefresh, fileMiddlew
 	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, addNotFoundImagesController.controller); // add ban images
 router.post('/deletenotfoundimages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteNotFoundImagesController.paramConverter, deleteNotFoundImagesController.controller); // delete ban images
+router.post('/addcustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_ASSETS), addCustomPageController.paramConverter, addCustomPageController.controller); //add custom pages
 
 /*
 router.post('/addassets', geoIp, useSession, sessionRefresh, fileMiddlewares.asset, csrf, calcPerms, isLoggedIn,

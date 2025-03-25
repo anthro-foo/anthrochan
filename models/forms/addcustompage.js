@@ -13,7 +13,6 @@ module.exports = async (req, res) => {
 	const { message: markdownMessage } = await messageHandler(message, null, null, res.locals.permissions);
 
 	const post = {
-		'board': req.params.board,
 		'page': req.body.page,
 		'title': req.body.title,
 		'message': {
@@ -30,16 +29,23 @@ module.exports = async (req, res) => {
 	buildQueue.push({
 		'task': 'buildCustomPage',
 		'options': {
-			'board': res.locals.board,
 			'page': post.page,
 			'customPage': post,
 		}
+	});
+	
+	const custompages = await CustomPages.find();
+	buildQueue.push({
+		'task': 'buildCustomPages',
+		'options': {
+			'custompages': custompages,
+		},
 	});
 
 	return dynamicResponse(req, res, 200, 'message', {
 		'title': __('Success'),
 		'message': __('Added custom page'),
-		'redirect': `/${req.params.board}/manage/custompages.html`
+		'redirect': '/globalmanage/custompages.html'
 	});
 
 };

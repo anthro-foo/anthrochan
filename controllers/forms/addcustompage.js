@@ -34,9 +34,6 @@ module.exports = {
 			{ result: lengthBody(req.body.title, 0, 50), expected: false, error: __('Title must be 50 characters or less') },
 			{ result: lengthBody(req.body.page, 0, 50), expected: false, error: __('.html name must be 50 characters or less') },
 			{ result: async () => {
-				return (await CustomPages.boardCount(req.params.board)) > globalLimits.customPages.max;
-			}, expected: false, error: __('Can only create %s pages per board', globalLimits.customPages.max) },
-			{ result: async () => {
 				return (await CustomPages.findOne(req.params.board, req.body.page)) == null;
 			}, expected: true, error: __('.html name must be unique') },
 		]);
@@ -45,7 +42,7 @@ module.exports = {
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Bad request'),
 				'errors': errors,
-				'redirect': `/${req.params.booard}/manage/custompages.html`
+				'redirect': '/globalmanage/custompages.html'
 			});
 		}
 

@@ -8,46 +8,38 @@ module.exports = {
 
 	db,
 
-	find: (board, limit=0) => {
-		return db.find({
-			'board': board
-		}).sort({
-			'_id': -1
-		})
+	find: (limit=0) => {
+		return db.find({})
+			.sort({ '_id': -1 })
 			.limit(limit)
 			.toArray();
 	},
 
 	//browsing board
-	findOne: (board, page) => {
+	findOne: (page) => {
 		return db.findOne({
-			'board': board,
 			'page': page
 		});
 	},
 
 	//editing
-	findOneId: (id, board) => {
+	findOneId: (id) => {
 		return db.findOne({
 			'_id': id,
-			'board': board,
 		});
 	},
 
-	boardCount: (board) => {
-		return db.countDocuments({
-			'board': board,
-		});
+	boardCount: () => {
+		return db.countDocuments({});
 	},
 
 	insertOne: (custompage) => {
 		return db.insertOne(custompage);
 	},
 
-	findOneAndUpdate: (id, board, page, title, raw, markdown, edited) => {
+	findOneAndUpdate: (id, page, title, raw, markdown, edited) => {
 		return db.findOneAndUpdate({
 			'_id': id,
-			'board': board,
 		}, {
 			'$set': {
 				'page': page,
@@ -61,18 +53,11 @@ module.exports = {
 		});
 	},
 
-	deleteMany: (pages, board) => {
+	deleteMany: (pages) => {
 		return db.deleteMany({
 			'page': {
 				'$in': pages
 			},
-			'board': board
-		});
-	},
-
-	deleteBoard: (board) => {
-		return db.deleteMany({
-			'board': board
 		});
 	},
 
