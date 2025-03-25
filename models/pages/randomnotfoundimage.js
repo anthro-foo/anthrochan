@@ -7,7 +7,6 @@ module.exports = async (req, res, next) => {
 	let notfoundimage;
 	try {
 		notfoundimage = await Assets.randomNotFoundImage();
-		console.log('notfoundimage',notfoundimage);
 	} catch (err) {
 		return next(err);
 	}
