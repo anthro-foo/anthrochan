@@ -74,29 +74,29 @@ window.addEventListener('DOMContentLoaded', () => {
 	};
 
 	function getPostMessage(postNum) {
-	    // Select the post container using the data-post-id attribute
-	    const postContainer = document.querySelector(`.post-container[data-post-id='${postNum}']`);
+		// Select the post container using the data-post-id attribute
+		const postContainer = document.querySelector(`.post-container[data-post-id='${postNum}']`);
 		
-	    if (postContainer) {
-	        // Find the post-message div inside the selected post container
-	        const postMessage = postContainer.querySelector('.post-message');
+		if (postContainer) {
+			// Find the post-message div inside the selected post container
+			const postMessage = postContainer.querySelector('.post-message');
 		
-	        if (postMessage) {
-	            return postMessage.innerText.trim(); // Extract and return the text
-	        }
-	    }
+			if (postMessage) {
+				return postMessage.innerText.trim(); // Extract and return the text
+			}
+		}
 	
-	    return null; // Return null if the element is not found
+		return null; // Return null if the element is not found
 	}
 
 	const addQuote = function(number) {
-		let quoteText = ``;
-		const selection = getPostMessage(number);
-		if (selection && selection.length > 0) {
-			const quotedSelection = selection.split(/\r?\n/) //split by lines
-				.map(line => line.trim().length > 0 ? `>${line}` : line) //make non empty lines greentext
+		let quoteText = '';
+		const text = getPostMessage(number);
+		if (text && text.length > 0) {
+			const quotedSelection = text.split(/\r?\n/) //split by lines
+				.map(line => `>${line}`) // green text all lines
 				.join('\n'); //join it back together and newline
-			quoteText += `${quotedSelection}`;
+			quoteText = quoteText.concat(quotedSelection, '\n');
 		}
 		addQuoteToPostForm(quoteText);	
 	};
@@ -143,7 +143,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			}
 		}
 
-		localStorage.removeItem('clickedQuoteNum')
+		localStorage.removeItem('clickedQuoteNum');
 		localStorage.removeItem('clickedQuote');
 	}
 
@@ -160,7 +160,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	};
 
 	addQuoteNumListeners(document.getElementsByClassName('post-quote-num'));
-	addQuoteListeners(document.getElementsByClassName('post-quote'))
+	addQuoteListeners(document.getElementsByClassName('post-quote'));
 
 	window.addEventListener('addPost', function(e) {
 		if (e.detail.hover) {
