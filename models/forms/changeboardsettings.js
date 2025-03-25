@@ -122,6 +122,7 @@ module.exports = async (req, res) => {
 			'audio': booleanSetting(req.body.files_allow_audio),
 			'other': booleanSetting(req.body.files_allow_other),
 		},
+		'requireFileApproval': booleanSetting(req.body.require_file_approval),
 	};
 
 	//settings changed in the db

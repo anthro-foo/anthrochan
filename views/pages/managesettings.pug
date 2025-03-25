@@ -213,6 +213,10 @@ block content
 														.label #{__('User File Unlinking')}
 														label.postform-style.ph-5
 															input(type='checkbox', name='user_post_unlink', value='true' checked=board.settings.userPostUnlink)
+													.row
+														.label #{__('Require File Approval')}
+														label.postform-style.ph-5
+															input(type='checkbox', name='require_file_approval', value='true' checked=board.settings.requireFileApproval)
 
 											.tab.tab-4
 												.col

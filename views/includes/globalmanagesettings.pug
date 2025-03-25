@@ -796,6 +796,10 @@ ul.tabs.group
 				label.postform-style.ph-5
 					input(type='checkbox', name='board_defaults_user_post_unlink', value='true' checked=settings.boardDefaults.userPostUnlink)
 			.row
+				.label #{__('Require File Approval')}
+				label.postform-style.ph-5
+					input(type='checkbox', name='board_defaults_require_file_approval', value='true' checked=settings.boardDefaults.requireFileApproval)
+			.row
 				.label #{__('Thread Limit')}
 				input(type='number' name='board_defaults_thread_limit' value=settings.boardDefaults.threadLimit)
 			.row

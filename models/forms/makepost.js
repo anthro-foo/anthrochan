@@ -66,7 +66,8 @@ module.exports = async (req, res) => {
 	const { blockedCountries, threadLimit, ids, userPostSpoiler,
 		pphTrigger, tphTrigger, tphTriggerAction, pphTriggerAction,
 		sageOnlyEmail, forceAnon, replyLimit, disableReplySubject,
-		captchaMode, lockMode, allowedFileTypes, customFlags, geoFlags, fileR9KMode, messageR9KMode } = res.locals.board.settings;
+		captchaMode, lockMode, allowedFileTypes, customFlags, geoFlags, fileR9KMode, messageR9KMode, 
+		requireFileApproval } = res.locals.board.settings;
 
 	//
 	// Check if country is blocked
@@ -437,7 +438,7 @@ module.exports = async (req, res) => {
 	//
 	// File approval
 	//
-	const bypassFileApproval = res.locals.permissions.hasAny(Permissions.BYPASS_FILE_APPROVAL);
+	const bypassFileApproval =  !requireFileApproval || res.locals.permissions.hasAny(Permissions.BYPASS_FILE_APPROVAL);
 
 	if (files.length > 0) {
 		for (let i = 0; i < files.length; i++) {

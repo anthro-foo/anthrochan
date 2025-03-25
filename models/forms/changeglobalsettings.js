@@ -309,6 +309,7 @@ module.exports = async (req, res) => {
 			userPostDelete: booleanSetting(req.body.board_defaults_user_post_delete, oldSettings.boardDefaults.userPostDelete),
 			userPostSpoiler: booleanSetting(req.body.board_defaults_user_post_spoiler, oldSettings.boardDefaults.userPostSpoiler),
 			userPostUnlink: booleanSetting(req.body.board_defaults_user_post_unlink, oldSettings.boardDefaults.userPostUnlink),
+			requireFileApproval: booleanSetting(req.body.board_defaults_require_file_approval, oldSettings.boardDefaults.requireFileApproval),
 			threadLimit: numberSetting(req.body.board_defaults_thread_limit, oldSettings.boardDefaults.threadLimit),
 			replyLimit: numberSetting(req.body.board_defaults_reply_limit, oldSettings.boardDefaults.replyLimit),
 			bumpLimit: numberSetting(req.body.board_defaults_bump_limit, oldSettings.boardDefaults.bumpLimit),
