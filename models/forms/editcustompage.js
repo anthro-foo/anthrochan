@@ -15,22 +15,26 @@ module.exports = async (req, res) => {
 	const { message: markdownPage } = await messageHandler(message, null, null, res.locals.permissions);
 	const editedDate = new Date();
 
-	const oldPage = await CustomPages.findOneAndUpdate(req.body.page_id, req.params.board,
-		req.body.page, req.body.title, message, markdownPage, editedDate).then(res => res.value);
+	const oldPage = await CustomPages.findOneAndUpdate(
+		req.body.page_id,
+		req.body.page,
+		req.body.title, 
+		message,
+		markdownPage,
+		editedDate).then(res => res.value);
 
 	if (oldPage === null) {
 		return dynamicResponse(req, res, 400, 'message', {
 			'title': __('Bad request'),
 			'error': __('Custom page does not exist'),
-			'redirect': req.headers.referer || `/${req.params.board}/manage/custompages.html`
+			'redirect': req.headers.referer || '/globalmanage/custompages.html'
 		});
 	}
 
-	await remove(`${uploadDirectory}/html/${req.params.board}/custompage/${oldPage.page}.html`);
+	await remove(`${uploadDirectory}/html/custompage/${oldPage.page}.html`);
 
 	const newPage = {
 		'_id': oldPage._id,
-		'board': req.params.board,
 		'page': req.body.page,
 		'title': req.body.title,
 		'message': {
@@ -44,16 +48,23 @@ module.exports = async (req, res) => {
 	buildQueue.push({
 		'task': 'buildCustomPage',
 		'options': {
-			'board': res.locals.board,
 			'page': newPage.page,
 			'customPage': newPage,
 		}
+	});
+	
+	const custompages = await CustomPages.find();
+	buildQueue.push({
+		'task': 'buildCustomPages',
+		'options': {
+			'custompages': custompages,
+		},
 	});
 
 	return dynamicResponse(req, res, 200, 'message', {
 		'title': __('Success'),
 		'message': __('Updated custom page'),
-		'redirect': `/${req.params.board}/manage/custompages.html`,
+		'redirect': '/globalmanage/custompages.html',
 	});
 
 };

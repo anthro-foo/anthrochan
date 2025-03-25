@@ -82,6 +82,10 @@ router.post('/deletenotfoundimages', useSession, sessionRefresh, csrf, calcPerms
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteNotFoundImagesController.paramConverter, deleteNotFoundImagesController.controller); // delete ban images
 router.post('/addcustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), addCustomPageController.paramConverter, addCustomPageController.controller); //add custom pages
+router.post('/deletecustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_ASSETS), deleteCustomPageController.paramConverter, deleteCustomPageController.controller); //delete custom pages
+router.post('/editcustompage', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_ASSETS), editCustomPageController.paramConverter, editCustomPageController.controller); //edit custom page
 
 /*
 router.post('/addassets', geoIp, useSession, sessionRefresh, fileMiddlewares.asset, csrf, calcPerms, isLoggedIn,

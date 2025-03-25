@@ -86,8 +86,7 @@ router.get('/:board/manage/bans.html', useSession, sessionRefresh, isLoggedIn, B
 	hasPerms.one(Permissions.MANAGE_BANS), csrf, manageBans);
 router.get('/:board/manage/settings.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
 	hasPerms.one(Permissions.MANAGE_BOARD_SETTINGS), csrf, manageSettings);
-router.get('/:board/manage/editcustompage/:custompageid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, custompageParamConverter, editCustomPage);
+
 router.get('/:board/manage/filters.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
 	hasPerms.one(Permissions.MANAGE_BOARD_SETTINGS), csrf, manageFilters);
 router.get('/:board/manage/editfilter/:filterid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
@@ -120,6 +119,8 @@ router.get('/globalmanage/assets.html', useSession, sessionRefresh, isLoggedIn, 
 	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, globalManageAssets);
 router.get('/globalmanage/custompages.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
 	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, globalManageCustomPages);
+router.get('/globalmanage/editcustompage/:custompageid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,
+	hasPerms.one(Permissions.MANAGE_ASSETS), csrf, custompageParamConverter, editCustomPage);
 router.get('/globalmanage/editnews/:newsid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,
 	hasPerms.one(Permissions.MANAGE_NEWS), csrf, newsParamConverter, editNews);
 router.get('/globalmanage/editfilter/:filterid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, calcPerms,

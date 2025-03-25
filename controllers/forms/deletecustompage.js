@@ -23,7 +23,7 @@ module.exports = {
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Bad request'),
 				'errors': errors,
-				'redirect': `/${req.params.board}/manage/custompages.html`
+				'redirect': '/globalmanage/custompages.html'
 			});
 		}
 

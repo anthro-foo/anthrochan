@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
 
 	let customPage;
 	try {
-		customPage = await CustomPages.findOneId(req.params.custompageid, req.params.board);
+		customPage = await CustomPages.findOneId(req.params.custompageid);
 	} catch (err) {
 		return next(err);
 	}
@@ -20,7 +20,6 @@ module.exports = async (req, res, next) => {
 		.render('editcustompage', {
 			csrf: req.csrfToken(),
 			page: customPage,
-			board: res.locals.board,
 		});
 
 };

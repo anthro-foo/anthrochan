@@ -1,18 +1,17 @@
 extends ../layout.pug
-include ../mixins/boardheader.pug
-include ../mixins/managenav.pug
+include ../mixins/globalmanagenav.pug
 
 block head
-	title /#{board._id}/ - #{__('Edit Custom Page')}
+	title #{__('Edit Custom Page')}
 
 block content
-	+boardheader(__('Edit Custom Page'))
+	h1.board-title #{__('Global Management')}
 	br
-	+managenav('custompages', true)
+	+globalmanagenav('custompages', true)
 	hr(size=1)
 	include ../includes/stickynav.pug
 	.form-wrapper.flex-center.mv-10
-		form.form-post(action=`/forms/board/${board._id}/editcustompage` method='POST')
+		form.form-post(action=`/forms/editcustompage` method='POST')
 			input(type='hidden' name='_csrf' value=csrf)
 			input(type='hidden' name='page_id' value=page._id)
 			.row

@@ -36,7 +36,7 @@ module.exports = {
 			{ result: lengthBody(req.body.title, 0, 50), expected: false, error: __('Title must be 50 characters or less') },
 			{ result: lengthBody(req.body.page, 0, 50), expected: false, error: __('.html name must be 50 characters or less') },
 			{ result: async () => {
-				const existingPage = await CustomPages.findOne(req.params.board, req.body.page);
+				const existingPage = await CustomPages.findOne(req.body.page);
 				if (existingPage && existingPage.page === req.body.page) {
 					return existingPage._id.equals(req.body.page_id);
 				}
@@ -48,7 +48,7 @@ module.exports = {
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Bad request'),
 				'errors': errors,
-				'redirect': req.headers.referer || `/${req.params.board}/manage/custompages.html`,
+				'redirect': req.headers.referer || '/globalmanage/custompages.html',
 			});
 		}
 

@@ -5,8 +5,5 @@ block head
 	title #{customPage.title}
 
 block content
-	.board-header
-		a.no-decoration(href='/pages.html')
-			h1.board-title #{customPage.title}
 	include ../includes/stickynav.pug
 	+custompage(customPage)
