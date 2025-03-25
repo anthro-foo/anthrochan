@@ -25,12 +25,6 @@ block content
 						li: a(href='#file-approval') How does the file approval system work?
 						li: a(href='#post-styling') What kind of styling options are available when making a post?
 						li: a(href='#post-info') What is the file size limit?
-					b Boards, users & permissions
-					ul.mv-0
-						li: a(href='#make-a-board') How do I make my own board?
-						li: a(href='#antispam') What do the board settings for antispam do?
-						li: a(href='#archive-reverse-url-format') What is the archive/reverse image search link url format?
-						li: a(href='#twofactor-enforcement') How does 2FA enforcement work?
 	.table-container.flex-center.mv-5
 		.anchor#whats-an-imageboard
 		table
@@ -138,51 +132,51 @@ block content
 			tr
 				td &gt;greentext
 				td
-					span.greentext &gt;woah where the hell are we
+					span.greentext &gt;greentext
 			tr
 				td &lt;orangetext
 				td
-					span.orangetext &lt;faq.html apparently
+					span.orangetext &lt;orangetext
 			tr
-				td $$rainbowtext$$
+				td *italic*
 				td
-					span.rainbow feelin valid rn
+					span.em italic
 			tr
-				td %%glowtext%%
+				td **bold**
 				td
-					span.glowtext Do not investigate
-			tr
-				td ==title==
-				td
-					span.title Red Text!
-			tr
-				td --title--
-				td
-					span.bluetext Blue Text...
-			tr
-				td ''bold''
-				td
-					span.bold bold favours the BRAVE!
+					span.bold bold
 			tr
 				td __underline__
 				td
-					span.underline The west has fallen.
+					span.underline underline
 			tr
 				td ~~strikethrough~~
 				td
-					span.strike Free chicken
+					span.strike strikethrough
+			tr
+				td `inline monospace`
+				td
+					span.mono inline monospace
 			tr
 				td ||spoiler text||
 				td
-					span.spoiler What are you looking at, newfloof?
+					span.spoiler spoiler text
 			tr
-				td **italic**
+				td r{red text}
 				td
-					span.em Italalalalalian
+					span.title red text
+			tr
+				td b{blue text}
+				td
+					span.bluetext blue text
+			tr
+				td g{glow text}
+				td
+					span.glowtext glow text
 			tr
 				td (((detected)))
 				td
-					span.detected ((( they )))
+					span.detected ((( detected text )))
 			tr
 				td ##2%9+3
 				td
@@ -212,10 +206,7 @@ block content
 			tr
 				td &gt;&gt;&gt;/b/123
 				td: a(class="quote" href="#!") &gt;&gt;&gt;/b/123
-			tr
-				td `inline monospace`
-				td
-					span.mono inline monospace
+			
 			tr
 				td
 					| [code]language
@@ -252,29 +243,6 @@ block content
 			tr
 				td
 					p Max size of form data per-post is #{postFilesSize}. Because other fields e.g. name, message, etc contribute to this, the maximum size of file uploads will be very slightly smaller than this.
-	.table-container.flex-center.mv-5
-		.anchor#moderation
-		table
-			tr
-				th: a(href='#moderation') How does moderation work?
-			tr
-				td.post-message
-					b Local vs. Global reports
-					p
-						| There exists the concept of "local" and "global" reports. Reporting a post locally will show the post along with reports on the report page for that particular board, and the reports 
-						| may be actioned upon by the board staff. Reporting a post globally will show the post along with reports on the global manage page available only to global staff and may be actioned upon by global staff. 
-						| Global reports should be used to flag posts that violate global rules such as illegal content or spam, in contrast to local reports which are for posts that abide by global rules but break 
-						| board-specific rules (which may be made arbitrarily by board staff). It is also possible to be banned from a board or globally for abuse of the report system.
-					b Batch processing of posts
-					p
-						| Each post has a checkbox in the top left to select it for moderation actions. Multiple posts may be selected to allow batch processing e.g. reporting multiple offending posts in one request. 
-						| The same is present in moderation interfaces. Some actions for example bans (which are based on IP) may also be handled in batches. Selecting multiple posts and using the ban action will 
-						| apply a single ban for each unique IP of the selected posts.
-					b Time format in moderation interfaces
-					p
-						| Some moderation interfaces, for example the ban duration when moderating posts, or the ban duration for post filtering use a shorthand for times/length. This format supports years, months, weeks, days, hours, minutes and seconds.
-						| An input of "3mo" would mean 3 months and "1y2mo3w4d5h6m7s" would mean 1 year, 2 months, 3 weeks, 4 days, 5 hours, 6 minutes and 7 seconds. Units of time should be in descending order, so "2w1mo" is invalid.
-						| However you may use "6w" for example to input 6 weeks, and are not required to use "1mo2w".
 	.table-container.flex-center.mv-5
 		.anchor#contact
 		table
