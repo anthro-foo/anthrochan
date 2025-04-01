@@ -1,4 +1,4 @@
-/* globals __ __n modal Tegaki grecaptcha hcaptcha captchaController appendLocalStorageArray socket isThread setLocalStorage forceUpdate captchaController uploaditem ThumbmarkJS */
+/* globals __ __n modal Tegaki grecaptcha hcaptcha captchaController appendLocalStorageArray socket isThread setLocalStorage forceUpdate captchaController uploaditem ThumbmarkJS detectIncognito */
 async function videoThumbnail(file) {
 	return new Promise((resolve, reject) => {
 		const hiddenVideo = document.createElement('video');
@@ -26,7 +26,7 @@ async function videoThumbnail(file) {
 	});
 }
 
-function doModal(data, postcallback, loadcallback) {
+async function doModal(data, postcallback, loadcallback) {
 	try {
 		const modalHtml = modal({ modal: data });
 		let checkInterval;
@@ -266,8 +266,7 @@ class postFormHandler {
 		}
 	}
 
-	formSubmit(e) {
-
+	async formSubmit(e) {
 		//get the captcha response if any recaptcha
 		const captchaResponse = recaptchaResponse;
 
@@ -276,11 +275,6 @@ class postFormHandler {
 		if (this.enctype === 'multipart/form-data') {
 			this.fileInput && (this.fileInput.disabled = true);
 			postData = new FormData(this.form);
-			ThumbmarkJS.getFingerprint().then(
-				function (hash) {
-					postData.append('thumbmarkjs', hash);
-				}
-			);
 			if (captchaResponse) {
 				postData.append('captcha', captchaResponse);
 			}
@@ -326,6 +320,12 @@ class postFormHandler {
 			e.preventDefault();
 		}
 
+		ThumbmarkJS.setOption('exclude', ['webgl', 'system.browser.version']);
+		const uuid = await ThumbmarkJS.getFingerprint();
+		const incognito = await detectIncognito();
+		postData.append('uuid', uuid);
+		postData.append('browserName', incognito.browserName);
+		postData.append('incognito', incognito.isPrivate);
 		//prepare new request
 		const xhr = new XMLHttpRequest();
 

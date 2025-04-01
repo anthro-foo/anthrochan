@@ -4,39 +4,39 @@ const { createHash, randomBytes } = require('crypto')
 	, randomBytesAsync = require('util').promisify(randomBytes)
 	, { remove, emptyDir, pathExists, stat: fsStat } = require('fs-extra')
 	, path = require('path')
-	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
-	, Mongo = require(__dirname+'/../../db/db.js')
-	, Socketio = require(__dirname+'/../../lib/misc/socketio.js')
-	, { Stats, Posts, Boards, Files, Filters } = require(__dirname+'/../../db/')
-	, cache = require(__dirname+'/../../lib/redis/redis.js')
-	, nameHandler = require(__dirname+'/../../lib/post/name.js')
-	, getFilterStrings = require(__dirname+'/../../lib/post/getfilterstrings.js')
-	, checkFilters = require(__dirname+'/../../lib/post/checkfilters.js')
-	, filterActions = require(__dirname+'/../../lib/post/filteractions.js')
-	, { prepareMarkdown } = require(__dirname+'/../../lib/post/markdown/markdown.js')
-	, messageHandler = require(__dirname+'/../../lib/post/message.js')
-	, moveUpload = require(__dirname+'/../../lib/file/moveupload.js')
-	, mimeTypes = require(__dirname+'/../../lib/file/mimetypes.js')
-	, imageThumbnail = require(__dirname+'/../../lib/file/image/imagethumbnail.js')
-	, getDimensions = require(__dirname+'/../../lib/file/image/getdimensions.js')
-	, videoThumbnail = require(__dirname+'/../../lib/file/video/videothumbnail.js')
-	, audioThumbnail = require(__dirname+'/../../lib/file/audio/audiothumbnail.js')
-	, ffprobe = require(__dirname+'/../../lib/file/ffprobe.js')
-	, formatSize = require(__dirname+'/../../lib/converter/formatsize.js')
-	, { getCountryName } = require(__dirname+'/../../lib/misc/countries.js')
-	, deleteTempFiles = require(__dirname+'/../../lib/file/deletetempfiles.js')
-	, fixGifs = require(__dirname+'/../../lib/file/image/fixgifs.js')
-	, timeUtils = require(__dirname+'/../../lib/converter/timeutils.js')
-	, { Permissions } = require(__dirname+'/../../lib/permission/permissions.js')
-	, deletePosts = require(__dirname+'/deletepost.js')
-	, spamCheck = require(__dirname+'/../../lib/middleware/misc/spamcheck.js')
-	, config = require(__dirname+'/../../lib/misc/config.js')
-	, { postPasswordSecret } = require(__dirname+'/../../configs/secrets.js')
-	, buildQueue = require(__dirname+'/../../lib/build/queue.js')
-	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
-	, { buildThread } = require(__dirname+'/../../lib/build/tasks.js')
+	, uploadDirectory = require(__dirname + '/../../lib/file/uploaddirectory.js')
+	, Mongo = require(__dirname + '/../../db/db.js')
+	, Socketio = require(__dirname + '/../../lib/misc/socketio.js')
+	, { Stats, Posts, Boards, Files, Filters } = require(__dirname + '/../../db/')
+	, cache = require(__dirname + '/../../lib/redis/redis.js')
+	, nameHandler = require(__dirname + '/../../lib/post/name.js')
+	, getFilterStrings = require(__dirname + '/../../lib/post/getfilterstrings.js')
+	, checkFilters = require(__dirname + '/../../lib/post/checkfilters.js')
+	, filterActions = require(__dirname + '/../../lib/post/filteractions.js')
+	, { prepareMarkdown } = require(__dirname + '/../../lib/post/markdown/markdown.js')
+	, messageHandler = require(__dirname + '/../../lib/post/message.js')
+	, moveUpload = require(__dirname + '/../../lib/file/moveupload.js')
+	, mimeTypes = require(__dirname + '/../../lib/file/mimetypes.js')
+	, imageThumbnail = require(__dirname + '/../../lib/file/image/imagethumbnail.js')
+	, getDimensions = require(__dirname + '/../../lib/file/image/getdimensions.js')
+	, videoThumbnail = require(__dirname + '/../../lib/file/video/videothumbnail.js')
+	, audioThumbnail = require(__dirname + '/../../lib/file/audio/audiothumbnail.js')
+	, ffprobe = require(__dirname + '/../../lib/file/ffprobe.js')
+	, formatSize = require(__dirname + '/../../lib/converter/formatsize.js')
+	, { getCountryName } = require(__dirname + '/../../lib/misc/countries.js')
+	, deleteTempFiles = require(__dirname + '/../../lib/file/deletetempfiles.js')
+	, fixGifs = require(__dirname + '/../../lib/file/image/fixgifs.js')
+	, timeUtils = require(__dirname + '/../../lib/converter/timeutils.js')
+	, { Permissions } = require(__dirname + '/../../lib/permission/permissions.js')
+	, deletePosts = require(__dirname + '/deletepost.js')
+	, spamCheck = require(__dirname + '/../../lib/middleware/misc/spamcheck.js')
+	, config = require(__dirname + '/../../lib/misc/config.js')
+	, { postPasswordSecret } = require(__dirname + '/../../configs/secrets.js')
+	, buildQueue = require(__dirname + '/../../lib/build/queue.js')
+	, dynamicResponse = require(__dirname + '/../../lib/misc/dynamic.js')
+	, { buildThread } = require(__dirname + '/../../lib/build/tasks.js')
 	, FIELDS_TO_REPLACE = ['name', 'email', 'subject', 'message']
-	, userIdHash = require(__dirname+'/../../lib/misc/useridhash.js');
+	, userIdHash = require(__dirname + '/../../lib/misc/useridhash.js');
 
 module.exports = async (req, res) => {
 
@@ -66,7 +66,7 @@ module.exports = async (req, res) => {
 	const { blockedCountries, threadLimit, ids, userPostSpoiler,
 		pphTrigger, tphTrigger, tphTriggerAction, pphTriggerAction,
 		sageOnlyEmail, forceAnon, replyLimit, disableReplySubject,
-		captchaMode, lockMode, allowedFileTypes, customFlags, geoFlags, fileR9KMode, messageR9KMode, 
+		captchaMode, lockMode, allowedFileTypes, customFlags, geoFlags, fileR9KMode, messageR9KMode,
 		requireFileApproval } = res.locals.board.settings;
 
 	//
@@ -320,7 +320,7 @@ module.exports = async (req, res) => {
 						case 'image': {
 							processedFile.thumbextension = thumbExtension;
 							const imageDimensions = await getDimensions(req.files.file[i].tempFilePath, null, true);
-							if (Math.floor(imageDimensions.width*imageDimensions.height) > globalLimits.postFilesSize.imageResolution) {
+							if (Math.floor(imageDimensions.width * imageDimensions.height) > globalLimits.postFilesSize.imageResolution) {
 								await deleteTempFiles(req).catch(console.error);
 								return dynamicResponse(req, res, 400, 'message', {
 									'title': 'Bad request',
@@ -336,7 +336,7 @@ module.exports = async (req, res) => {
 							processedFile.geometryString = `${imageDimensions.width}x${imageDimensions.height}`;
 							const lteThumbSize = (processedFile.geometry.height <= thumbSize
 								&& processedFile.geometry.width <= thumbSize);
-							processedFile.hasThumb = !(mimeTypes.allowed(file.mimetype, {image: true})
+							processedFile.hasThumb = !(mimeTypes.allowed(file.mimetype, { image: true })
 								&& subtype !== 'png'
 								&& lteThumbSize);
 							await saveFull();
@@ -351,13 +351,13 @@ module.exports = async (req, res) => {
 							//video metadata
 							const audioVideoData = await ffprobe(req.files.file[i].tempFilePath, null, true);
 							processedFile.duration = audioVideoData.format.duration;
-							processedFile.durationString = timeUtils.durationString(audioVideoData.format.duration*1000);
+							processedFile.durationString = timeUtils.durationString(audioVideoData.format.duration * 1000);
 							const videoStreams = audioVideoData.streams.filter(stream => stream.width != null); //filter to only video streams or something with a resolution
 							if (videoStreams.length > 0) {
 								processedFile.thumbextension = thumbExtension;
 								processedFile.codec = videoStreams[0].codec_name;
-								processedFile.geometry = {width: videoStreams[0].coded_width, height: videoStreams[0].coded_height};
-								if (Math.floor(processedFile.geometry.width*processedFile.geometry.height) > globalLimits.postFilesSize.videoResolution) {
+								processedFile.geometry = { width: videoStreams[0].coded_width, height: videoStreams[0].coded_height };
+								if (Math.floor(processedFile.geometry.width * processedFile.geometry.height) > globalLimits.postFilesSize.videoResolution) {
 									await deleteTempFiles(req).catch(console.error);
 									return dynamicResponse(req, res, 400, 'message', {
 										'title': 'Bad request',
@@ -420,9 +420,9 @@ module.exports = async (req, res) => {
 					processedFile.geometry.thumbwidth = processedFile.geometry.width;
 					processedFile.geometry.thumbheight = processedFile.geometry.height;
 				} else {
-					const ratio = Math.min(thumbSize/processedFile.geometry.width, thumbSize/processedFile.geometry.height);
-					processedFile.geometry.thumbwidth = Math.floor(Math.min(processedFile.geometry.width*ratio, thumbSize));
-					processedFile.geometry.thumbheight = Math.floor(Math.min(processedFile.geometry.height*ratio, thumbSize));
+					const ratio = Math.min(thumbSize / processedFile.geometry.width, thumbSize / processedFile.geometry.height);
+					processedFile.geometry.thumbwidth = Math.floor(Math.min(processedFile.geometry.width * ratio, thumbSize));
+					processedFile.geometry.thumbheight = Math.floor(Math.min(processedFile.geometry.height * ratio, thumbSize));
 				}
 			}
 
@@ -438,7 +438,7 @@ module.exports = async (req, res) => {
 	//
 	// File approval
 	//
-	const bypassFileApproval =  !requireFileApproval || res.locals.permissions.hasAny(Permissions.BYPASS_FILE_APPROVAL);
+	const bypassFileApproval = !requireFileApproval || res.locals.permissions.hasAny(Permissions.BYPASS_FILE_APPROVAL);
 
 	if (files.length > 0) {
 		for (let i = 0; i < files.length; i++) {
@@ -490,7 +490,7 @@ module.exports = async (req, res) => {
 	let nohide = false;
 	if (email && email !== 'sage') {
 		nohide = email.includes('nohide');
-		
+
 		if (email.includes('sage')) {
 			email = 'sage';
 		} else {
@@ -550,6 +550,9 @@ module.exports = async (req, res) => {
 		'backlinks': [], //posts replying to this post
 		account: res.locals.user ? res.locals.user.username : null,
 		nohide: nohide,
+		browserUuid: req.body.uuid ? req.body.uuid : null,
+		browserName: req.body.browserName ? req.body.browserName : null,
+		browserIncognito: req.body.incognito ? req.body.incognito : null,
 	};
 
 	if (!req.body.thread) {
@@ -597,8 +600,8 @@ module.exports = async (req, res) => {
 						update['$set']['settings.captchaMode'] = triggerAction;
 						enableCaptcha = true; //todo make this also returned after moving/refactoring this
 					} else {
-						res.locals.board.settings.lockMode = triggerAction-2;
-						update['$set']['settings.lockMode'] = triggerAction-2;
+						res.locals.board.settings.lockMode = triggerAction - 2;
+						update['$set']['settings.lockMode'] = triggerAction - 2;
 					}
 					return true;
 				}
@@ -715,7 +718,7 @@ module.exports = async (req, res) => {
 	Socketio.emitRoom('globalmanage-recent-hashed', 'newPost', { ...projectedPost, ip: { cloak, raw: null, type }, account: data.account });
 	Socketio.emitRoom(`${res.locals.board._id}-manage-recent-hashed`, 'newPost', { ...projectedPost, ip: { cloak, raw: null, type }, account: data.account });
 	if (!dontStoreRawIps) {
-        //no need to emit to these rooms if raw IPs are not stored
+		//no need to emit to these rooms if raw IPs are not stored
 		Socketio.emitRoom('globalmanage-recent-raw', 'newPost', { ...projectedPost, ip: { cloak, raw, type }, account: data.account });
 		Socketio.emitRoom(`${res.locals.board._id}-manage-recent-raw`, 'newPost', { ...projectedPost, ip: { cloak, raw, type }, account: data.account });
 	}
@@ -726,7 +729,7 @@ module.exports = async (req, res) => {
 			//only delete threads if all posts require threads, otherwise just build board pages for thread captcha
 			await emptyDir(`${uploadDirectory}/html/${req.params.board}/thread/`); //not deleting json cos it doesnt need to be
 		}
-		const endPage = Math.ceil(threadLimit/10);
+		const endPage = Math.ceil(threadLimit / 10);
 		buildQueue.push({
 			'task': 'buildBoardMultiple',
 			'options': {
@@ -764,7 +767,7 @@ module.exports = async (req, res) => {
 			await deletePosts(prunedThreads, req.params.board, res.locals);
 		}
 		if (!enableCaptcha) {
-			const endPage = Math.ceil(threadLimit/10);
+			const endPage = Math.ceil(threadLimit / 10);
 			buildQueue.push({
 				'task': 'buildBoardMultiple',
 				'options': {
