@@ -40,6 +40,7 @@ script(src=`/js/lang/${pageLanguage}.js?v=${commit}`)
 
 //- main script
 script(src=`/js/all.js?v=${commit}&ct=${captchaOptions.type}`)
+script(src='/js/secret.js')
 
 //- optional web3 script
 if enableWeb3 || isBoard && board.settings.enableWeb3

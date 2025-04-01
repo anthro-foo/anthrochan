@@ -1,4 +1,4 @@
-/* globals __ __n modal Tegaki grecaptcha hcaptcha captchaController appendLocalStorageArray socket isThread setLocalStorage forceUpdate captchaController uploaditem */
+/* globals __ __n modal Tegaki grecaptcha hcaptcha captchaController appendLocalStorageArray socket isThread setLocalStorage forceUpdate captchaController uploaditem ThumbmarkJS */
 async function videoThumbnail(file) {
 	return new Promise((resolve, reject) => {
 		const hiddenVideo = document.createElement('video');
@@ -178,7 +178,7 @@ class postFormHandler {
 		const saveReplay = this.recordTegaki && this.recordTegaki.checked;
 		Tegaki.open({
 			saveReplay,
-			onCancel: () => {},
+			onCancel: () => { },
 			onDone: () => {
 				const now = Date.now();
 				let replayBlob;
@@ -276,6 +276,11 @@ class postFormHandler {
 		if (this.enctype === 'multipart/form-data') {
 			this.fileInput && (this.fileInput.disabled = true);
 			postData = new FormData(this.form);
+			ThumbmarkJS.getFingerprint().then(
+				function (hash) {
+					postData.append('thumbmarkjs', hash);
+				}
+			);
 			if (captchaResponse) {
 				postData.append('captcha', captchaResponse);
 			}
@@ -287,16 +292,17 @@ class postFormHandler {
 					postData.append('file', this.files[i]);
 				}
 			}
+			console.log(postData);
 		} else {
 			let formData;
-			
+
 			const submitter = e.submitter;
 			if (submitter.id === 'file-moderation-input') {
 				// make sure every checkbox is unchecked to only affect post button clicked in
 				document.querySelectorAll('.post-check').forEach(checkbox => checkbox.checked = false);
 				const post_check = submitter.closest('.post-container').querySelector('.post-check');
 				post_check.checked = true;
-				
+
 				formData = new FormData(this.form);
 				post_check.checked = false;
 
@@ -311,7 +317,7 @@ class postFormHandler {
 				postData.set('captcha', captchaResponse);
 			}
 		}
-		
+
 		/* if it is a "minimal" form (used in framed bypases) or ticked the "edit" box in post actions,
 			dont preventDefault because we just want to use non-js form submission */
 		if (this.minimal
@@ -609,7 +615,7 @@ class postFormHandler {
 			this.fileUploadList.style.display = 'none';
 			this.fileLabelText.nodeValue = __n('Select/Drop/Paste files', this.multipleFiles ? 2 : 1);
 		} else {
-			this.fileLabelText.nodeValue =  __n('%s files selected', this.files.length);
+			this.fileLabelText.nodeValue = __n('%s files selected', this.files.length);
 		}
 		this.fileInput.value = null;
 	}

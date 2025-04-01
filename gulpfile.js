@@ -1,16 +1,16 @@
 'use strict';
 
-const config = require(__dirname+'/lib/misc/config.js')
+const config = require(__dirname + '/lib/misc/config.js')
 	, { Binary } = require('mongodb')
-	, Permission = require(__dirname+'/lib/permission/permission.js')
-	, { Permissions } = require(__dirname+'/lib/permission/permissions.js')
-	, { hcaptcha, google, yandex } = require(__dirname+'/configs/secrets.js')
+	, Permission = require(__dirname + '/lib/permission/permission.js')
+	, { Permissions } = require(__dirname + '/lib/permission/permissions.js')
+	, { hcaptcha, google, yandex } = require(__dirname + '/configs/secrets.js')
 	, gulp = require('gulp')
-//	, pugRuntime = require('pug-runtime/build')
+	//	, pugRuntime = require('pug-runtime/build')
 	, fs = require('fs-extra')
 	, semver = require('semver')
-	, uploadDirectory = require(__dirname+'/lib/file/uploaddirectory.js')
-	, commit = require(__dirname+'/lib/misc/commit.js')
+	, uploadDirectory = require(__dirname + '/lib/file/uploaddirectory.js')
+	, commit = require(__dirname + '/lib/misc/commit.js')
 	, replace = require('gulp-replace')
 	, less = require('gulp-less')
 	, concat = require('gulp-concat')
@@ -20,10 +20,10 @@ const config = require(__dirname+'/lib/misc/config.js')
 	, del = require('del')
 	, pug = require('pug')
 	, gulppug = require('gulp-pug')
-	, { migrateVersion, version } = require(__dirname+'/package.json')
+	, { migrateVersion, version } = require(__dirname + '/package.json')
 	, { randomBytes } = require('crypto')
-	, Redis = require(__dirname+'/lib/redis/redis.js')
-	, Mongo = require(__dirname+'/db/db.js')
+	, Redis = require(__dirname + '/lib/redis/redis.js')
+	, Mongo = require(__dirname + '/db/db.js')
 	, paths = {
 		styles: {
 			src: 'gulp/res/css/',
@@ -54,7 +54,7 @@ var FAVICON_DATA_FILE = 'gulp/res/icons/faviconData.json';
 // You should run it at least once to create the icons. Then,
 // you should run it whenever RealFaviconGenerator updates its
 // package (see the check-for-favicon-update task below).
-gulp.task('generate-favicon', function(done) {
+gulp.task('generate-favicon', function (done) {
 	realFavicon.generateFavicon({
 		masterPicture: 'gulp/res/icons/master.png',
 		dest: 'gulp/res/icons',
@@ -120,7 +120,7 @@ gulp.task('generate-favicon', function(done) {
 			paramValue: commit
 		},
 		markupFile: FAVICON_DATA_FILE
-	}, function() {
+	}, function () {
 		fs.writeFileSync('gulp/res/icons/html_code.html', JSON.parse(fs.readFileSync(FAVICON_DATA_FILE)).favicon.html_code, 'utf8');
 		done();
 	});
@@ -130,9 +130,9 @@ gulp.task('generate-favicon', function(done) {
 // released a new Touch icon along with the latest version of iOS).
 // Run this task from time to time. Ideally, make it part of your
 // continuous integration system.
-gulp.task('check-for-favicon-update', function(done) {
+gulp.task('check-for-favicon-update', function (done) {
 	var currentVersion = JSON.parse(fs.readFileSync(FAVICON_DATA_FILE)).version;
-	realFavicon.checkForUpdates(currentVersion, function(err) {
+	realFavicon.checkForUpdates(currentVersion, function (err) {
 		if (err) {
 			throw err;
 		}
@@ -141,7 +141,7 @@ gulp.task('check-for-favicon-update', function(done) {
 });
 
 async function password() {
-	const { Accounts } = require(__dirname+'/db/');
+	const { Accounts } = require(__dirname + '/db/');
 	const randomPassword = randomBytes(20).toString('base64');
 	await Accounts.changePassword('floof', randomPassword);
 	const ROOT = new Permission();
@@ -151,26 +151,26 @@ async function password() {
 }
 
 async function ips() {
-	const { func: ipSchedule } = require(__dirname+'/schedules/tasks/ips.js');
+	const { func: ipSchedule } = require(__dirname + '/schedules/tasks/ips.js');
 	await ipSchedule();
 }
 
 async function wipe() {
 	const db = Mongo.db;
 
-	const defaultConfig = require(__dirname+'/configs/template.js.example');
+	const defaultConfig = require(__dirname + '/configs/template.js.example');
 	await Mongo.setConfig(defaultConfig);
 
 	const collectionNames = ['accounts', 'bans', 'custompages', 'boards', 'captcha', 'files',
 		'modlog', 'filters', 'news', 'posts', 'poststats', 'ratelimit', 'bypass', 'roles'];
 	for (const name of collectionNames) {
 		//drop collection so gulp reset can be run again. ignores error of dropping non existing collection first time
-		await db.dropCollection(name).catch(() => {});
+		await db.dropCollection(name).catch(() => { });
 		await db.createCollection(name);
 	}
 
 	const { Boards, Posts, Captchas, Ratelimits, News, CustomPages,
-		Accounts, Files, Stats, Modlogs, Filters, Bans, Bypass, Roles } = require(__dirname+'/db/');
+		Accounts, Files, Stats, Modlogs, Filters, Bans, Bypass, Roles } = require(__dirname + '/db/');
 
 	//wipe db shit
 	await Promise.all([
@@ -191,11 +191,11 @@ async function wipe() {
 	]);
 
 	//add indexes - should profiled and changed at some point if necessary
-	await Stats.db.createIndex({board:1, hour:1});
-	await Boards.db.createIndex({ips: 1, pph:1, sequence_value:1});
-	await Boards.db.createIndex({tags: 1});
-	await Boards.db.createIndex({uri: 1});
-	await Boards.db.createIndex({lastPostTimestamp:1});
+	await Stats.db.createIndex({ board: 1, hour: 1 });
+	await Boards.db.createIndex({ ips: 1, pph: 1, sequence_value: 1 });
+	await Boards.db.createIndex({ tags: 1 });
+	await Boards.db.createIndex({ uri: 1 });
+	await Boards.db.createIndex({ lastPostTimestamp: 1 });
 	await Roles.db.dropIndexes();
 	await Bans.db.dropIndexes();
 	await Captchas.db.dropIndexes();
@@ -208,15 +208,15 @@ async function wipe() {
 	await Modlogs.db.createIndex({ 'board': 1 });
 	await Files.db.createIndex({ 'count': 1 });
 	await Filters.db.createIndex({ 'board': 1 });
-	await Bans.db.createIndex({ 'ip.cloak': 1 , 'board': 1 });
+	await Bans.db.createIndex({ 'ip.cloak': 1, 'board': 1 });
 	await Bans.db.createIndex({ 'expireAt': 1 }, { expireAfterSeconds: 0 }); //custom expiry, i.e. it will expire when current date > than this date
 	await Bypass.db.createIndex({ 'expireAt': 1 }, { expireAfterSeconds: 0 });
 	await Captchas.db.createIndex({ 'expireAt': 1 }, { expireAfterSeconds: 300 }); //captchas valid for 5 minutes
 	await Ratelimits.db.createIndex({ 'expireAt': 1 }, { expireAfterSeconds: 60 }); //per minute captcha ratelimit
-	await Posts.db.createIndex({ 'postId': 1,'board': 1,});
-	await Posts.db.createIndex({ 'board': 1,	'thread': 1, 'bumped': -1 });
+	await Posts.db.createIndex({ 'postId': 1, 'board': 1, });
+	await Posts.db.createIndex({ 'board': 1, 'thread': 1, 'bumped': -1 });
 	await Posts.db.createIndex({ 'board': 1, 'reports.0': 1 }, { 'partialFilterExpression': { 'reports.0': { '$exists': true } } });
-	await Posts.db.createIndex({ 'globalreports.0': 1 }, { 'partialFilterExpression': {	'globalreports.0': { '$exists': true } } });
+	await Posts.db.createIndex({ 'globalreports.0': 1 }, { 'partialFilterExpression': { 'globalreports.0': { '$exists': true } } });
 
 	console.log('Creating new roles');
 	const ANON = new Permission();
@@ -237,10 +237,10 @@ async function wipe() {
 		Permissions.VIEW_MANAGE,
 
 		Permissions.BYPASS_BANS,
-		
-		Permissions.MANAGE_FILE_APPROVAL,		
+
+		Permissions.MANAGE_FILE_APPROVAL,
 	]);
-	
+
 	const MOD = new Permission(APPROVER.base64);
 	MOD.setAll([
 		Permissions.MANAGE_GENERAL,
@@ -282,16 +282,16 @@ async function wipe() {
 	});
 
 	await Promise.all([
-		del([ 'static/file/*' ]),
-		del([ 'static/captcha/*' ]),
-		del([ 'static/html/*' ]),
-		del([ 'static/json/*' ]),
-		del([ 'static/banner/*' ]),
-		del([ 'static/flag/*' ]),
-		del([ 'static/notfoundimage/*' ]),
-		del([ 'static/asset/*' ]),
-		del([ 'static/css/*' ]),
-		del([ 'static/js/*' ]),
+		del(['static/file/*']),
+		del(['static/captcha/*']),
+		del(['static/html/*']),
+		del(['static/json/*']),
+		del(['static/banner/*']),
+		del(['static/flag/*']),
+		del(['static/notfoundimage/*']),
+		del(['static/asset/*']),
+		del(['static/css/*']),
+		del(['static/js/*']),
 	]);
 
 	return Promise.all([
@@ -327,8 +327,8 @@ async function css() {
 			case 'grid':
 			case 'grid2':
 				bypassHeight = 330;
-				captchaHeight = config.get.captchaOptions.grid.imageSize+30;
-				captchaWidth = config.get.captchaOptions.grid.imageSize+30;
+				captchaHeight = config.get.captchaOptions.grid.imageSize + 30;
+				captchaWidth = config.get.captchaOptions.grid.imageSize + 30;
 				break;
 			case 'text':
 				bypassHeight = 235;
@@ -337,17 +337,17 @@ async function css() {
 				break;
 		}
 		const cssLocals = `:root {
-    --attachment-img: url('/file/attachment.png');
-    --spoiler-img: url('/file/spoiler.png');
-    --audio-img: url('/file/audio.png');
-    --captcha-grid-size: ${'1fr '.repeat(config.get.captchaOptions.grid.size)};
-    --thumbnail-size: ${config.get.thumbSize}px;
-    --captcha-w: ${captchaWidth}px;
-    --captcha-h: ${captchaHeight}px;
-    --bypass-height: ${bypassHeight}px;
+	--attachment-img: url('/file/attachment.png');
+	--spoiler-img: url('/file/spoiler.png');
+	--audio-img: url('/file/audio.png');
+	--captcha-grid-size: ${'1fr '.repeat(config.get.captchaOptions.grid.size)};
+	--thumbnail-size: ${config.get.thumbSize}px;
+	--captcha-w: ${captchaWidth}px;
+	--captcha-h: ${captchaHeight}px;
+	--bypass-height: ${bypassHeight}px;
 }`;
 		fs.writeFileSync('gulp/res/css/locals.css', cssLocals);
-		fs.symlinkSync(__dirname+'/node_modules/highlight.js/styles', __dirname+'/gulp/res/css/codethemes', 'dir');
+		fs.symlinkSync(__dirname + '/node_modules/highlight.js/styles', __dirname + '/gulp/res/css/codethemes', 'dir');
 	} catch (e) {
 		if (e.code !== 'EEXIST') {
 			//already exists, ignore error
@@ -432,12 +432,12 @@ async function cache() {
 }
 
 function deletehtml() {
-	return del([ 'static/html/*' ]);
+	return del(['static/html/*']);
 }
 
 async function custompages() {
-	const formatSize = require(__dirname+'/lib/converter/formatsize.js')
-		, i18n = require(__dirname+'/lib/locale/locale.js')
+	const formatSize = require(__dirname + '/lib/converter/formatsize.js')
+		, i18n = require(__dirname + '/lib/locale/locale.js')
 		, locals = {
 			Permissions,
 			early404Fraction: config.get.early404Fraction,
@@ -477,10 +477,10 @@ async function custompages() {
 }
 
 async function langs() {
-	const i18n = require(__dirname+'/lib/locale/locale.js');
-	await del([ 'static/js/lang/' ]);
+	const i18n = require(__dirname + '/lib/locale/locale.js');
+	await del(['static/js/lang/']);
 	fs.mkdirSync(`${paths.scripts.dest}lang/`, { recursive: true });
-	const feStrings = require(__dirname+'/tools/festrings.json');
+	const feStrings = require(__dirname + '/tools/festrings.json');
 	Object.entries(i18n.getCatalog())
 		.forEach(entry => {
 			const [lang, dict] = entry;
@@ -495,7 +495,7 @@ const TRANSLATIONS = ${JSON.stringify(minimalDict)};`;
 }
 
 async function scripts() {
-	const { themes, codeThemes } = require(__dirname+'/lib/misc/themes.js');
+	const { themes, codeThemes } = require(__dirname + '/lib/misc/themes.js');
 	try {
 
 		// compile some locals/variables needed from configs in fe scripts
@@ -517,9 +517,9 @@ const extraLocals = ${JSON.stringify({ meta: config.get.meta, reverseImageLinksU
 `;
 		fs.writeFileSync('gulp/res/js/locals.js', locals);
 
-//		const pugRuntimeFuncs = pugRuntime(['classes', 'style', 'attr', 'escape']);
-//		fs.writeFileSync('gulp/res/js/pugruntime.js', pugRuntimeFuncs);
-		
+		//		const pugRuntimeFuncs = pugRuntime(['classes', 'style', 'attr', 'escape']);
+		//		fs.writeFileSync('gulp/res/js/pugruntime.js', pugRuntimeFuncs);
+
 		//compile some pug client side functions
 		['modal', 'post', 'uploaditem', 'pugfilters', 'captchaformsection', 'watchedthread', 'threadwatcher', 'banmessage']
 			.forEach(templateName => {
@@ -534,12 +534,15 @@ const extraLocals = ${JSON.stringify({ meta: config.get.meta, reverseImageLinksU
 			});
 
 		//symlink web3
-		await fs.symlink(__dirname+'/node_modules/web3/dist/web3.min.js', __dirname+'/gulp/res/js/web3.js', 'file')
-			.catch(e => { console.warn(e); });
+		await fs.symlink(
+			__dirname + '/node_modules/web3/dist/web3.min.js',
+			__dirname + '/gulp/res/js/web3.js', 'file'
+		).catch(e => { console.warn(e); });
 		//symlink socket.io file
-		await fs.symlink(__dirname+'/node_modules/socket.io/client-dist/socket.io.min.js', __dirname+'/gulp/res/js/socket.io.js', 'file')
-			.catch(e => { console.warn(e); });
-
+		await fs.symlink(
+			__dirname + '/node_modules/socket.io/client-dist/socket.io.min.js',
+			__dirname + '/gulp/res/js/socket.io.js', 'file'
+		).catch(e => { console.warn(e); });
 	} catch (e) {
 		console.log(e);
 	}
@@ -549,7 +552,7 @@ const extraLocals = ${JSON.stringify({ meta: config.get.meta, reverseImageLinksU
 		`${paths.scripts.src}/locals.js`,
 		`${paths.scripts.src}/i18n.js`,
 		`${paths.scripts.src}/localstorage.js`,
-//		`${paths.scripts.src}/pugruntime.js`,
+		//		`${paths.scripts.src}/pugruntime.js`,
 		`${paths.scripts.src}/modal.js`,
 		`${paths.scripts.src}/pugfilters.js`,
 		`${paths.scripts.src}/banmessage.js`,
@@ -573,7 +576,13 @@ const extraLocals = ${JSON.stringify({ meta: config.get.meta, reverseImageLinksU
 		`!${paths.scripts.src}/renderweb3.js`,
 	])
 		.pipe(concat('all.js'))
-		.pipe(uglify({compress:true}))
+		.pipe(uglify({ compress: true }))
+		.pipe(gulp.dest(paths.scripts.dest));
+
+	gulp.src([
+		__dirname + '/node_modules/@thumbmarkjs/thumbmarkjs/dist/thumbmark.umd.js'
+	])
+		.pipe(concat('secret.js'))
 		.pipe(gulp.dest(paths.scripts.dest));
 
 	gulp.src([
@@ -596,7 +605,7 @@ const extraLocals = ${JSON.stringify({ meta: config.get.meta, reverseImageLinksU
 		`${paths.scripts.src}/renderweb3.js`,
 	])
 		.pipe(concat('render.js'))
-		.pipe(uglify({compress:true}))
+		.pipe(uglify({ compress: true }))
 		.pipe(gulp.dest(paths.scripts.dest));
 
 }
@@ -611,7 +620,7 @@ async function migrate() {
 
 	if (semver.lt(currentVersion, migrateVersion)) {
 		console.log(`Current version: ${currentVersion}`);
-		const migrations = require(__dirname+'/migrations/');
+		const migrations = require(__dirname + '/migrations/');
 		const migrationVersions = Object.keys(migrations)
 			.sort(semver.compare)
 			.filter(v => semver.gt(v, currentVersion));
@@ -641,7 +650,7 @@ async function migrate() {
 }
 
 async function init() {
-	const defaultConfig = require(__dirname+'/configs/template.js.example');
+	const defaultConfig = require(__dirname + '/configs/template.js.example');
 	await Mongo.connect();
 	const globalSettings = await Mongo.getConfig();
 	if (!globalSettings) {
