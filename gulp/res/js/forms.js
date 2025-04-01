@@ -292,7 +292,6 @@ class postFormHandler {
 					postData.append('file', this.files[i]);
 				}
 			}
-			console.log(postData);
 		} else {
 			let formData;
 
