@@ -128,11 +128,11 @@ class modMacroHandler {
 				this.set('preserve_post', true);
 				break;
 			case 'banevasion':
-				this.set('delete_ip_global', true);
 				this.set('global_ban', true);
 				this.set('ban_h', true);
 				this.set('ban_reason', 'ban evasion');
 				this.set('ban_duration', '1h');
+				this.set('preserve_post', true);
 				break;
 		}
 	}
