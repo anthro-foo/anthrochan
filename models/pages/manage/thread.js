@@ -1,6 +1,7 @@
 'use strict';
 
-const Posts = require(__dirname+'/../../../db/posts.js');
+const { Posts, Assets } = require(__dirname + '/../../../db/')
+	, path = require('path');
 
 module.exports = async (req, res, next) => {
 
@@ -18,6 +19,12 @@ module.exports = async (req, res, next) => {
 	} catch (err) {
 		return next(err);
 	}
+
+	res.locals.board.flags = (await Assets.getFlags()).
+		map(filename => {
+			const name = path.parse(filename).name;
+			return { name, filename };
+		});
 
 	res
 		.set('Cache-Control', 'private, max-age=1')
