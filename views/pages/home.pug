@@ -6,7 +6,7 @@ block head
 
 block content
 	.flexcenter
-		img.homepage-image(src="/file/nigerilogo.png" alt="A brown fox in a box, with the letter anthro.foo.")
+		img.homepage-image(src="/file/averilogo.png" alt="A brown fox in a box, with the letter anthro.foo.")
 	h1.board-title #{meta.siteName}
 	.table-container.flex-center.mv-10.text-center
 		table
@@ -16,13 +16,11 @@ block content
 				td
 					pre.no-m-p
 						| A hangout for anthro enthusiasts with a focus on SFW. 
-						a(href='/faq.html') So what is anthro.foo?
+						br
+						a(href='/faq.html') README
 						br
 						| Sister sites: 
 						a(href='https://anthrobooru.party') Anthrobooru
-						br
-						| Useful links: 
-						a(href='/banned.html') Am I Banned?
 	if recentNews && recentNews.length > 0
 		.table-container.flex-center.mv-10
 			table.newstable
