@@ -30,6 +30,7 @@ module.exports = {
 		const disableBoardAnonymizerFilePosting = res.locals.board.settings.disableAnonymizerFilePosting && !res.locals.permissions.get(Permissions.MANAGE_GENERAL);
 
 		const errors = await checkSchema([
+			{ result: existsBody(req.body.uuid) && existsBody(req.body.incognito), blocking: true, expected: true, error: __('Please try again') },
 			{ result: (lengthBody(req.body.message, 1) && res.locals.numFiles === 0), expected: false, error: __('Posts must include a message or file') },
 			{
 				result: (res.locals.anonymizer && (disableAnonymizerFilePosting || disableBoardAnonymizerFilePosting)

@@ -7,7 +7,7 @@ const { createHash, randomBytes } = require('crypto')
 	, uploadDirectory = require(__dirname + '/../../lib/file/uploaddirectory.js')
 	, Mongo = require(__dirname + '/../../db/db.js')
 	, Socketio = require(__dirname + '/../../lib/misc/socketio.js')
-	, { Stats, Posts, Boards, Files, Filters } = require(__dirname + '/../../db/')
+	, { TempDataCollection, Stats, Posts, Boards, Files, Filters } = require(__dirname + '/../../db/')
 	, cache = require(__dirname + '/../../lib/redis/redis.js')
 	, nameHandler = require(__dirname + '/../../lib/post/name.js')
 	, getFilterStrings = require(__dirname + '/../../lib/post/getfilterstrings.js')
@@ -49,7 +49,7 @@ module.exports = async (req, res) => {
 	//
 	const flood = await spamCheck(req, res);
 	if (flood) {
-		deleteTempFiles(req).catch(console.error);
+		await deleteTempFiles(req).catch(console.error);
 		return dynamicResponse(req, res, 429, 'message', {
 			'title': __('Flood detected'),
 			'message': __('Please wait before making another post, or a post similar to another user'),
@@ -550,9 +550,6 @@ module.exports = async (req, res) => {
 		'backlinks': [], //posts replying to this post
 		account: res.locals.user ? res.locals.user.username : null,
 		nohide: nohide,
-		browserUuid: req.body.uuid ? req.body.uuid : null,
-		browserName: req.body.browserName ? req.body.browserName : null,
-		browserIncognito: req.body.incognito ? req.body.incognito : null,
 	};
 
 	if (!req.body.thread) {
@@ -576,6 +573,13 @@ module.exports = async (req, res) => {
 	}
 
 	const { postId, postMongoId } = await Posts.insertOne(res.locals.board, data, thread, res.locals.anonymizer);
+
+	const userData = {
+		browserUuid: req.body.uuid ? req.body.uuid : null,
+		browserName: req.body.browserName ? req.body.browserName : null,
+		browserIncognito: req.body.incognito ? req.body.incognito : null,
+	};
+	await TempDataCollection.insertOne(data.board, data.thread, postId, userData);
 
 	let enableCaptcha = false; //make this returned from some function, refactor and move the next section to another file
 	const tphTriggerActive = (tphTriggerAction > 0 && tphTrigger > 0);
