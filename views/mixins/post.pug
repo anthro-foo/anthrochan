@@ -117,10 +117,13 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 							if file.approved || manage || modview || globalmanage
 								span.post-file-info
 									span
-										a.filename(href='/file/'+file.filename title='Download '+file.originalFilename download=file.originalFilename) #{post.spoiler || file.spoiler ? __('Spoiler File') : file.originalFilename}
+										a.filename(href=`/file/${file.filename}` title=`Download ${file.originalFilename}` download=file.originalFilename) #{post.spoiler || file.spoiler ? __('Spoiler File') : file.originalFilename}
 										|
 										|
-										a.filename(href='/file/'+file.filename title='Download '+file.originalFilename download=post.u+fileindex+' '+file.originalFilename) #{post.spoiler || file.spoiler ? __('Spoiler File') : 'Archive'}
+										a.filename(href=`/file/${file.filename}` title='Download Unix timestamp' download=`${post.u}${fileindex > 0 ? String.fromCharCode(97 + fileindex - 1) : ''}${file.extension}`) #{'U'}
+										|
+										|
+										a.filename(href=`/file/${file.filename}` title='Download Archive format' download=`${post.u} ${file.originalFilename}`) #{'A'}
 									br
 									if globalmanage && file.phash != null
 										span #{file.phash}
