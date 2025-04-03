@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* globals setDefaultLocalStorage settings */
+const isHome = /index.html/.test(window.location.pathname);
 const isCatalog = /^\/(\w+\/(manage\/)?)?catalog.html/.test(window.location.pathname);
 const isThread = /\/\w+\/thread\/\d+(\+50)?.html/.test(window.location.pathname);
 const isModView = /\/\w+\/manage\/(thread\/)?(index|\d+)(\+50)?.html/.test(window.location.pathname);
@@ -23,7 +24,7 @@ function appendLocalStorageArray(key, value) {
 	setLocalStorage(key, JSON.stringify(storedArray));
 }
 
-function deleteStartsWith(startString='hovercache') {
+function deleteStartsWith(startString = 'hovercache') {
 	//clears cache when localstorage gets full
 	const hoverCaches = Object.keys(localStorage).filter(k => k.startsWith(startString));
 	for (let i = 0; i < hoverCaches.length; i++) {
