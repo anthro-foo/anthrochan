@@ -5,6 +5,7 @@ block head
 	title #{__('Pages')}
 
 block content
+	h1.board-title #{__('Pages')}
 	include ../includes/stickynav.pug
 	if custompages && custompages.length > 0
 		.table-container.flex-center.mv-11
@@ -15,4 +16,3 @@ block content
 							+custompage(page)
 	else
 		p #{__('Site has no pages yet.')}
-	include ../includes/stickynav.pug

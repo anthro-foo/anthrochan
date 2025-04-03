@@ -6,6 +6,7 @@ block head
 	title #{__('Banners')}
 
 block content
+	h1.board-title #{__('Banners')}
 	include ../includes/stickynav.pug
 	if banners && banners.length > 0
 		.catalog
@@ -13,4 +14,3 @@ block content
 				img.board-banner(src=`/banner/${banner}` loading='lazy')
 	else
 		p #{__('Site has no banners.')}
-	include ../includes/stickynav.pug
