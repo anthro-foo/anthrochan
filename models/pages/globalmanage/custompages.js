@@ -1,12 +1,12 @@
 'use strict';
 
-const CustomPages = require(__dirname+'/../../../db/custompages.js');
+const CustomPages = require(__dirname + '/../../../db/custompages.js');
 
 module.exports = async (req, res, next) => {
 
 	let customPages;
 	try {
-		customPages = await CustomPages.find(req.params.board);
+		customPages = await CustomPages.find();
 	} catch (err) {
 		return next(err);
 	}

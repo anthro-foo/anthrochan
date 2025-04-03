@@ -204,7 +204,7 @@ async function wipe() {
 	await Modlogs.db.dropIndexes();
 	await CustomPages.db.dropIndexes();
 	await Filters.db.dropIndexes();
-	await CustomPages.db.createIndex({ 'board': 1, 'page': 1 }, { unique: true });
+	await CustomPages.db.createIndex({ 'page': 1 }, { unique: true });
 	await Modlogs.db.createIndex({ 'board': 1 });
 	await Files.db.createIndex({ 'count': 1 });
 	await Filters.db.createIndex({ 'board': 1 });

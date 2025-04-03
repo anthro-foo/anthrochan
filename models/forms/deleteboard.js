@@ -27,7 +27,6 @@ module.exports = async (uri, board) => {
 		Bans.deleteBoard(uri), //bans for the board
 		Filters.deleteBoard(uri), //filters for the board
 		Stats.deleteBoard(uri), //stats for the board
-		CustomPages.deleteBoard(uri), //custom pages for the board
 		remove(`${uploadDirectory}/html/${uri}/`), //html
 		remove(`${uploadDirectory}/json/${uri}/`), //json
 		remove(`${uploadDirectory}/banner/${uri}/`), //banners
