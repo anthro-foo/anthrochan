@@ -21,13 +21,11 @@ main.minimal {
 }
 
 .homepage-image {
-	/* display: block; */
-	/* align-content: center; */
-	width: 10%;
+	width: 168px;
 	height: auto;
 
-	@media (max-width: 600px) {
-		width: 25%;
+	@media (max-width: 900px) {
+		width: 124px;
 	}
 }
 
@@ -129,44 +127,18 @@ pre {
 .nav-item {
 	position: relative;
 	display: inline-block;
-	padding: 0px 10px 0px 10px;
 	text-decoration: none;
 	height: 48px;
-	font-size: 24px;
+
+	@media (max-width: 900px) {
+		height: 24px;
+	}
 }
 
 .nav-item img {
 	height: 100%;
 	width: auto;
 	display: block;
-}
-
-.nav-item span {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	color: white;
-	font-size: 1em;
-	text-shadow: 1px 1px 2px black;
-	white-space: nowrap;
-	pointer-events: none;
-	transition: opacity 0.3s ease;
-}
-
-.nav-item:hover span {
-	opacity: 0;
-}
-
-@media (max-width: 850px) {
-	.nav-item {
-		height: 24px;
-		font-size: 12px;
-	}
-
-	.burger-link {
-		display: none;
-	}
 }
 
 .replies {

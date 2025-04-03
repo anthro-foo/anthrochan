@@ -1,33 +1,17 @@
 unless minimal
 	nav.navbar
 		a.nav-item(href='/index.html')
-			img(src='/file/index.png' alt='Home')
-			span Home
+			img(src='/file/home.png' alt='Home')
 		a.nav-item(href='/boards.html')
-			img(src='/file/home.png' alt='Boards')
-			span Boards
+			img(src='/file/boards.png' alt='Boards')
 		a.nav-item(href='/overboard.html')
-			img(src='/file/home.png' alt='Overboard')
-			span Overboard
-		a.nav-item(href='/rules.html')
-			img(src='/file/home.png' alt='Rules')
-			span Rules
-		a.nav-item(href='/bans.html')
-			img(src='/file/home.png' alt='Bans')
-			span Bans
-		a.nav-item(href='/banners.html')
-			img(src='/file/home.png' alt='Banners')
-			span Banners
+			img(src='/file/overboard.png' alt='Overboard')
 		a.nav-item(href='/pages.html')
-			img(src='/file/home.png' alt='Pages')
-			span Pages
+			img(src='/file/pages.png' alt='Pages')
 		a.nav-item(href='/account.html')
-			img(src='/file/home.png' alt='Account')
-			span Account
+			img(src='/file/account.png' alt='Account')
 		if !modview && board
 			a.nav-item(href=`/${board._id}/manage/${managePage || 'index.html'}`)
-				img(src='/file/home.png' alt='Manage')
-				span Manage
+				img(src='/file/manage.png' alt='Manage')
 		.nav-item.right#settings
-			img(src='/file/home.png' alt='Settings')
-			span Settings
+			img(src='/file/settings.png' alt='Settings')

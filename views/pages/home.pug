@@ -1,8 +1,10 @@
 extends ../layout.pug
 include ../mixins/boardtable.pug
+include ../mixins/catalogfile.pug
 
 block head
 	title #{meta.siteName}
+	<link rel="canonical" href="https://anthro.foo/index.html"/>
 
 block content
 	br
@@ -41,12 +43,18 @@ block content
 			table#hotposts
 				tr(colspan=3) 
 				each post, i in hotThreads
+					- const threadLink = `/${post.board}/thread/${post.postId}.html`
 					tr
 						td.text-center
 							span.help(title=__('Hot Thread (%s)', post.score.toFixed(1))) 🔥
 							|  #{post.replyposts}
+						td
+							if post.files && post.files.length > 0
+								- const file = post.files[0]
+								+catalogfile(threadLink, post, file, false)
+							else 
+								p No thread file
 						td 
-							- const threadLink = `/${post.board}/thread/${post.postId}.html#${post.postId}`;
 							a.quote(href=threadLink)
 								if post.subject
 									| #{post.subject.substring(0,30)}#{post.subject.length > 30 ? '...' : ''}
@@ -56,9 +64,6 @@ block content
 									| #{post.nomarkup.substring(0,40)}#{post.nomarkup.length > 40 ? '...' : ''}
 								if !post.nomarkup && !post.subject
 									| >>>/#{post.board}/#{post.postId}
-						td
-							- const postedDate = new Date(post.date);
-							time.right.reltime(datetime=postedDate.toISOString()) #{postedDate.toLocaleString(pageLanguage, {hourCycle:'h23'})}
 	if boards && boards.length > 0
 		+boardtable(true, false)
 			each board in boards
