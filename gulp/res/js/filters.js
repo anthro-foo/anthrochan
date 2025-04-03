@@ -30,7 +30,7 @@ let { single, fid, fname, ftrip, fsub, fmsg, fflag, fnamer, ftripr, fsubr, fmsgr
 let filtersTable;
 const updateFiltersTable = () => {
 	[...filtersTable.children].slice(3).forEach(row => row.remove());
-	filtersTable.insertAdjacentHTML('beforeend', pugfilters({filterArr: JSON.parse(localStorage.getItem('filters1'))}));
+	filtersTable.insertAdjacentHTML('beforeend', pugfilters({ filterArr: JSON.parse(localStorage.getItem('filters1')) }));
 	const closeButtons = filtersTable.querySelectorAll('.close');
 	for (let elem of closeButtons) {
 		let { type: closeType, data: closeData } = elem.dataset;
@@ -43,18 +43,18 @@ const updateFiltersTable = () => {
 
 const updateSavedFilters = () => {
 	setLocalStorage('filters1', JSON.stringify([
-		...([...single].map(x => ({type:'single', val:x}))),
-		...([...fid].map(x => ({type:'fid', val:x}))),
-		...([...ftrip].map(x => ({type:'ftrip', val:x}))),
-		...([...fname].map(x => ({type:'fname', val:x}))),
-		...([...fsub].map(x => ({type:'fsub', val:x}))),
-		...([...fmsg].map(x => ({type:'fmsg', val:x}))),
-		...([...fflag].map(x => ({type:'fflag', val:x}))),
-		...fnamer.map(x => ({type:'fnamer', val:x.source.toString()})),
-		...ftripr.map(x => ({type:'ftripr', val:x.source.toString()})),
-		...fsubr.map(x => ({type:'fsubr', val:x.source.toString()})),
-		...fmsgr.map(x => ({type:'fmsgr', val:x.source.toString()})),
-		...fflagr.map(x => ({type:'fflagr', val:x.source.toString()})),
+		...([...single].map(x => ({ type: 'single', val: x }))),
+		...([...fid].map(x => ({ type: 'fid', val: x }))),
+		...([...ftrip].map(x => ({ type: 'ftrip', val: x }))),
+		...([...fname].map(x => ({ type: 'fname', val: x }))),
+		...([...fsub].map(x => ({ type: 'fsub', val: x }))),
+		...([...fmsg].map(x => ({ type: 'fmsg', val: x }))),
+		...([...fflag].map(x => ({ type: 'fflag', val: x }))),
+		...fnamer.map(x => ({ type: 'fnamer', val: x.source.toString() })),
+		...ftripr.map(x => ({ type: 'ftripr', val: x.source.toString() })),
+		...fsubr.map(x => ({ type: 'fsubr', val: x.source.toString() })),
+		...fmsgr.map(x => ({ type: 'fmsgr', val: x.source.toString() })),
+		...fflagr.map(x => ({ type: 'fflagr', val: x.source.toString() })),
 	]));
 	updateFiltersTable();
 };
@@ -102,11 +102,11 @@ const getPostsByRegex = (attribute, regex) => {
 	return matches;
 };
 
-const getPostsByMessage = (data, regex=false) => {
+const getPostsByMessage = (data, regex = false) => {
 	//you asked for this
-	const postMessages = [...document.querySelectorAll(`.${isCatalog ? 'catalog-tile': 'post-container' } .post-message`)];
+	const postMessages = [...document.querySelectorAll(`.${isCatalog ? 'catalog-tile' : 'post-container'} .post-message`)];
 	const matchingMessages = postMessages.filter(m => (regex ? data.test(m.textContent) : m.textContent.includes(data)));
-	return matchingMessages.map(m => m.closest(`.${isCatalog ? 'catalog-tile': 'post-container' }`));
+	return matchingMessages.map(m => m.closest(`.${isCatalog ? 'catalog-tile' : 'post-container'}`));
 };
 
 const getPostsByFilter = (type, data) => {
@@ -262,8 +262,8 @@ const moderatePost = (postContainer) => {
 	}
 };
 
-const postMenuChange = function() {
-	const postContainer = this.closest(isCatalog ? '.catalog-tile': '.post-container');
+const postMenuChange = function () {
+	const postContainer = this.closest(isCatalog ? '.catalog-tile' : '.post-container');
 	const postDataset = postContainer.dataset;
 	const filterType = this.value;
 	const hiding = !postContainer.classList.contains('hidden');
@@ -292,20 +292,18 @@ const postMenuChange = function() {
 			return moderatePost(postContainer);
 		case 'edit':
 			return window.location = `/${postDataset.board}/manage/editpost/${postDataset.postId}.html`;
-		case 'archive':
-			return window.location = `https://archive.today/submit/?url=https://${window.location.hostname}/${postDataset.board}/thread/${postDataset.postId}.html`;
 		case 'watch': {
 			const postMessage = postContainer.querySelector('.post-message');
 			const watcherSubject = (postDataset.subject || (postMessage && postMessage.textContent) || `#${postDataset.postId}`).substring(0, 25);
 			threadWatcher.add(postDataset.board, postDataset.postId, { subject: watcherSubject, unread: 0, updatedDate: new Date() });
 			return;
 		}
-		case 'playlist':{
+		case 'playlist': {
 			console.log('creating playlist...');
 			window.dispatchEvent(new CustomEvent('createPlaylist', {
-				detail:{
-					board:postDataset.board,
-					postId:postDataset.postId
+				detail: {
+					board: postDataset.board,
+					postId: postDataset.postId
 				}
 			}));
 			break;
@@ -362,7 +360,7 @@ const getHiddenElems = () => {
 
 togglePostsHidden(getHiddenElems(), true);
 
-window.addEventListener('addPost', function(e) {
+window.addEventListener('addPost', function (e) {
 	const newPost = e.detail.post;
 	if (anyFilterMatches(newPost)) {
 		newPost.classList.add('hidden');
@@ -373,14 +371,14 @@ window.addEventListener('addPost', function(e) {
 	menu.addEventListener('change', postMenuChange, false);
 });
 
-window.addEventListener('updatePostMessage', function(e) {
+window.addEventListener('updatePostMessage', function (e) {
 	const newPost = e.detail.post;
 	if (anyFilterMatches(newPost)) {
 		newPost.classList.add('hidden');
 	}
 });
 
-window.addEventListener('settingsReady', function() {
+window.addEventListener('settingsReady', function () {
 
 	actionForm = document.getElementById('actionform');
 	if (actionForm) {
@@ -405,19 +403,19 @@ window.addEventListener('settingsReady', function() {
 	const filterClearButton = document.getElementById('filters-clear');
 	const clearFilters = () => {
 		single = new Set(),
-		fid = new Set(),
-		fname = new Set(),
-		ftrip = new Set(),
-		fsub = new Set(),
-		fmsg = new Set(),
-		fflag = new Set(),
-		fnamer = [],
-		ftripr = [],
-		fsubr = [],
-		fmsgr = [],
-		fflagr = [],
-		updateFiltersTable();
-		togglePostsHidden(document.querySelectorAll(`.${isCatalog ? 'catalog-tile': 'post-container' }`), false);
+			fid = new Set(),
+			fname = new Set(),
+			ftrip = new Set(),
+			fsub = new Set(),
+			fmsg = new Set(),
+			fflag = new Set(),
+			fnamer = [],
+			ftripr = [],
+			fsubr = [],
+			fmsgr = [],
+			fflagr = [],
+			updateFiltersTable();
+		togglePostsHidden(document.querySelectorAll(`.${isCatalog ? 'catalog-tile' : 'post-container'}`), false);
 		updateSavedFilters();
 		console.log('cleared hidden posts');
 	};
