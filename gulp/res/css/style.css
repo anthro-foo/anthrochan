@@ -24,7 +24,7 @@ main.minimal {
 	width: 168px;
 	height: auto;
 
-	@media (max-width: 900px) {
+	@media (max-width: 600px) {
 		width: 124px;
 	}
 }
@@ -130,7 +130,7 @@ pre {
 	text-decoration: none;
 	height: 48px;
 
-	@media (max-width: 900px) {
+	@media (max-width: 600px) {
 		height: 24px;
 	}
 }
