@@ -28,4 +28,6 @@ unless minimal
 			a.nav-item(href=`/${board._id}/manage/${managePage || 'index.html'}`)
 				img(src='/file/home.png' alt='Manage')
 				span Manage
-		a.jsonly.nav-item.right#settings(data-label=(__('Settings')))
+		.nav-item.right#settings
+			img(src='/file/home.png' alt='Settings')
+			span Settings
