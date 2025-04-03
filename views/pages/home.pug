@@ -37,7 +37,8 @@ block content
 						td
 							if post.files && post.files.length > 0
 								- const file = post.files[0]
-								+catalogfile(threadLink, post, file, false)
+								a(href=threadLink)
+									img.file-thumb(src=`/file/thumb/${file.hash}${file.thumbextension}` width=file.geometry.thumbwidth height=file.geometry.thumbheight loading='lazy')
 							else 
 								p No thread file
 						td 
