@@ -1,37 +1,37 @@
 'use strict';
 
-const express  = require('express')
+const express = require('express')
 	, router = express.Router({ caseSensitive: true })
-	, Boards = require(__dirname+'/../db/boards.js')
-//middlewares
-	, geoIp = require(__dirname+'/../lib/middleware/ip/geoip.js')
-	, processIp = require(__dirname+'/../lib/middleware/ip/processip.js')
-	, calcPerms = require(__dirname+'/../lib/middleware/permission/calcpermsmiddleware.js')
-	, { Permissions } = require(__dirname+'/../lib/permission/permissions.js')
-	, hasPerms = require(__dirname+'/../lib/middleware/permission/haspermsmiddleware.js')
-	, numFiles = require(__dirname+'/../lib/middleware/file/numfiles.js')
-	, imageHashes = require(__dirname+'/../lib/middleware/file/imagehash.js')
-	, banCheck = require(__dirname+'/../lib/middleware/permission/bancheck.js')
-	, isLoggedIn = require(__dirname+'/../lib/middleware/permission/isloggedin.js')
-	, verifyCaptcha = require(__dirname+'/../lib/middleware/captcha/verify.js')
-	, csrf = require(__dirname+'/../lib/middleware/misc/csrfmiddleware.js')
-	, useSession = require(__dirname+'/../lib/middleware/permission/usesession.js')
-	, sessionRefresh = require(__dirname+'/../lib/middleware/permission/sessionrefresh.js')
-	, dnsblCheck = require(__dirname+'/../lib/middleware/ip/dnsbl.js')
-	, blockBypass = require(__dirname+'/../lib/middleware/captcha/blockbypass.js')
-	, fileMiddlewares = require(__dirname+'/../lib/middleware/file/filemiddlewares.js')
-	, { setBoardLanguage, setQueryLanguage } = require(__dirname+'/../lib/middleware/locale/locale.js')
-//controllers
+	, Boards = require(__dirname + '/../db/boards.js')
+	//middlewares
+	, geoIp = require(__dirname + '/../lib/middleware/ip/geoip.js')
+	, processIp = require(__dirname + '/../lib/middleware/ip/processip.js')
+	, calcPerms = require(__dirname + '/../lib/middleware/permission/calcpermsmiddleware.js')
+	, { Permissions } = require(__dirname + '/../lib/permission/permissions.js')
+	, hasPerms = require(__dirname + '/../lib/middleware/permission/haspermsmiddleware.js')
+	, numFiles = require(__dirname + '/../lib/middleware/file/numfiles.js')
+	, imageHashes = require(__dirname + '/../lib/middleware/file/imagehash.js')
+	, banCheck = require(__dirname + '/../lib/middleware/permission/bancheck.js')
+	, isLoggedIn = require(__dirname + '/../lib/middleware/permission/isloggedin.js')
+	, verifyCaptcha = require(__dirname + '/../lib/middleware/captcha/verify.js')
+	, csrf = require(__dirname + '/../lib/middleware/misc/csrfmiddleware.js')
+	, useSession = require(__dirname + '/../lib/middleware/permission/usesession.js')
+	, sessionRefresh = require(__dirname + '/../lib/middleware/permission/sessionrefresh.js')
+	, dnsblCheck = require(__dirname + '/../lib/middleware/ip/dnsbl.js')
+	, blockBypass = require(__dirname + '/../lib/middleware/captcha/blockbypass.js')
+	, fileMiddlewares = require(__dirname + '/../lib/middleware/file/filemiddlewares.js')
+	, { setBoardLanguage, setQueryLanguage } = require(__dirname + '/../lib/middleware/locale/locale.js')
+	//controllers
 	, { deleteBoardController, editBansController, appealController, globalActionController, twofactorController,
 		actionController, addCustomPageController, deleteCustomPageController, addNewsController,
 		editNewsController, deleteNewsController, uploadBannersController, deleteBannersController, addFlagsController,
 		deleteFlagsController, boardSettingsController, addAssetsController, deleteAssetsController,
 		deleteAccountController, loginController, registerController, changePasswordController,
-		deleteAccountsController, editAccountController, addFilterController, editFilterController, deleteFilterController, 
+		deleteAccountsController, editAccountController, addFilterController, editFilterController, deleteFilterController,
 		globalSettingsController, createBoardController, makePostController,
-		editCustomPageController, editPostController, editRoleController, newCaptchaForm, 
+		editCustomPageController, editPostController, editRoleController, newCaptchaForm,
 		blockBypassForm, logoutForm, deleteSessionsController, globalClearController, addTrustedController,
-		deleteTrustedController, addNotFoundImagesController, deleteNotFoundImagesController } = require(__dirname+'/forms/index.js');
+		deleteTrustedController, addBoardAdsController, deleteBoardAdsController } = require(__dirname + '/forms/index.js');
 
 //make new post
 router.post('/board/:board/post', geoIp, processIp, useSession, sessionRefresh, Boards.exists, setBoardLanguage, calcPerms, banCheck, fileMiddlewares.posts,
@@ -76,10 +76,10 @@ router.post('/addflags', geoIp, useSession, sessionRefresh, fileMiddlewares.flag
 	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, addFlagsController.controller); //add flags
 router.post('/deleteflags', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), deleteFlagsController.paramConverter, deleteFlagsController.controller); //delete flags
-router.post('/addnotfoundimages', geoIp, useSession, sessionRefresh, fileMiddlewares.asset, csrf, calcPerms, isLoggedIn,
-	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, addNotFoundImagesController.controller); // add ban images
-router.post('/deletenotfoundimages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
-	hasPerms.one(Permissions.MANAGE_ASSETS), deleteNotFoundImagesController.paramConverter, deleteNotFoundImagesController.controller); // delete ban images
+router.post('/addboardads', geoIp, useSession, sessionRefresh, fileMiddlewares.asset, csrf, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_ASSETS), numFiles, addBoardAdsController.controller); // add ban images
+router.post('/deleteboardads', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_ASSETS), deleteBoardAdsController.paramConverter, deleteBoardAdsController.controller); // delete ban images
 router.post('/addcustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_ASSETS), addCustomPageController.paramConverter, addCustomPageController.controller); //add custom pages
 router.post('/deletecustompages', useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,

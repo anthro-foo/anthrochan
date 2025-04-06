@@ -16,14 +16,14 @@ block content
 		'asset-banner', false, false,
 		__('Images randomly chosen and displayed at the top of most pages on the board'))
 	hr(size=1)
+	+fileform('boardad', globalLimits.bannerFiles.max, globalLimits.bannerFiles.total,
+		'/forms/addboardads', '/forms/deleteboardads',
+		'checkedboardads', boardads, boardads, '/boardads',
+		'asset-boardad', true, true,
+		__('Images randomly chosen and displayed to advertise boards'))
+	hr(size=1)
 	+fileform('flag', globalLimits.flagFiles.max, globalLimits.flagFiles.total,
 		'/forms/addflags', '/forms/deleteflags',
 		'checkedflags', flags, flags, '/flag',
 		'asset-flag', true, false,
 		__('Flags that can be applied to posts if custom flags are enabled in board settings'))
-	hr(size=1)
-	+fileform('not found image', globalLimits.assetFiles.max, globalLimits.assetFiles.total,
-		`/forms/addnotfoundimages`, `/forms/deletenotfoundimages`,
-		'checkednotfoundimages', notfoundimages, notfoundimages, `/notfoundimage`,
-		'asset-generic', false, true,
-		__('Not Found images that are shown on 404 error.'))
