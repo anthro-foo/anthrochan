@@ -18,8 +18,8 @@ block content
 	hr(size=1)
 	+fileform('boardad', globalLimits.bannerFiles.max, globalLimits.bannerFiles.total,
 		'/forms/addboardads', '/forms/deleteboardads',
-		'checkedboardads', boardads, boardads, '/boardads',
-		'asset-boardad', true, true,
+		'checkedboardads', boardads, boardads, '/boardad',
+		'asset-boardad', true, false,
 		__('Images randomly chosen and displayed to advertise boards'))
 	hr(size=1)
 	+fileform('flag', globalLimits.flagFiles.max, globalLimits.flagFiles.total,

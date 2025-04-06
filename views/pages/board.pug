@@ -3,6 +3,7 @@ include ../mixins/post.pug
 include ../mixins/boardnav.pug
 include ../mixins/managenav.pug
 include ../mixins/boardheader.pug
+include ../mixins/boardad.pug
 include ../mixins/announcements.pug
 
 block head
@@ -12,6 +13,8 @@ block content
 	+boardheader(modview ? __('Mod Index') : null)
 	br
 	include ../includes/postform.pug
+	br
+	+boardad()
 	br
 	+announcements()
 	include ../includes/stickynav.pug

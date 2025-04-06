@@ -1,21 +1,21 @@
 
 'use strict';
 
-const Assets = require(__dirname+'/../../db/assets.js');
+const Assets = require(__dirname + '/../../db/assets.js');
 
 module.exports = async (req, res, next) => {
-	let notfoundimage;
+	let boardad;
 	try {
-		notfoundimage = await Assets.randomNotFoundImage();
+		boardad = await Assets.randomBoardAd();
 	} catch (err) {
 		return next(err);
 	}
 
-	if (!notfoundimage) {
+	if (!boardad) {
 		//non existing boards will show default banner, but it doesnt really matter.
 		return res.redirect('/file/defaultbanner.png');
 	}
 
-	return res.redirect(`/notfoundimage/${notfoundimage}`);
+	return res.redirect(`/boardad/${boardad}`);
 
 };

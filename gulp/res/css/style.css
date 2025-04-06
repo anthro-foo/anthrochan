@@ -359,6 +359,22 @@ object {
 	align-items: center;
 }
 
+.board-ad-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.board-ad {
+	width: 468px;
+	height: 60px;
+
+	@media (max-width: 600px) {
+		width: 234px;
+		height: 30px;
+	}
+}
+
 .catalog-tile {
 	padding: 5px;
 	margin: 5px;

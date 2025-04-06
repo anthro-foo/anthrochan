@@ -1,10 +1,10 @@
 'use strict';
 
-const addNotFoundImages = require(__dirname+'/../../models/forms/addnotfoundimages.js')
-	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
-	, deleteTempFiles = require(__dirname+'/../../lib/file/deletetempfiles.js')
-	, config = require(__dirname+'/../../lib/misc/config.js')
-	, { checkSchema, numberBody } = require(__dirname+'/../../lib/input/schema.js');
+const addBoardAds = require(__dirname + '/../../models/forms/addboardads.js')
+	, dynamicResponse = require(__dirname + '/../../lib/misc/dynamic.js')
+	, deleteTempFiles = require(__dirname + '/../../lib/file/deletetempfiles.js')
+	, config = require(__dirname + '/../../lib/misc/config.js')
+	, { checkSchema, numberBody } = require(__dirname + '/../../lib/input/schema.js');
 
 module.exports = {
 
@@ -15,7 +15,7 @@ module.exports = {
 		const { __ } = res.locals;
 
 		const { globalLimits, disableAnonymizerFilePosting } = config.get;
-		
+
 		const errors = await checkSchema([
 			{ result: res.locals.numFiles === 0, expected: false, blocking: true, error: __('Must provide a file') },
 			{ result: (res.locals.anonymizer && disableAnonymizerFilePosting && !res.locals.permissions.get(Permissions.BYPASS_ANONYMIZER_RESTRICTIONS)), expected: false, error: __('Posting files through anonymizers has been disabled globally') },
@@ -32,7 +32,7 @@ module.exports = {
 		}
 
 		try {
-			await addNotFoundImages(req, res, next);
+			await addBoardAds(req, res, next);
 		} catch (err) {
 			await deleteTempFiles(req).catch(console.error);
 			return next(err);

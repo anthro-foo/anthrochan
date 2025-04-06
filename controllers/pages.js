@@ -1,30 +1,30 @@
 'use strict';
 
-const express  = require('express')
+const express = require('express')
 	, router = express.Router({ caseSensitive: true })
-	, Boards = require(__dirname+'/../db/boards.js')
-	, Posts = require(__dirname+'/../db/posts.js')
+	, Boards = require(__dirname + '/../db/boards.js')
+	, Posts = require(__dirname + '/../db/posts.js')
 	//middlewares
-	, processIp = require(__dirname+'/../lib/middleware/ip/processip.js')
-	, geoIp = require(__dirname+'/../lib/middleware/ip/geoip.js')
-	, calcPerms = require(__dirname+'/../lib/middleware/permission/calcpermsmiddleware.js')
-	, { Permissions } = require(__dirname+'/../lib/permission/permissions.js')
-	, hasPerms = require(__dirname+'/../lib/middleware/permission/haspermsmiddleware.js')
-	, isLoggedIn = require(__dirname+'/../lib/middleware/permission/isloggedin.js')
-	, paramConverter = require(__dirname+'/../lib/middleware/input/paramconverter.js')
-	, useSession = require(__dirname+'/../lib/middleware/permission/usesession.js')
-	, sessionRefresh = require(__dirname+'/../lib/middleware/permission/sessionrefresh.js')
-	, csrf = require(__dirname+'/../lib/middleware/misc/csrfmiddleware.js')
-	, setMinimal = require(__dirname+'/../lib/middleware/misc/setminimal.js')
-	, { setBoardLanguage, setQueryLanguage } = require(__dirname+'/../lib/middleware/locale/locale.js')
+	, processIp = require(__dirname + '/../lib/middleware/ip/processip.js')
+	, geoIp = require(__dirname + '/../lib/middleware/ip/geoip.js')
+	, calcPerms = require(__dirname + '/../lib/middleware/permission/calcpermsmiddleware.js')
+	, { Permissions } = require(__dirname + '/../lib/permission/permissions.js')
+	, hasPerms = require(__dirname + '/../lib/middleware/permission/haspermsmiddleware.js')
+	, isLoggedIn = require(__dirname + '/../lib/middleware/permission/isloggedin.js')
+	, paramConverter = require(__dirname + '/../lib/middleware/input/paramconverter.js')
+	, useSession = require(__dirname + '/../lib/middleware/permission/usesession.js')
+	, sessionRefresh = require(__dirname + '/../lib/middleware/permission/sessionrefresh.js')
+	, csrf = require(__dirname + '/../lib/middleware/misc/csrfmiddleware.js')
+	, setMinimal = require(__dirname + '/../lib/middleware/misc/setminimal.js')
+	, { setBoardLanguage, setQueryLanguage } = require(__dirname + '/../lib/middleware/locale/locale.js')
 	//page models
 	, { manageRecent, manageReports, manageSettings, manageBans, manageFilters, editFilter, editCustomPage,
-		manageBoard, manageThread, manageLogs, manageCatalog, editPost } = require(__dirname+'/../models/pages/manage/')
+		manageBoard, manageThread, manageLogs, manageCatalog, editPost } = require(__dirname + '/../models/pages/manage/')
 	, { globalManageAssets, globalManageCustomPages, globalManageTrusted, globalManageApproval, globalManageSettings, globalManageReports, globalManageBans, globalManageBoards, globalManageFilters, globalEditFilter, editNews, editAccount, editRole,
-		globalManageRecent, globalManageAccounts, globalManageNews, globalManageLogs, globalManageRoles } = require(__dirname+'/../models/pages/globalmanage/')
+		globalManageRecent, globalManageAccounts, globalManageNews, globalManageLogs, globalManageRoles } = require(__dirname + '/../models/pages/globalmanage/')
 	, { bans, banned, changePassword, blockBypass, home, register, login, create, myPermissions, sessions, setupTwoFactor,
-		board, catalog, banners, pages, boardSettings, globalSettings, randombanner, randomnotfoundimage, news, captchaPage, overboard, overboardCatalog,
-		captcha, thread, modlog, modloglist, account, boardlist, customPage, csrfPage, noncePage } = require(__dirname+'/../models/pages/')
+		board, catalog, banners, pages, boardSettings, globalSettings, randombanner, randomboardad, news, captchaPage, overboard, overboardCatalog,
+		captcha, thread, modlog, modloglist, account, boardlist, customPage, csrfPage, noncePage } = require(__dirname + '/../models/pages/')
 	, threadParamConverter = paramConverter({ processThreadIdParam: true })
 	, logParamConverter = paramConverter({ processDateParam: true })
 	, filterParamConverter = paramConverter({ objectIdParams: ['filterid'] })
@@ -55,7 +55,7 @@ router.get('/catalog.(html|json)', overboardCatalog); //overboard catalog view
 router.get('/banners.(html|json)', banners); //banners
 router.get('/pages.(html|json)', pages); // list of custom pages
 router.get('/randombanner', randombanner); //random banner
-router.get('/randomnotfoundimage', randomnotfoundimage); // random not found image
+router.get('/randomboardad', randomboardad); // random board ad
 router.get('/custompage/:page.(html|json)', customPage); //board custom page
 
 //board pages

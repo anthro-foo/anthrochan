@@ -1,14 +1,14 @@
 'use strict';
 
 const { remove, pathExists } = require('fs-extra')
-	, config = require(__dirname+'/../../lib/misc/config.js')
-	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
-	, moveUpload = require(__dirname+'/../../lib/file/moveupload.js')
-	, mimeTypes = require(__dirname+'/../../lib/file/mimetypes.js')
-	, getDimensions = require(__dirname+'/../../lib/file/image/getdimensions.js')
-	, deleteTempFiles = require(__dirname+'/../../lib/file/deletetempfiles.js')
-	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
-	, { Assets } = require(__dirname+'/../../db/');
+	, config = require(__dirname + '/../../lib/misc/config.js')
+	, uploadDirectory = require(__dirname + '/../../lib/file/uploaddirectory.js')
+	, moveUpload = require(__dirname + '/../../lib/file/moveupload.js')
+	, mimeTypes = require(__dirname + '/../../lib/file/mimetypes.js')
+	, getDimensions = require(__dirname + '/../../lib/file/image/getdimensions.js')
+	, deleteTempFiles = require(__dirname + '/../../lib/file/deletetempfiles.js')
+	, dynamicResponse = require(__dirname + '/../../lib/misc/dynamic.js')
+	, { Assets } = require(__dirname + '/../../db/');
 
 module.exports = async (req, res) => {
 
@@ -45,13 +45,13 @@ module.exports = async (req, res) => {
 			}
 		}
 
-		//800x600 check
+		//468x60 check
 		const imageDimensions = await getDimensions(req.files.file[i].tempFilePath, null, true);
 		let geometry = imageDimensions;
 		if (Array.isArray(geometry)) {
 			geometry = geometry[0];
 		}
-		if (geometry.width != 800 || geometry.height != 600) {
+		if (geometry.width != 468 || geometry.height != 60) {
 			await deleteTempFiles(req).catch(console.error);
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Bad request'),
@@ -65,9 +65,9 @@ module.exports = async (req, res) => {
 	for (let i = 0; i < res.locals.numFiles; i++) {
 		const file = req.files.file[i];
 		file.filename = file.name;
-		
+
 		//check if already exists
-		const exists = await pathExists(`${uploadDirectory}/notfoundimage/${file.filename}`);
+		const exists = await pathExists(`${uploadDirectory}/boardad/${file.filename}`);
 
 		if (exists) {
 			await remove(file.tempFilePath);
@@ -78,7 +78,7 @@ module.exports = async (req, res) => {
 		filenames.push(file.filename);
 
 		//then upload it
-		await moveUpload(file, file.filename, 'notfoundimage/');
+		await moveUpload(file, file.filename, 'boardad/');
 
 		//and delete the temp file
 		await remove(file.tempFilePath);
@@ -91,17 +91,16 @@ module.exports = async (req, res) => {
 	if (filenames.length === 0) {
 		return dynamicResponse(req, res, 400, 'message', {
 			'title': __('Bad request'),
-			'message': __n('Not found image already exist', res.locals.numFiles),
+			'message': __n('Board ad already exists', res.locals.numFiles),
 			'redirect': redirect
 		});
 	}
 
-	// add not found images to the db
-	await Assets.addNotFoundImages(filenames);
+	await Assets.addBoardAds(filenames);
 
 	return dynamicResponse(req, res, 200, 'message', {
 		'title': __('Success'),
-		'message': __n('Uploaded %s new Not Found Images.', filenames.length),
+		'message': __n('Uploaded %s new Board ads.', filenames.length),
 		'redirect': redirect
 	});
 
