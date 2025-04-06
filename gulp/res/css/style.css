@@ -20,13 +20,9 @@ main.minimal {
 	height: 100vh;
 }
 
-.homepage-image {
-	width: 168px;
+.logo {
+	width: 128px;
 	height: auto;
-
-	@media (max-width: 600px) {
-		width: 124px;
-	}
 }
 
 .faq-image {
@@ -129,9 +125,11 @@ pre {
 	display: inline-block;
 	text-decoration: none;
 	height: 48px;
+	width: 96px;
 
 	@media (max-width: 600px) {
 		height: 24px;
+		width: 48px;
 	}
 }
 
