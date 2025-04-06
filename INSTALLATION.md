@@ -387,6 +387,12 @@ You will need to match the number of servers to however many chan processes you 
 
 Customisation is pretty easy. As long as you format whatever you are customising properly e.g. pug templates, css, etc and have correct syntax for javascript files, the build system will handle the rest for you. Here are some things you can do:
 
+**Images**
+logo:
+- `magick logo.png -resize 256x256 -filter LanczosSharp -sharpen 0x1 logo.png`
+navbar:
+- `magick item.png -resize 25% -filter LanczosSharp item.png`
+
 **Custom pages**
 
 To add additional custom pages which will be at the root of your site, add a .pug file to views/custompages/. See rules.pug or faq.pug as an example. These will get added to the root of your site just like /rules.html and /faq.html.
