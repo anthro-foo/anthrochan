@@ -48,7 +48,7 @@ module.exports = {
 				{ banners: 1, _id: 0 }
 			);
 
-			if (assets && assets.banners) {
+			if (assets && assets.banners && assets.banners.length > 0) {
 				cache.sadd('banners', assets.banners);
 				banners = assets.banners;
 			}
@@ -86,7 +86,7 @@ module.exports = {
 				{ flags: 1, _id: 0 }
 			);
 
-			if (assets && assets.flags) {
+			if (assets && assets.flags && assets.flags.length > 0) {
 				cache.sadd('flags', assets.flags);
 				flags = assets.flags;
 			}
@@ -113,7 +113,7 @@ module.exports = {
 				{ boardads: 1, _id: 0 }
 			);
 
-			if (assets && assets.boardads) {
+			if (assets && assets.boardads && assets.boardads.length > 0) {
 				cache.sadd('boardads', assets.boardads);
 				boardads = assets.boardads;
 			}
@@ -141,9 +141,5 @@ module.exports = {
 	removeBoardAds: (filenames) => {
 		cache.del('boardads');
 		return module.exports.removeFromArray('boardads', filenames);
-	},
-
-	getCustomPages: async () => {
-		return [];
 	},
 };
