@@ -138,7 +138,7 @@ module.exports = {
 		return module.exports.addToArray('boardads', filenames);
 	},
 
-	removeNotFoundImages: (filenames) => {
+	removeBoardAds: (filenames) => {
 		cache.del('boardads');
 		return module.exports.removeFromArray('boardads', filenames);
 	},

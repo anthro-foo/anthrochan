@@ -1,7 +1,7 @@
 
 'use strict';
 
-const deleteNotFoundImages = require(__dirname + '/../../models/forms/deletenotfoundimages.js')
+const deleteBoardAds = require(__dirname + '/../../models/forms/deleteboardads.js')
 	, dynamicResponse = require(__dirname + '/../../lib/misc/dynamic.js')
 	, paramConverter = require(__dirname + '/../../lib/middleware/input/paramconverter.js')
 	, { checkSchema, lengthBody } = require(__dirname + '/../../lib/input/schema.js');
@@ -17,7 +17,7 @@ module.exports = {
 		const { __ } = res.locals;
 
 		const errors = await checkSchema([
-			{ result: lengthBody(req.body.checkednotfoundimages, 1), expected: false, error: __('Must select at least one board ad to delete') },
+			{ result: lengthBody(req.body.checkedboardads, 1), expected: false, error: __('Must select at least one board ad to delete') },
 		]);
 
 		if (errors.length > 0) {
@@ -29,7 +29,7 @@ module.exports = {
 		}
 
 		try {
-			await deleteNotFoundImages(req, res, next);
+			await deleteBoardAds(req, res, next);
 		} catch (err) {
 			console.error(err);
 			return next(err);
