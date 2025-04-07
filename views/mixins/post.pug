@@ -120,9 +120,6 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 										|
 										|
 										a.filename(href=`/file/${file.filename}` title='Download Unix timestamp' download=`${post.u}${fileindex > 0 ? String.fromCharCode(97 + fileindex - 1) : ''}${file.extension}`) #{'U'}
-										|
-										|
-										a.filename(href=`/file/${file.filename}` title='Download Archive format' download=`${post.u} ${file.originalFilename}`) #{'A'}
 									br
 									if globalmanage && file.phash != null
 										span #{file.phash}
