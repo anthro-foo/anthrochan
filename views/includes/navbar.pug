@@ -4,6 +4,14 @@ unless minimal
 			img(src='/file/home.png' alt='Home')
 		a.nav-item(href='/boards.html')
 			img(src='/file/boards.png' alt='Boards')
+		if boardsList && boardsList.length > 0
+			span.nav-item
+				| #{'[ '}
+				each board, i in boardsList
+					a(href=`/${board}/`) #{board}
+					if i != boardsList.length - 1
+						|  / 
+				| #{' ]'}
 		a.nav-item(href='/overboard.html')
 			img(src='/file/overboard.png' alt='Overboard')
 		a.nav-item(href='/pages.html')
