@@ -18,7 +18,7 @@ const express = require('express')
 	, setMinimal = require(__dirname + '/../lib/middleware/misc/setminimal.js')
 	, { setBoardLanguage, setQueryLanguage } = require(__dirname + '/../lib/middleware/locale/locale.js')
 	//page models
-	, { manageRecent, manageReports, manageSettings, manageBans, manageFilters, editFilter, editCustomPage,
+	, { manageRecent, manageReports, manageSettings, manageBans, editCustomPage,
 		manageBoard, manageThread, manageLogs, manageCatalog, editPost } = require(__dirname + '/../models/pages/manage/')
 	, { globalManageAssets, globalManageCustomPages, globalManageTrusted, globalManageApproval, globalManageSettings, globalManageReports, globalManageBans, globalManageBoards, globalManageFilters, globalEditFilter, editNews, editAccount, editRole,
 		globalManageRecent, globalManageAccounts, globalManageNews, globalManageLogs, globalManageRoles } = require(__dirname + '/../models/pages/globalmanage/')
@@ -86,11 +86,6 @@ router.get('/:board/manage/bans.html', useSession, sessionRefresh, isLoggedIn, B
 	hasPerms.one(Permissions.MANAGE_BANS), csrf, manageBans);
 router.get('/:board/manage/settings.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
 	hasPerms.one(Permissions.MANAGE_BOARD_SETTINGS), csrf, manageSettings);
-
-router.get('/:board/manage/filters.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_SETTINGS), csrf, manageFilters);
-router.get('/:board/manage/editfilter/:filterid([a-f0-9]{24}).html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_SETTINGS), csrf, filterParamConverter, editFilter);
 
 //global manage pages
 router.get('/globalmanage/approval.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
