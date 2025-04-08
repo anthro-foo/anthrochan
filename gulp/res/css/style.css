@@ -2084,7 +2084,7 @@ row.wrap.sb .col {
 
 	#postform {
 		width: 100%;
-		top: 4em !important;
+		top: 0px !important;
 	}
 
 	input#file {
