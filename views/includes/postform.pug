@@ -66,25 +66,20 @@ section.form-wrapper.flex-center
 			section.row
 				.label Password
 				input(type='password', name='postpassword', placeholder='Password to delete/spoiler/unlink later' maxlength='50' autocomplete='new-password')
-		if modview || board.settings.customFlags === true
-			- const flags = board.flags
-			if flags && flags.length > 0
-				section.row
-					.label #{__('Flag')}
-					select#customflag(name='customflag')
-						option(value='') #{board.settings.geoFlags === true ? __('Geographic Flag') : __('None')}
-						each flag in flags
-							option(value=flag.filename data-src=`/flag/${flag.filename}`) #{flag.name}
-					img.jsonly#selected-flag
-		if enableWeb3 === true && board.settings.enableWeb3 === true
-			section.row.jsonly.web3
-				.label #{__('Web3')}
-				input.dummy-link.web3-sign(type='button' value=__('Sign') disabled=true)
-				textarea.ml-1.no-resize(name='signature', rows='1', autocomplete='off' readonly)
+			
+		section.row
+			if modview || board.settings.customFlags === true
+				- const flags = board.flags
+				if flags && flags.length > 0
+						select#customflag(name='customflag')
+							option(value='') #{board.settings.geoFlags === true ? __('Geographic Flag') : __('Flag')}
+							each flag in flags
+								option(value=flag.filename data-src=`/flag/${flag.filename}`) #{flag.name}
+						img.jsonly#selected-flag
+				input#submitpost(type='submit', value=(isThread ? __('New Reply') : __('New Thread')))
 		if ((board.settings.captchaMode === 1 && !isThread) || board.settings.captchaMode === 2) && !modview
 			if captchaOptions.type === 'text'
 				include ./captchasidelabel.pug
 			else
 				include ./captchaexpand.pug
-		input#submitpost(type='submit', value=(isThread ? __('New Reply') : __('New Thread')))
 	a.collapse.no-decoration.post-button(href='#postform') [#{isThread ? __('New Reply') : __('New Thread')}]
