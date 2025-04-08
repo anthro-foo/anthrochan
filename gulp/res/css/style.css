@@ -576,7 +576,7 @@ p {
 	justify-content: center;
 	font-weight: bolder;
 	margin-left: auto;
-	width: 25px;
+	width: 24px;
 	cursor: pointer;
 	font-size: initial;
 }
@@ -2028,9 +2028,8 @@ row.wrap.sb .col {
 	input[type="password"],
 	input[type="file"],
 	.postform-style,
-	select,
-	#postform-dragHandle {
-		min-height: 2.25em;
+	select {
+		min-height: 1em;
 		box-sizing: border-box;
 	}
 
@@ -2085,6 +2084,7 @@ row.wrap.sb .col {
 
 	#postform {
 		width: 100%;
+		top: 4em !important;
 	}
 
 	input#file {
