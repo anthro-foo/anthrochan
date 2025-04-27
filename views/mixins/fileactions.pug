@@ -1,8 +1,8 @@
 mixin fileactions(filename, approved)
 		if approved
 			.file-actions-container
-				input.file-action(type='submit' name='spoiler_single_file' value='Spoiler', data-filename=filename)
-				input.file-action(type='submit' name='delete_single_file' value='Delete', data-filename=filename)
+				input.file-action(type='submit' name='spoiler' value='Spoiler', data-filename=filename)
+				input.file-action(type='submit' name='delete_file' value='Delete', data-filename=filename)
 		else
 			.file-approval-text File pending approval
 			.file-actions-container

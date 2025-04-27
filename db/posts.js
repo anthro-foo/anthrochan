@@ -1,17 +1,15 @@
 'use strict';
 
-const Mongo = require(__dirname+'/db.js')
+const Mongo = require(__dirname + '/db.js')
 	, { isIP } = require('net')
-	, { DAY } = require(__dirname+'/../lib/converter/timeutils.js')
-	, Boards = require(__dirname+'/boards.js')
+	, { DAY } = require(__dirname + '/../lib/converter/timeutils.js')
+	, Boards = require(__dirname + '/boards.js')
 	// , Files = require(__dirname+'/files.js')
 	// , approvalTypes = require(__dirname+'/../lib/approval/approvaltypes.js')
-	, Stats = require(__dirname+'/stats.js')
-	, { Permissions } = require(__dirname+'/../lib/permission/permissions.js')
-	, { randomBytes } = require('crypto')
-	, randomBytesAsync = require('util').promisify(randomBytes)
+	, Stats = require(__dirname + '/stats.js')
+	, { Permissions } = require(__dirname + '/../lib/permission/permissions.js')
 	, db = Mongo.db.collection('posts')
-	, config = require(__dirname+'/../lib/misc/config.js');
+	, config = require(__dirname + '/../lib/misc/config.js');
 
 module.exports = {
 
@@ -41,11 +39,11 @@ module.exports = {
 		]).toArray();
 		//is there a way to do this in the db with an aggregation stage, instead of in js?
 		const threadIndex = threadsBefore.findIndex((e) => e.postId === thread);
-		const threadPage = Math.max(1, Math.ceil((threadIndex+1)/10));
+		const threadPage = Math.max(1, Math.ceil((threadIndex + 1) / 10));
 		return threadPage;
 	},
 
-	getBoardRecent: async (offset=0, limit=20, ip, board, permissions) => {
+	getBoardRecent: async (offset = 0, limit = 20, ip, board, permissions) => {
 		const query = {};
 		if (board) {
 			query['board'] = board;
@@ -82,8 +80,8 @@ module.exports = {
 		}).skip(offset).limit(limit).toArray();
 		return posts;
 	},
-	
-	getBoardRecentByAccount: async (offset=0, limit=20, account, board, permissions) => {
+
+	getBoardRecentByAccount: async (offset = 0, limit = 20, account, board, permissions) => {
 		const query = {};
 		if (board) {
 			query['board'] = board;
@@ -97,10 +95,10 @@ module.exports = {
 		} else {
 			projection['globalreports'] = 0;
 		}
-		
+
 		query['account'] = account;
 		query['nohide'] = true;
-		
+
 		if (!permissions.get(Permissions.VIEW_RAW_IP)) {
 			projection['ip.raw'] = 0;
 			//MongoError, why cant i just projection['reports.ip.raw'] = 0;
@@ -118,7 +116,7 @@ module.exports = {
 		return posts;
 	},
 
-	getRecent: async (board, page, limit=10, getSensitive=false, sortSticky=true) => {
+	getRecent: async (board, page, limit = 10, getSensitive = false, sortSticky = true) => {
 		// get all thread posts (posts with null thread id)
 		const projection = {
 			'salt': 0,
@@ -155,7 +153,7 @@ module.exports = {
 			projection
 		})
 			.sort(threadsSort)
-			.skip(10*(page-1))
+			.skip(10 * (page - 1))
 			.limit(limit)
 			.toArray();
 
@@ -166,7 +164,7 @@ module.exports = {
 			const replies = previewRepliesLimit === 0 ? [] : await db.find({
 				'thread': thread.postId,
 				'board': thread.board
-			},{
+			}, {
 				projection
 			}).sort({
 				'postId': -1
@@ -244,7 +242,7 @@ module.exports = {
 					'bumped': {
 						'$max': {
 							'$cond': [
-								{ '$ne': [ '$email', 'sage' ] },
+								{ '$ne': ['$email', 'sage'] },
 								'$date',
 								0 //still need to improve this to ignore bump limitthreads
 							]
@@ -262,7 +260,7 @@ module.exports = {
 		});
 	},
 
-	getThread: async (board, id, getSensitive=false) => {
+	getThread: async (board, id, getSensitive = false) => {
 		// get thread post and potential replies concurrently
 		const projection = {
 			'salt': 0,
@@ -311,7 +309,7 @@ module.exports = {
 			}
 		}, {
 			'projection': {
-				'salt': 0 ,
+				'salt': 0,
 				'password': 0,
 				'ip': 0,
 				'reports': 0,
@@ -320,7 +318,7 @@ module.exports = {
 		}).toArray();
 	},
 
-	getCatalog: (board, sortSticky=true, catalogLimit=0) => {
+	getCatalog: (board, sortSticky = true, catalogLimit = 0) => {
 
 		const threadsQuery = {
 			thread: null,
@@ -360,7 +358,7 @@ module.exports = {
 
 	},
 
-	getPost: (board, id, getSensitive=false) => {
+	getPost: (board, id, getSensitive = false) => {
 
 		// get a post
 		if (getSensitive) {
@@ -432,7 +430,7 @@ module.exports = {
 	},
 
 	//takes array "ids" of post ids
-	getPosts: (board, ids, getSensitive=false) => {
+	getPosts: (board, ids, getSensitive = false) => {
 
 		if (getSensitive) {
 			return db.find({
@@ -628,7 +626,7 @@ module.exports = {
 		return posts;
 	},
 
-	getGlobalReports: async (offset=0, limit, ip, permissions) => {
+	getGlobalReports: async (offset = 0, limit, ip, permissions) => {
 		const projection = {
 			'salt': 0,
 			'password': 0,
@@ -692,11 +690,11 @@ module.exports = {
 					}
 				}, {
 					//skip the first (board.settings.threadLimit/early404Fraction)
-					'$skip': Math.ceil(board.settings.threadLimit/config.get.early404Fraction)
+					'$skip': Math.ceil(board.settings.threadLimit / config.get.early404Fraction)
 				}, {
 					//then any that have less than early404Replies replies get matched again
 					'$match': {
-						'sticky':0,
+						'sticky': 0,
 						'replyposts': {
 							'$lt': config.get.early404Replies
 						}
@@ -771,7 +769,7 @@ module.exports = {
 				'$group': {
 					'_id': '$board',
 					'lastPostTimestamp': {
-						'$max':'$bumped'
+						'$max': '$bumped'
 					}
 				}
 			}, {
@@ -890,7 +888,7 @@ module.exports = {
 				}
 			});
 		}
-		
+
 		// update other metadata
 		bulkWrites.push({
 			'updateMany': {
@@ -916,7 +914,7 @@ module.exports = {
 			}
 		});
 
-		const salt = (await db.findOne({ _id: postMongoIds[0]})).salt;
+		const salt = (await db.findOne({ _id: postMongoIds[0] })).salt;
 		// Make new OP
 		bulkWrites.push({
 			'updateOne': {
@@ -958,7 +956,7 @@ module.exports = {
 			'postId': postId,
 		}, {
 			'projection': {
-				'salt': 0 ,
+				'salt': 0,
 				'password': 0,
 				'ip': 0,
 				'reports': 0,
@@ -976,4 +974,19 @@ module.exports = {
 		next();
 	},
 
+	spoilerFile: async (filename) => {
+		return db.updateMany(
+			{ 'files.filename': filename },
+			{
+				$set: {
+					'files.$[file].spoiler': true
+				}
+			},
+			{
+				arrayFilters: [
+					{ 'file.filename': filename }
+				]
+			}
+		);
+	}
 };

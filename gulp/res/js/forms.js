@@ -318,7 +318,7 @@ class postFormHandler {
 				post_check.checked = false;
 
 				formData.append(submitter.name, '1');
-				formData.append('file_moderation_filename', submitter.dataset.filename);
+				formData.append('file_action_filename', submitter.dataset.filename);
 			} else {
 				formData = new FormData(this.form);
 			}

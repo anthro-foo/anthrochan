@@ -1,26 +1,34 @@
 'use strict';
 
-module.exports = (locals) => {
+const { Posts } = require(__dirname + '/../../db/');
 
-	const { __, __n, posts } = locals;
+module.exports = async (req, res) => {
 
-	// filter to ones not spoilered
-	const filteredPosts = posts.filter(post => {
-		return !post.spoiler && post.files.length > 0;
-	});
+	const { __, __n, posts } = res.locals;
 
-	if (filteredPosts.length === 0) {
+	if (req.body.file_action_filename) {
+		await Posts.spoilerFile(req.body.file_action_filename);
 		return {
-			message: __('No files to spoiler'),
+			message: __n('Spoilered 1 file')
+		};
+	} else {
+		// filter to ones not spoilered
+		const filteredPosts = posts.filter(post => {
+			return !post.spoiler && post.files.length > 0;
+		});
+
+		if (filteredPosts.length === 0) {
+			return {
+				message: __('No files to spoiler'),
+			};
+		}
+
+		return {
+			message: __n('Spoilered %s posts', filteredPosts.length),
+			action: '$set',
+			query: {
+				'spoiler': true
+			}
 		};
 	}
-
-	return {
-		message: __n('Spoilered %s posts', filteredPosts.length),
-		action: '$set',
-		query: {
-			'spoiler': true
-		}
-	};
-
 };

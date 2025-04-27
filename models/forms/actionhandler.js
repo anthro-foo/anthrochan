@@ -248,7 +248,7 @@ module.exports = async (req, res, next) => {
 
 		// if it was getting deleted/moved, dont do these actions
 		if (req.body.delete_file) {
-			const { message, action, query } = await deletePostsFiles(res.locals);
+			const { message, action, query } = await deletePostsFiles(req, res);
 			if (action) {
 				modlogActions.push(ModlogActions.DELETE_FILES);
 				recalculateThreadMetadata = true;
@@ -256,7 +256,7 @@ module.exports = async (req, res, next) => {
 			}
 			messages.push(message);
 		} else if (req.body.spoiler) {
-			const { message, action, query } = spoilerPosts(res.locals);
+			const { message, action, query } = await spoilerPosts(req, res);
 			if (action) {
 				modlogActions.push(ModlogActions.SPOILER_FILES);
 				combinedQuery[action] = { ...combinedQuery[action], ...query };

@@ -1,13 +1,13 @@
 'use strict';
 
-const { Posts, Boards } = require(__dirname+'/../../db/')
-	, { Permissions } = require(__dirname+'/../../lib/permission/permissions.js')
-	, config = require(__dirname+'/../../lib/misc/config.js')
-	, actionHandler = require(__dirname+'/../../models/forms/actionhandler.js')
-	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
-	, actionChecker = require(__dirname+'/../../lib/input/actionchecker.js')
-	, paramConverter = require(__dirname+'/../../lib/middleware/input/paramconverter.js')
-	, { checkSchema, lengthBody, existsBody } = require(__dirname+'/../../lib/input/schema.js');
+const { Posts, Boards } = require(__dirname + '/../../db/')
+	, { Permissions } = require(__dirname + '/../../lib/permission/permissions.js')
+	, config = require(__dirname + '/../../lib/misc/config.js')
+	, actionHandler = require(__dirname + '/../../models/forms/actionhandler.js')
+	, dynamicResponse = require(__dirname + '/../../lib/misc/dynamic.js')
+	, actionChecker = require(__dirname + '/../../lib/input/actionchecker.js')
+	, paramConverter = require(__dirname + '/../../lib/middleware/input/paramconverter.js')
+	, { checkSchema, lengthBody, existsBody } = require(__dirname + '/../../lib/input/schema.js');
 
 module.exports = {
 
@@ -35,7 +35,7 @@ module.exports = {
 			{ result: (existsBody(req.body.report_ban) && !req.body.checkedreports), expected: false, error: __('Must select post and reports to ban reporter') },
 			{ result: (existsBody(req.body.checkedreports) && !req.body.report_ban), expected: false, error: __('Must select a report action if checked reports') },
 			{ result: (existsBody(req.body.checkedreports) && !req.body.checkedposts), expected: false, error: __('Must check parent post if checking reports for report action') },
-			{ result: (existsBody(req.body.checkedreports) && existsBody(req.body.checkedposts) && lengthBody(req.body.checkedreports, 1, req.body.checkedposts.length*5)), expected: false, error: __('Invalid number of reports checked') },
+			{ result: (existsBody(req.body.checkedreports) && existsBody(req.body.checkedposts) && lengthBody(req.body.checkedreports, 1, req.body.checkedposts.length * 5)), expected: false, error: __('Invalid number of reports checked') },
 			{ result: res.locals.actions.hasPermission, expected: true, blocking: true, error: __('No permission') },
 			{ result: (existsBody(req.body.delete) && !res.locals.board.settings.userPostDelete), permission: Permissions.MANAGE_GENERAL, expected: false, error: __('User post deletion is disabled on this board') },
 			{ result: (existsBody(req.body.spoiler) && !res.locals.board.settings.userPostSpoiler), permission: Permissions.MANAGE_GENERAL, expected: false, error: __('User file spoiling is disabled on this board') },
@@ -47,20 +47,22 @@ module.exports = {
 			{ result: (existsBody(req.body.report || req.body.global_report) && lengthBody(req.body.report_reason, 1)), expected: false, blocking: true, error: __('Reports must have a reason') },
 			{ result: (existsBody(req.body.move) && (!req.body.move_to_board)), expected: false, error: __('Must input destination board to move thread') },
 			{ result: existsBody(req.body.move) && req.body.checkedposts.length > 1, expected: false, error: __('Must select a single thread to move') },
-			{ result: async () => {
-				if (req.body.move && req.body.move_to_board
-					&& req.body.move_to_board !== req.params.board) {
-					if (!res.locals.user || !res.locals.user.username) {
-						return false;
+			{
+				result: async () => {
+					if (req.body.move && req.body.move_to_board
+						&& req.body.move_to_board !== req.params.board) {
+						if (!res.locals.user || !res.locals.user.username) {
+							return false;
+						}
+
+						const destinationBoard = await Boards.findOne(req.body.move_to_board);
+						res.locals.destinationBoard = destinationBoard;
+
+						return res.locals.destinationBoard != null;
 					}
-
-					const destinationBoard = await Boards.findOne(req.body.move_to_board);
-					res.locals.destinationBoard = destinationBoard;
-
-					return res.locals.destinationBoard != null;
-				}
-				return true;
-			}, expected: true, error: __('Destination for move does not exist') },
+					return true;
+				}, expected: true, error: __('Destination for move does not exist')
+			},
 			{ result: existsBody(req.body.approve) && existsBody(req.body.deny), expected: false, error: __('You may only bulk approve or deny, not both.') },
 		], res.locals.permissions);
 
