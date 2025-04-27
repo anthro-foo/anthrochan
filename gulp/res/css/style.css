@@ -1642,7 +1642,7 @@ table.boardtable .nobreak {
 	text-align: center;
 }
 
-.file-approval-button-container {
+.file-actions-container {
 	display: flex;
 	width: 100%;
 }

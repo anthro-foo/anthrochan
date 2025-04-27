@@ -1,0 +1,10 @@
+mixin fileactions(filename, approved)
+		if approved
+			.file-actions-container
+				input.file-action(type='submit' name='spoiler_single_file' value='Spoiler', data-filename=filename)
+				input.file-action(type='submit' name='delete_single_file' value='Delete', data-filename=filename)
+		else
+			.file-approval-text File pending approval
+			.file-actions-container
+				input.approve-button.file-action(type='submit' name='approve' value='Approve', data-filename=filename)
+				input.deny-button.file-action(type='submit' name='deny' value='Deny', data-filename=filename)

@@ -307,7 +307,8 @@ class postFormHandler {
 			let formData;
 
 			const submitter = e.submitter;
-			if (submitter.id === 'file-moderation-input') {
+			// single file actions
+			if (submitter.classList.contains('file-action')) {
 				// make sure every checkbox is unchecked to only affect post button clicked in
 				document.querySelectorAll('.post-check').forEach(checkbox => checkbox.checked = false);
 				const post_check = submitter.closest('.post-container').querySelector('.post-check');
